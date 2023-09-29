@@ -34,20 +34,4 @@ body {
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
   background-color: white;
-  color: transparent;
-}
-
-.card.flipped {
-  background-color: white;
-  color: black;
-  pointer-events: none;
-}
-
-.card.matched {
-  background-color: green; /* Change the background color to your preferred color */
-  color: white; /* Change the text color to your preferred color */
-}
-
-#start-button {
-  margin-bottom: 20px;
-}
+  color: black; /* Set the default text color to black */
