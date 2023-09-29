@@ -1,35 +1,36 @@
+/* style.css */
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f0f0f0;
-}
-
-.game-container {
-    text-align: center;
+  font-family: 'Century Gothic', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: #f0f0f0;
 }
 
 .card {
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    margin: 10px;
-    font-size: 24px;
-    background-color: #ccc;
-    cursor: pointer;
+  width: 120px;
+  height: 120px;
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  background-color: white;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
 }
 
-.matched {
-    background-color: green;
-    color: white;
-    pointer-events: none;
+.card.flipped {
+  background-color: #f0f0f0;
+  pointer-events: none;
 }
 
-button {
-    margin-top: 20px;
-    font-size: 18px;
-    padding: 10px 20px;
+#start-button {
+  margin-bottom: 20px;
 }
