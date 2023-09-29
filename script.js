@@ -2,7 +2,7 @@
 const sightWords = [
   'a', 'about', 'above', 'again', 'all', 'also', 'are', 'be', 'came', 'day', 'do',
   'does', 'for', 'go', 'he', 'her', 'his', 'how', 'I', 'in', 'into', 'is', 'it',
-  'know', 'many', 'name', 'not', 'now', 'of', 'on', 'one', 'over', 'said', 'she',
+  'know', 'many', 'name', 'not', 'now', 'of', 'on', ' one', 'over', 'said', 'she',
   'so', 'some', 'story', 'the', 'their', 'then', 'there', 'this', 'to', 'too',
   'want', 'was', 'were', 'what', 'when', 'white'
 ];
@@ -18,6 +18,7 @@ function createCard(word) {
   const card = document.createElement('div');
   card.classList.add('card');
   card.dataset.word = word;
+  card.textContent = word; // Display the word on the card
   card.addEventListener('click', () => flipCard(card));
   return card;
 }
@@ -70,7 +71,16 @@ function startGame() {
 
   shuffleArray(cards);
 
-  cards.forEach(card => cardsContainer.appendChild(card));
+  const cardRow1 = document.createElement('div');
+  cardRow1.classList.add('card-row');
+  const cardRow2 = document.createElement('div');
+  cardRow2.classList.add('card-row');
+
+  cards.slice(0, 5).forEach(card => cardRow1.appendChild(card));
+  cards.slice(5, 10).forEach(card => cardRow2.appendChild(card));
+
+  cardsContainer.appendChild(cardRow1);
+  cardsContainer.appendChild(cardRow2);
 }
 
 startButton.addEventListener('click', startGame);
