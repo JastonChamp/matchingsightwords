@@ -30,15 +30,20 @@ function createCards() {
     card.classList.add('card');
     card.dataset.word = word;
     card.textContent = 'Click to reveal';
-    card.addEventListener('click', () => flipCard(card));
     cardContainer.appendChild(card);
   }
 }
 
-// Handle card click event
-function flipCard(card) {
-  if (flippedCards.length < 2 && !flippedCards.includes(card)) {
+// Handle card click event using event delegation
+cardContainer.addEventListener('click', (event) => {
+  const card = event.target;
+  if (
+    card.classList.contains('card') &&
+    !card.classList.contains('flipped') &&
+    flippedCards.length < 2
+  ) {
     card.textContent = card.dataset.word;
+    card.classList.add('flipped');
     flippedCards.push(card);
 
     if (flippedCards.length === 2) {
@@ -46,23 +51,25 @@ function flipCard(card) {
       if (card1.dataset.word === card2.dataset.word) {
         matchedCards.push(card1, card2);
         flippedCards = [];
+
+        if (matchedCards.length === shuffledWords.length) {
+          // All cards are matched, reset the game
+          matchedCards = [];
+          startButton.textContent = 'Next Set of Words';
+          startButton.disabled = false;
+        }
       } else {
         setTimeout(() => {
           card1.textContent = 'Click to reveal';
           card2.textContent = 'Click to reveal';
+          card1.classList.remove('flipped');
+          card2.classList.remove('flipped');
           flippedCards = [];
         }, 1000);
       }
     }
-
-    if (matchedCards.length === shuffledWords.length) {
-      // All cards are matched, reset the game
-      matchedCards = [];
-      startButton.textContent = 'Next Set of Words';
-      startButton.disabled = false;
-    }
   }
-}
+});
 
 // Handle start button click event
 startButton.addEventListener('click', () => {
