@@ -11,7 +11,25 @@ const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
 let flippedCards = [];
 let matchedCards = [];
-let shuffledWords = [];
+let shuffledSets = [];
+let currentSet = 0;
+
+// Shuffle the sets of 5 words with 2 cards each
+function shuffleSets() {
+  const sets = [];
+  const wordsCopy = sightWords.slice();
+
+  while (wordsCopy.length > 0) {
+    const set = [];
+    for (let i = 0; i < 5; i++) {
+      const word = wordsCopy.pop();
+      set.push(word, word); // Add 2 cards with the same word
+    }
+    sets.push(set);
+  }
+
+  return sets;
+}
 
 function shuffleArray(array) {
   const shuffled = array.slice();
@@ -22,38 +40,24 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-// Create an array with duplicate words
-function createDuplicateWordsArray(words) {
-  const duplicateWords = [];
-  words.forEach((word) => {
-    duplicateWords.push(word, word); // Add each word twice
-  });
-  return duplicateWords;
-}
-
 // Create and append cards to the DOM
 function createCards() {
   cardContainer.innerHTML = '';
-  shuffledWords = shuffleArray(createDuplicateWordsArray(sightWords.slice(0, 5))); // Take 5 words and duplicate them
-  for (let word of shuffledWords) {
+  const set = shuffledSets[currentSet];
+  for (let word of set) {
     const card = document.createElement('div');
     card.classList.add('card');
     card.dataset.word = word;
     card.textContent = 'Click to reveal';
+    card.addEventListener('click', () => flipCard(card));
     cardContainer.appendChild(card);
   }
 }
 
-// Handle card click event using event delegation
-cardContainer.addEventListener('click', (event) => {
-  const card = event.target;
-  if (
-    card.classList.contains('card') &&
-    !card.classList.contains('flipped') &&
-    flippedCards.length < 2
-  ) {
+// Handle card click event
+function flipCard(card) {
+  if (flippedCards.length < 2 && !flippedCards.includes(card)) {
     card.textContent = card.dataset.word;
-    card.classList.add('flipped');
     flippedCards.push(card);
 
     if (flippedCards.length === 2) {
@@ -61,29 +65,38 @@ cardContainer.addEventListener('click', (event) => {
       if (card1.dataset.word === card2.dataset.word) {
         matchedCards.push(card1, card2);
         flippedCards = [];
-
-        if (matchedCards.length === shuffledWords.length) {
-          // All cards are matched, reset the game
-          matchedCards = [];
-          startButton.textContent = 'Next Set of Words';
-          startButton.disabled = false;
-        }
+        // Indicate correct match with background color
+        card1.classList.add('matched');
+        card2.classList.add('matched');
       } else {
         setTimeout(() => {
           card1.textContent = 'Click to reveal';
           card2.textContent = 'Click to reveal';
-          card1.classList.remove('flipped');
-          card2.classList.remove('flipped');
           flippedCards = [];
         }, 1000);
       }
     }
+
+    if (matchedCards.length === sightWords.length) {
+      // All cards are matched, go to the next set
+      matchedCards = [];
+      currentSet++;
+      if (currentSet < shuffledSets.length) {
+        startButton.textContent = 'Next Set of Words';
+        startButton.disabled = false;
+      } else {
+        startButton.textContent = 'Game Over';
+        startButton.disabled = true;
+      }
+    }
   }
-});
+}
 
 // Handle start button click event
 startButton.addEventListener('click', () => {
   startButton.disabled = true;
+  shuffledSets = shuffleSets();
+  currentSet = 0;
   createCards();
 });
 
