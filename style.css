@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    text-align: center;
+}
+
+.card {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    font-size: 24px;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.matched {
+    background-color: green;
+    color: white;
+    pointer-events: none;
+}
+
+button {
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 10px 20px;
+}
