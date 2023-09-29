@@ -30,14 +30,12 @@ body {
   border: 1px solid #ccc;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
-   background-color: 
-  color: transparent; /
+  color: transparent;
 }
 
 .card.flipped {
-
-   background-color: white;
-  color: black; 
+  background-color: #eee; /* Change this color to a lighter shade of gray */
+  color: black;
   pointer-events: none;
 }
 
