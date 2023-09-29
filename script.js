@@ -1,4 +1,4 @@
-// script.js
+// JavaScript code
 const words = [
   'a', 'about', 'above', 'again', 'all', 'also', 'are', 'be', 'came', 'day',
   'do', 'does', 'for', 'go', 'he', 'her', 'his', 'how', 'I', 'in', 'into',
@@ -7,44 +7,93 @@ const words = [
   'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
 ];
 
-const shuffledWords = [...words, ...words].sort(() => 0.5 - Math.random());
+const shuffledWords = shuffleArray([...words, ...words]); // Duplicate words for matching
+const cardContainer = document.querySelector('.card-row');
+const startButton = document.getElementById('start-button');
 
-const grid = document.querySelector('.grid');
-let flippedCards = [];
-let matchedWords = [];
+let cardsFlipped = 0;
+let firstCard, secondCard;
+let lockBoard = false;
 
-function createCard(word) {
-  const card = document.createElement('div');
-  card.classList.add('card');
-  card.dataset.word = word;
-  card.addEventListener('click', () => flipCard(card));
-  return card;
+// Shuffle an array using the Fisher-Yates algorithm
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
-function flipCard(card) {
-  if (flippedCards.length < 2 && !flippedCards.includes(card) && !matchedWords.includes(card.dataset.word)) {
-    card.classList.toggle('flipped');
-    flippedCards.push(card);
-
-    if (flippedCards.length === 2) {
-      const [firstCard, secondCard] = flippedCards;
-      if (firstCard.dataset.word === secondCard.dataset.word) {
-        matchedWords.push(firstCard.dataset.word);
-        if (matchedWords.length === words.length) {
-          alert('Congratulations! You matched all the words!');
-        }
-      } else {
-        setTimeout(() => {
-          firstCard.classList.remove('flipped');
-          secondCard.classList.remove('flipped');
-        }, 1000);
-      }
-      flippedCards = [];
-    }
+// Create and append cards to the DOM
+function createCards() {
+  cardContainer.innerHTML = '';
+  for (let word of shuffledWords) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.dataset.word = word;
+    card.textContent = 'Click to reveal';
+    card.addEventListener('click', flipCard);
+    cardContainer.appendChild(card);
   }
 }
 
-shuffledWords.forEach((word) => {
-  const card = createCard(word);
-  grid.appendChild(card);
+// Flip a card to reveal its word
+function flipCard() {
+  if (lockBoard) return;
+  if (this === firstCard) return;
+
+  this.classList.add('flipped');
+
+  if (!firstCard) {
+    firstCard = this;
+    return;
+  }
+
+  secondCard = this;
+  checkForMatch();
+}
+
+// Check if two flipped cards match
+function checkForMatch() {
+  if (firstCard.dataset.word === secondCard.dataset.word) {
+    disableCards();
+    cardsFlipped += 2;
+    if (cardsFlipped === shuffledWords.length) {
+      alert('Congratulations! You matched all the cards.');
+    }
+  } else {
+    unflipCards();
+  }
+}
+
+// Disable matched cards
+function disableCards() {
+  firstCard.removeEventListener('click', flipCard);
+  secondCard.removeEventListener('click', flipCard);
+  resetBoard();
+}
+
+// Unflip cards if they don't match
+function unflipCards() {
+  lockBoard = true;
+  setTimeout(() => {
+    firstCard.classList.remove('flipped');
+    secondCard.classList.remove('flipped');
+    resetBoard();
+  }, 1000);
+}
+
+// Reset the board for the next turn
+function resetBoard() {
+  [firstCard, secondCard] = [null, null];
+  lockBoard = false;
+}
+
+// Add click event listener to the start button to create cards
+startButton.addEventListener('click', () => {
+  createCards();
+  startButton.style.display = 'none'; // Hide the start button
 });
+
+// Initialize the game
+createCards();
