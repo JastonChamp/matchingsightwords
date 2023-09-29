@@ -22,9 +22,19 @@ function shuffleArray(array) {
   return shuffled;
 }
 
+// Create an array with duplicate words
+function createDuplicateWordsArray(words) {
+  const duplicateWords = [];
+  words.forEach((word) => {
+    duplicateWords.push(word, word); // Add each word twice
+  });
+  return duplicateWords;
+}
+
 // Create and append cards to the DOM
 function createCards() {
   cardContainer.innerHTML = '';
+  shuffledWords = shuffleArray(createDuplicateWordsArray(sightWords.slice(0, 5))); // Take 5 words and duplicate them
   for (let word of shuffledWords) {
     const card = document.createElement('div');
     card.classList.add('card');
@@ -74,8 +84,6 @@ cardContainer.addEventListener('click', (event) => {
 // Handle start button click event
 startButton.addEventListener('click', () => {
   startButton.disabled = true;
-  // Shuffle the sight words
-  shuffledWords = shuffleArray(sightWords.slice(0, 10)); // Take the first 10 words
   createCards();
 });
 
