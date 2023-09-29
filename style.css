@@ -1,4 +1,5 @@
 /* style.css */
+
 body {
   font-family: 'Century Gothic', Arial, sans-serif;
   display: flex;
@@ -12,11 +13,9 @@ body {
 
 .card-row {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  width: 700px; /* Adjust the width to accommodate 5 cards in a row */
+  flex-wrap: wrap; /* Added to wrap cards */
 }
 
 .card {
@@ -41,6 +40,11 @@ body {
   background-color: white;
   color: black;
   pointer-events: none;
+}
+
+.card.matched {
+  background-color: green; /* Change the background color to your preferred color */
+  color: white; /* Change the text color to your preferred color */
 }
 
 #start-button {
