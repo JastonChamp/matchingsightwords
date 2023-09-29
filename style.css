@@ -1,5 +1,4 @@
 /* style.css */
-
 body {
   font-family: 'Century Gothic', Arial, sans-serif;
   display: flex;
@@ -13,9 +12,11 @@ body {
 
 .card-row {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap; /* Added to wrap cards */
+  margin-top: 20px;
+  width: 700px; /* Adjust the width to accommodate 5 cards in a row */
 }
 
 .card {
