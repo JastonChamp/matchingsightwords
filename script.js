@@ -11,13 +11,13 @@ const startButton = document.getElementById('start-button');
 
 let cards = [];
 let flippedCards = [];
-let matchedCards = [];
+let matchedWords = [];
 
 function createCard(word) {
     const card = document.createElement('div');
     card.classList.add('card');
-    card.textContent = word;
-    card.addEventListener('click', () => flipCard(card, word));
+    card.dataset.word = word;
+    card.addEventListener('click', () => flipCard(card));
     return card;
 }
 
@@ -28,22 +28,25 @@ function shuffleArray(array) {
     }
 }
 
-function flipCard(card, word) {
-    if (flippedCards.length < 2 && !flippedCards.includes(card) && !matchedCards.includes(card)) {
-        card.classList.add('matched');
-        card.textContent = word;
+function flipCard(card) {
+    if (flippedCards.length < 2 && !flippedCards.includes(card) && !matchedWords.includes(card.dataset.word)) {
+        card.classList.add('flipped');
         flippedCards.push(card);
 
         if (flippedCards.length === 2) {
-            if (flippedCards[0].textContent === flippedCards[1].textContent) {
-                matchedCards.push(...flippedCards);
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.word === card2.dataset.word) {
+                matchedWords.push(card1.dataset.word);
                 flippedCards = [];
+
+                if (matchedWords.length === sightWords.length) {
+                    // All words are matched, the game is won
+                    alert('Congratulations! You matched all the words.');
+                }
             } else {
                 setTimeout(() => {
-                    flippedCards.forEach(card => {
-                        card.textContent = '';
-                        card.classList.remove('matched');
-                    });
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
                     flippedCards = [];
                 }, 1000);
             }
@@ -54,16 +57,19 @@ function flipCard(card, word) {
 function startGame() {
     startButton.disabled = true;
     cardsContainer.innerHTML = '';
-    matchedCards = [];
+    matchedWords = [];
     flippedCards = [];
     cards = [];
 
     shuffleArray(sightWords);
+    sightWords.forEach(word => {
+        cards.push(createCard(word));
+        cards.push(createCard(word));
+    });
 
-    for (let i = 0; i < sightWords.length; i++) {
-        const card = createCard(sightWords[i]);
-        cardsContainer.appendChild(card);
-    }
+    shuffleArray(cards);
+
+    cards.forEach(card => cardsContainer.appendChild(card));
 }
 
 startButton.addEventListener('click', startGame);
