@@ -10,6 +10,12 @@ body {
   background-color: #f0f0f0;
 }
 
+.card-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .card {
   width: 120px;
   height: 120px;
