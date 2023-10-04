@@ -1,6 +1,5 @@
 // JavaScript code
-const wheel = document.querySelector('.wheel');
-const challengingWordsSets = [
+const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
     ['do', 'does', 'for', 'go', 'he'],
@@ -15,8 +14,13 @@ const challengingWordsSets = [
     ['want', 'was', 'were', 'what', 'when', 'white']
 ];
 
+const cardContainer = document.querySelector('.card-row');
+const startButton = document.getElementById('start-button');
+let flippedCards = [];
+let matchedCards = [];
 let currentSet = 0;
-let shuffledWords = [];
+let currentWordIndex = 0;
+let currentWordSet = [];
 
 function shuffleArray(array) {
     const shuffled = array.slice();
@@ -27,55 +31,64 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Create and append slots to the DOM
-function createSlots() {
-    wheel.innerHTML = '';
-    const wordSet = challengingWordsSets[currentSet];
-    for (let word of wordSet) {
-        for (let i = 0; i < 2; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'slot';
-            slot.textContent = 'Click to reveal';
-            wheel.appendChild(slot);
+// Create and append cards to the DOM
+function createCards() {
+    cardContainer.innerHTML = '';
+    currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet])); // Add two of each word
+    for (let word of currentWordSet) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.word = word;
+        card.textContent = 'Click to reveal';
+        card.addEventListener('click', () => flipCard(card));
+        cardContainer.appendChild(card);
+    }
+}
+
+// Handle card click event
+function flipCard(card) {
+    if (!flippedCards.includes(card)) {
+        card.textContent = card.dataset.word;
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            const [card1, card2] = flippedCards;
+            if (card1.dataset.word === card2.dataset.word) {
+                matchedCards.push(card1, card2);
+                flippedCards = [];
+                // Indicate correct match with background color
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+            } else {
+                setTimeout(() => {
+                    card1.textContent = 'Click to reveal';
+                    card2.textContent = 'Click to reveal';
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        if (matchedCards.length === currentWordSet.length) {
+            // All cards are matched, go to the next set of words
+            matchedCards = [];
+            currentSet++;
+            currentWordIndex = 0;
+            if (currentSet < sightWordsSets.length) {
+                createCards();
+                startButton.disabled = false;
+            } else {
+                startButton.textContent = 'Game Over';
+                startButton.disabled = true;
+            }
         }
     }
-    shuffledWords = shuffleArray(wordSet.slice().concat(wordSet.slice())); // Add two of each word
 }
 
-const slots = document.querySelectorAll('.slot');
-let currentSlot = 0;
-
-document.getElementById('spinButton').addEventListener('click', () => {
-    createSlots();
-    currentSlot = 0;
-    spin();
+// Handle start button click event
+startButton.addEventListener('click', () => {
+    startButton.disabled = true;
+    createCards();
 });
 
-function spin() {
-    let shuffleCount = 0;
-    let lastRandom = 0;
-
-    const shuffleEffect = setInterval(() => {
-        slots[lastRandom].style.display = 'none';
-        const randomSlot = Math.floor(Math.random() * slots.length);
-        slots[randomSlot].style.display = 'flex';
-        lastRandom = randomSlot;
-        shuffleCount++;
-        if (shuffleCount > 20) {
-            clearInterval(shuffleEffect);
-            slots[lastRandom].style.display = 'none';
-            slots[currentSlot].style.display = 'flex';
-        }
-    }, 100);
-
-    setTimeout(() => {
-        const randomSlot = Math.floor(Math.random() * slots.length);
-        slots[currentSlot].style.display = 'none';
-        slots[randomSlot].style.display = 'flex';
-        currentSlot = randomSlot;
-    }, 2500);
-}
-
-// Initialize the spinner
-createSlots();
-spin();
+// Initialize the game
+createCards();
