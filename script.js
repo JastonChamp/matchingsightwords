@@ -42,9 +42,18 @@ function createCards() {
     }
 }
 
-// Use the Web Speech API to speak the word aloud
+// Use the Web Speech API to speak the word aloud in British English
 function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word);
+    const utterance = new SpeechSynthesisUtterance();
+
+    // Check for the word "a" and adjust its pronunciation to the schwa sound
+    if (word === 'a') {
+        utterance.text = 'uh';  // Force the pronunciation to "uh" (schwa)
+    } else {
+        utterance.text = word;  // For other words, use the actual word
+    }
+
+    utterance.lang = 'en-GB';  // Set to British English
     speechSynthesis.speak(utterance);
 }
 
