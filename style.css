@@ -1,14 +1,13 @@
-/* Updated style.css */
+/* style.css */
 body {
-  font-family: 'Comic Sans MS', Arial, sans-serif; /* Child-friendly font */
+  font-family: 'Comic Sans MS', Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* Adjusted to start from the top */
   align-items: center;
   height: 100vh;
   margin: 0;
   background-color: #f0f0f0;
-  background-image: url('background.png'); /* Add a fun background image */
   background-size: cover;
 }
 
@@ -17,8 +16,8 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 10px; /* Reduced margin to bring it closer to the score */
-  width: 700px; /* Adjust the width to accommodate 5 cards in a row */
+  margin-top: 20px;
+  width: 700px; /* Adjust width for 5 cards per row */
 }
 
 .card {
@@ -37,21 +36,26 @@ body {
   transition: all 0.4s ease;
   color: #333;
   border-radius: 15px;
-  visibility: hidden; /* Make the cards hidden initially */
+  visibility: hidden; /* Initially hidden */
 }
 
-.card.matched, .card.flipped {
-  visibility: visible; /* Show the cards when flipped or matched */
-}
-
-.card:hover {
-  transform: scale(1.1);
-  background-color: #FFD700;
+.card.flipped {
+  visibility: visible; /* Make cards visible when flipped */
 }
 
 .matched {
-  background-color: #32CD32; /* Green for matched cards */
-  box-shadow: 0 0 15px #32CD32;
+  background-color: #32CD32; /* Matched cards background */
+}
+
+#score-display {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  border: 2px solid #FFA500;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
 }
 
 #start-button {
@@ -64,24 +68,8 @@ body {
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%); /* Center the button */
 }
 
 #start-button:hover {
   background-color: #FF6347;
-}
-
-#score-display {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10px; /* Reduced margin to bring it closer to the grid */
-  background-color: #f8f8f8;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: 2px solid #FFA500;
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-  text-align: center;
 }
