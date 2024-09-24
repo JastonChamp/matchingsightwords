@@ -6,7 +6,7 @@ const sightWordsSets = [
     ['into', 'is', 'it', 'know', 'many'],
     ['name', 'not', 'now', 'of', 'on'],
     ['one', 'over', 'said', 'she', 'so'],
-    ['some', 'story', 'the', 'their', 'then'],
+    ['some', 'story', 'the', 'their', 'then'], // "the" included in this set
     ['there', 'this', 'to', 'too', 'want'],
     ['was', 'were', 'what', 'when', 'white']
 ];
@@ -95,10 +95,20 @@ function checkForMatch() {
     }
 }
 
-// Speak the word
+// Speak the word with special pronunciation for "the" with the schwa sound /ðə/
 function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'uh' : word);
-    utterance.lang = 'en-GB';
+    let utterance;
+
+    // Special pronunciation for "the" with schwa sound /ðə/
+    if (word === 'the') {
+        utterance = new SpeechSynthesisUtterance('thuh'); // Mimicking the schwa sound for "the"
+    } else if (word === 'a') {
+        utterance = new SpeechSynthesisUtterance('uh'); // Mimicking the schwa sound for "a"
+    } else {
+        utterance = new SpeechSynthesisUtterance(word);
+    }
+
+    utterance.lang = 'en-GB'; // UK English pronunciation
     speechSynthesis.speak(utterance);
 }
 
