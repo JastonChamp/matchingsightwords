@@ -1,5 +1,3 @@
-// Full JS
-
 const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
@@ -36,10 +34,13 @@ function shuffleArray(array) {
 function createCards() {
     cardContainer.innerHTML = ''; // Clear the container
     const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
+    console.log('Current word set:', currentWordSet); // Debugging output
     for (let word of currentWordSet) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.word = word;
+        card.textContent = ''; // Initially blank
+        card.style.visibility = 'visible'; // Ensure card is visible
         card.addEventListener('click', () => flipCard(card));
         cardContainer.appendChild(card);
     }
@@ -112,7 +113,7 @@ startButton.addEventListener('click', () => {
     startButton.disabled = true;
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
-    createCards();
+    createCards(); // Ensure cards are created when the game starts
 });
 
 // Initialize game on page load
