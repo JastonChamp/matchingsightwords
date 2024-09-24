@@ -13,11 +13,11 @@ body {
 
 .card-row {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping to multiple rows */
+  flex-wrap: wrap; /* Allow wrapping to two rows */
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  width: 720px; /* Adjust width for 5 cards in 2 rows */
+  width: 760px; /* Adjust width to ensure 5 cards fit in each row */
 }
 
 .card {
