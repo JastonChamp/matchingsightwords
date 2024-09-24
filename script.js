@@ -38,15 +38,16 @@ function createCards() {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.word = word;
+        card.dataset.index = index + 1; // Store card index for resetting numbers
         card.textContent = index + 1; // Show card number initially
         card.style.visibility = 'visible'; // Ensure card is visible
-        card.addEventListener('click', () => flipCard(card, index + 1)); // Pass the number
+        card.addEventListener('click', () => flipCard(card)); // Pass the card
         cardContainer.appendChild(card);
     });
 }
 
 // Flip card logic with number replacement
-function flipCard(card, cardNumber) {
+function flipCard(card) {
     if (!flippingAllowed || flippedCards.includes(card)) return;
 
     if (flippedCards.length < 2) {
@@ -87,7 +88,7 @@ function checkForMatch() {
     } else {
         setTimeout(() => {
             card1.textContent = card1.dataset.index;  // Restore the number
-            card2.textContent = card2.dataset.index;
+            card2.textContent = card2.dataset.index;  // Restore the number
             flippedCards = [];
             flippingAllowed = true;
         }, 1000);
@@ -109,11 +110,8 @@ function updateScore() {
 
 // Start game
 startButton.addEventListener('click', () => {
-    startButton.disabled = true;
+    startButton.disabled = true; // Disable the start button after the game starts
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
-    createCards(); // Ensure cards are created when the game starts
+    createCards(); // Create the cards only when the game starts
 });
-
-// Initialize game on page load
-createCards();
