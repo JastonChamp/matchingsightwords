@@ -13,10 +13,12 @@ const sightWordsSets = [
 
 const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
+const scoreDisplay = document.getElementById('score-display'); // Add a score display
 let flippedCards = [];
 let matchedCards = [];
 let currentSet = 0;
-let flippingAllowed = true;  // To control whether flipping is allowed
+let flippingAllowed = true;
+let score = 0; // Initialize score
 
 // Shuffle an array
 function shuffleArray(array) {
@@ -46,11 +48,10 @@ function createCards() {
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance();
 
-    // Check for the word "a" and adjust its pronunciation to the schwa sound
     if (word === 'a') {
-        utterance.text = 'uh';  // Force the pronunciation to "uh" (schwa)
+        utterance.text = 'uh';  // Schwa sound for "a"
     } else {
-        utterance.text = word;  // For other words, use the actual word
+        utterance.text = word;
     }
 
     utterance.lang = 'en-GB';  // Set to British English
@@ -83,7 +84,8 @@ function checkForMatch() {
         flippedCards = [];
         card1.classList.add('matched');
         card2.classList.add('matched');
-        flippingAllowed = true;  // Enable flipping again
+        updateScore();  // Update the score after a match
+        flippingAllowed = true;
 
         // Check if all cards are matched to move to the next set
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
@@ -104,14 +106,22 @@ function checkForMatch() {
             card1.textContent = 'Click to reveal';
             card2.textContent = 'Click to reveal';
             flippedCards = [];
-            flippingAllowed = true;  // Enable flipping again
+            flippingAllowed = true;
         }, 1000);
     }
+}
+
+// Update the score when a match is made
+function updateScore() {
+    score += 10; // Add 10 points for each match
+    scoreDisplay.textContent = `Score: ${score}`; // Update score on the display
 }
 
 // Start the game with the first set
 startButton.addEventListener('click', () => {
     startButton.disabled = true;
+    score = 0;  // Reset score when game restarts
+    scoreDisplay.textContent = `Score: ${score}`;  // Reset score display
     createCards();
 });
 
