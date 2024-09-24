@@ -1,3 +1,5 @@
+// Full JS
+
 const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
@@ -13,14 +15,14 @@ const sightWordsSets = [
 
 const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
-const scoreDisplay = document.getElementById('score-display'); // Score display
+const scoreDisplay = document.getElementById('score-display');
 let flippedCards = [];
 let matchedCards = [];
 let currentSet = 0;
 let flippingAllowed = true;
 let score = 0; // Initialize score
 
-// Shuffle an array
+// Shuffle array
 function shuffleArray(array) {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -30,42 +32,28 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Create and display cards for the current set
+// Create and display cards
 function createCards() {
-    cardContainer.innerHTML = '';
-    const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet])); // Duplicate the words for matching pairs
+    cardContainer.innerHTML = ''; // Clear the container
+    const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
     for (let word of currentWordSet) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.word = word;
-        card.addEventListener('click', () => flipCard(card)); // Handle card flip
+        card.addEventListener('click', () => flipCard(card));
         cardContainer.appendChild(card);
     }
 }
 
-// Use the Web Speech API to speak the word aloud in British English
-function speakWord(word) {
-    const utterance = new SpeechSynthesisUtterance();
-    if (word === 'a') {
-        utterance.text = 'uh';  // Schwa sound for "a"
-    } else {
-        utterance.text = word;
-    }
-    utterance.lang = 'en-GB';  // Set to British English
-    speechSynthesis.speak(utterance);
-}
-
-// Flip card and check for a match
+// Flip card logic
 function flipCard(card) {
     if (!flippingAllowed || flippedCards.includes(card)) return;
 
-    // Allow flipping only 2 cards at a time
     if (flippedCards.length < 2) {
-        card.textContent = card.dataset.word;  // Display word when card is flipped
-        card.classList.add('flipped');  // Add flipped class to show the word
-        card.style.visibility = 'visible'; // Ensure visibility when flipped
+        card.textContent = card.dataset.word; // Show word on flip
+        card.classList.add('flipped');
         flippedCards.push(card);
-        speakWord(card.dataset.word); // Speak the word after flipping
+        speakWord(card.dataset.word);
 
         if (flippedCards.length === 2) {
             checkForMatch();
@@ -73,9 +61,9 @@ function flipCard(card) {
     }
 }
 
-// Check if the two flipped cards match
+// Check for match
 function checkForMatch() {
-    flippingAllowed = false;  // Disable further flipping until match is checked
+    flippingAllowed = false;
 
     const [card1, card2] = flippedCards;
     if (card1.dataset.word === card2.dataset.word) {
@@ -83,26 +71,22 @@ function checkForMatch() {
         flippedCards = [];
         card1.classList.add('matched');
         card2.classList.add('matched');
-        updateScore();  // Update the score after a match
-        flippingAllowed = true;
+        updateScore();
 
-        // Check if all cards are matched to move to the next set
+        flippingAllowed = true;
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
             matchedCards = [];
             currentSet++;
             if (currentSet < sightWordsSets.length) {
-                setTimeout(() => {
-                    createCards(); // Load the next set
-                }, 1000);
+                setTimeout(() => createCards(), 1000);
             } else {
                 startButton.textContent = 'Game Over';
                 startButton.disabled = true;
             }
         }
     } else {
-        // If cards don't match, flip them back after a short delay
         setTimeout(() => {
-            card1.textContent = '';  // Hide word again
+            card1.textContent = '';
             card2.textContent = '';
             flippedCards = [];
             flippingAllowed = true;
@@ -110,19 +94,26 @@ function checkForMatch() {
     }
 }
 
-// Update the score when a match is made
-function updateScore() {
-    score += 10; // Add 10 points for each match
-    scoreDisplay.textContent = `Score: ${score}`; // Update score on the display
+// Speak the word
+function speakWord(word) {
+    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'uh' : word);
+    utterance.lang = 'en-GB';
+    speechSynthesis.speak(utterance);
 }
 
-// Start the game with the first set
+// Update score
+function updateScore() {
+    score += 10;
+    scoreDisplay.textContent = `Score: ${score}`;
+}
+
+// Start game
 startButton.addEventListener('click', () => {
     startButton.disabled = true;
-    score = 0;  // Reset score when game restarts
-    scoreDisplay.textContent = `Score: ${score}`;  // Reset score display
+    score = 0;
+    scoreDisplay.textContent = `Score: ${score}`;
     createCards();
 });
 
-// Initialize the game with the first set
+// Initialize game on page load
 createCards();
