@@ -1,4 +1,4 @@
-/* style.css */
+/* Updated style.css */
 body {
   font-family: 'Comic Sans MS', Arial, sans-serif; /* Child-friendly font */
   display: flex;
@@ -17,36 +17,41 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px; /* Reduced margin to bring it closer to the score */
   width: 700px; /* Adjust the width to accommodate 5 cards in a row */
 }
 
 .card {
-  width: 140px; /* Increase size for young children */
+  width: 140px;
   height: 140px;
   margin: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 32px; /* Larger font size */
-  background-color: #FFD700; /* Use a bright gold color */
+  font-size: 32px;
+  background-color: #FFD700;
   cursor: pointer;
   user-select: none;
-  border: 3px solid #FFA500; /* Make borders thicker and orange */
+  border: 3px solid #FFA500;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-  transition: all 0.4s ease; /* Smooth transition for hover and flip */
-  color: #333; /* Darker text color for readability */
-  border-radius: 15px; /* Rounded corners */
+  transition: all 0.4s ease;
+  color: #333;
+  border-radius: 15px;
+  visibility: hidden; /* Make the cards hidden initially */
+}
+
+.card.matched, .card.flipped {
+  visibility: visible; /* Show the cards when flipped or matched */
 }
 
 .card:hover {
-  transform: scale(1.1); /* Slight zoom on hover */
-  background-color: #FFD700; /* Color remains bright on hover */
+  transform: scale(1.1);
+  background-color: #FFD700;
 }
 
 .matched {
   background-color: #32CD32; /* Green for matched cards */
-  box-shadow: 0 0 15px #32CD32; /* Glowing effect for matches */
+  box-shadow: 0 0 15px #32CD32;
 }
 
 #start-button {
@@ -54,26 +59,29 @@ body {
   padding: 15px 25px;
   font-size: 18px;
   color: white;
-  background-color: #FF4500; /* Bright orange button */
+  background-color: #FF4500;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%); /* Center the button */
 }
 
 #start-button:hover {
-  background-color: #FF6347; /* Slightly different orange on hover */
+  background-color: #FF6347;
 }
 
-/* New styling for the point system */
 #score-display {
   font-size: 24px;
   font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 10px; /* Reduced margin to bring it closer to the grid */
   background-color: #f8f8f8;
   padding: 10px 20px;
   border-radius: 10px;
-  border: 2px solid #FFA500; /* Orange border for score display */
+  border: 2px solid #FFA500;
   box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+  text-align: center;
 }
