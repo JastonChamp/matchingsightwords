@@ -13,7 +13,7 @@ const sightWordsSets = [
 
 const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
-const scoreDisplay = document.getElementById('score-display'); // Add a score display
+const scoreDisplay = document.getElementById('score-display'); // Score display
 let flippedCards = [];
 let matchedCards = [];
 let currentSet = 0;
@@ -38,8 +38,7 @@ function createCards() {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.word = word;
-        card.textContent = 'Click to reveal';
-        card.addEventListener('click', () => flipCard(card));
+        card.addEventListener('click', () => flipCard(card)); // Handle card flip
         cardContainer.appendChild(card);
     }
 }
@@ -47,13 +46,11 @@ function createCards() {
 // Use the Web Speech API to speak the word aloud in British English
 function speakWord(word) {
     const utterance = new SpeechSynthesisUtterance();
-
     if (word === 'a') {
         utterance.text = 'uh';  // Schwa sound for "a"
     } else {
         utterance.text = word;
     }
-
     utterance.lang = 'en-GB';  // Set to British English
     speechSynthesis.speak(utterance);
 }
@@ -64,7 +61,9 @@ function flipCard(card) {
 
     // Allow flipping only 2 cards at a time
     if (flippedCards.length < 2) {
-        card.textContent = card.dataset.word;
+        card.textContent = card.dataset.word;  // Display word when card is flipped
+        card.classList.add('flipped');  // Add flipped class to show the word
+        card.style.visibility = 'visible'; // Ensure visibility when flipped
         flippedCards.push(card);
         speakWord(card.dataset.word); // Speak the word after flipping
 
@@ -103,8 +102,8 @@ function checkForMatch() {
     } else {
         // If cards don't match, flip them back after a short delay
         setTimeout(() => {
-            card1.textContent = 'Click to reveal';
-            card2.textContent = 'Click to reveal';
+            card1.textContent = '';  // Hide word again
+            card2.textContent = '';
             flippedCards = [];
             flippingAllowed = true;
         }, 1000);
