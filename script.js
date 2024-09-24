@@ -1,4 +1,3 @@
-// JavaScript code
 const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
@@ -6,22 +5,19 @@ const sightWordsSets = [
     ['her', 'his', 'how', 'I', 'in'],
     ['into', 'is', 'it', 'know', 'many'],
     ['name', 'not', 'now', 'of', 'on'],
-    ['one', 'over', 'said', 'it', 'know'],
-    ['many', 'name', 'not', 'now', 'of'],
-    ['on', 'one', 'over', 'said', 'she'],
-    ['so', 'some', 'story', 'the', 'their'],
-    ['then', 'there', 'this', 'to', 'too'],
-    ['want', 'was', 'were', 'what', 'when', 'white']
+    ['one', 'over', 'said', 'she', 'so'],
+    ['some', 'story', 'the', 'their', 'then'],
+    ['there', 'this', 'to', 'too', 'want'],
+    ['was', 'were', 'what', 'when', 'white']
 ];
 
 const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
 let flippedCards = [];
 let matchedCards = [];
-let currentSet = 0;
-let currentWordIndex = 0;
-let currentWordSet = [];
+let currentSet = 0; // To keep track of which set we're on
 
+// Shuffle an array
 function shuffleArray(array) {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -31,10 +27,10 @@ function shuffleArray(array) {
     return shuffled;
 }
 
-// Create and append cards to the DOM
+// Create and display cards for the current set
 function createCards() {
     cardContainer.innerHTML = '';
-    currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet])); // Add two of each word
+    const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet])); // Duplicate the words for matching pairs
     for (let word of currentWordSet) {
         const card = document.createElement('div');
         card.classList.add('card');
@@ -45,7 +41,7 @@ function createCards() {
     }
 }
 
-// Handle card click event
+// Flip card and check for a match
 function flipCard(card) {
     if (!flippedCards.includes(card)) {
         card.textContent = card.dataset.word;
@@ -56,7 +52,6 @@ function flipCard(card) {
             if (card1.dataset.word === card2.dataset.word) {
                 matchedCards.push(card1, card2);
                 flippedCards = [];
-                // Indicate correct match with background color
                 card1.classList.add('matched');
                 card2.classList.add('matched');
             } else {
@@ -68,14 +63,13 @@ function flipCard(card) {
             }
         }
 
-        if (matchedCards.length === currentWordSet.length) {
-            // All cards are matched, go to the next set of words
+        if (matchedCards.length === sightWordsSets[currentSet].length * 2) { // Check if all cards are matched
             matchedCards = [];
             currentSet++;
-            currentWordIndex = 0;
             if (currentSet < sightWordsSets.length) {
-                createCards();
-                startButton.disabled = false;
+                setTimeout(() => {
+                    createCards(); // Load the next set
+                }, 1000);
             } else {
                 startButton.textContent = 'Game Over';
                 startButton.disabled = true;
@@ -84,11 +78,11 @@ function flipCard(card) {
     }
 }
 
-// Handle start button click event
+// Start the game with the first set
 startButton.addEventListener('click', () => {
     startButton.disabled = true;
     createCards();
 });
 
-// Initialize the game
+// Initialize the game with the first set
 createCards();
