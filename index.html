@@ -1,42 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta Tags for Responsive Design -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Title and Favicon -->
+    <title>Sight Words Matching Game</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- CSS Link -->
     <link rel="stylesheet" href="style.css">
-    <title>Matching Card Game</title>
 </head>
 <body>
-    <div class="game-container">
-        <!-- Score display -->
-        <div id="score-display">Score: 0</div>
-        
-        <!-- Dropdown for selecting the word set -->
-        <label for="set-select">Choose a word set:</label>
-        <select id="set-select">
-            <option value="" selected disabled>Select a set</option>
-            <option value="0">Set 1</option>
-            <option value="1">Set 2</option>
-            <option value="2">Set 3</option>
-            <option value="3">Set 4</option>
-            <option value="4">Set 5</option>
-            <option value="5">Set 6</option>
-            <option value="6">Set 7</option>
-            <option value="7">Set 8</option>
-            <option value="8">Set 9</option>
-            <option value="9">Set 10</option>
-        </select>
-        
-        <!-- Card container where cards will be dynamically added -->
-        <div class="card-row">
+    <main class="game-container">
+        <!-- Score Display -->
+        <header>
+            <div id="score-display">Score: 0</div>
+        </header>
+
+        <!-- Controls -->
+        <div class="controls">
+            <label for="set-select">Choose a word set:</label>
+            <select id="set-select" aria-label="Select a word set">
+                <option value="" selected disabled>Select a set</option>
+                <option value="0">Set 1</option>
+                <option value="1">Set 2</option>
+                <option value="2">Set 3</option>
+                <option value="3">Set 4</option>
+                <option value="4">Set 5</option>
+                <option value="5">Set 6</option>
+                <option value="6">Set 7</option>
+                <option value="7">Set 8</option>
+                <option value="8">Set 9</option>
+                <option value="9">Set 10</option>
+            </select>
+            <button id="start-button" type="button">Start Game</button>
+            <button id="reset-button" type="button">Reset Game</button>
+        </div>
+
+        <!-- Message Display -->
+        <div id="message-display" aria-live="polite"></div>
+
+        <!-- Card Container -->
+        <div class="card-row" role="grid">
             <!-- Cards will be dynamically created here by JS -->
         </div>
-        
-        <!-- Start game button -->
-        <button id="start-button">Start Game</button>
-    </div>
-    
+    </main>
+
+    <!-- JavaScript File -->
     <script src="script.js"></script>
 </body>
 </html>
