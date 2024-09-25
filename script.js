@@ -1,164 +1,138 @@
-"/* Style the game container */
-.game-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px;
+const sightWordsSets = [
+    ['a', 'about', 'above', 'again', 'all'],
+    ['also', 'are', 'be', 'came', 'day'],
+    ['do', 'does', 'for', 'go', 'he'],
+    ['her', 'his', 'how', 'I', 'in'],
+    ['into', 'is', 'it', 'know', 'many'],
+    ['name', 'not', 'now', 'of', 'on'],
+    ['one', 'over', 'said', 'she', 'so'],
+    ['some', 'story', 'the', 'their', 'then'],
+    ['there', 'this', 'to', 'too', 'want'],
+    ['was', 'were', 'what', 'when', 'white']
+];
+
+const cardContainer = document.querySelector('.card-row');
+const startButton = document.getElementById('start-button'); // Ensure this matches the HTML button ID
+const setSelect = document.getElementById('set-select');
+const scoreDisplay = document.getElementById('score-display');
+let flippedCards = [];
+let matchedCards = [];
+let currentSet = null;  // No set selected initially
+let flippingAllowed = true;
+let score = 0; // Initialize score
+
+// Shuffle array
+function shuffleArray(array) {
+    const shuffled = array.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 }
 
-/* Style for the score display */
-#score-display {
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-family: 'Comic Sans MS', Arial, sans-serif;
-    padding: 10px;
-    background-color: #fff;
-    border: 2px solid #ffa500;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+// Create and display cards with numbers before flipping
+function createCards() {
+    if (currentSet === null) {
+        alert('Please select a word set to start the game!');
+        return;
+    }
+
+    cardContainer.innerHTML = ''; // Clear the container
+    const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
+    currentWordSet.forEach((word, index) => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.dataset.word = word;
+        card.dataset.index = index + 1; // Store card index for resetting numbers
+        card.textContent = index + 1; // Show card number initially
+        card.style.visibility = 'visible'; // Ensure card is visible
+        card.addEventListener('click', () => flipCard(card)); // Pass the card
+        cardContainer.appendChild(card);
+    });
 }
 
-/* Style for the dropdown (select element) */
-select {
-    font-size: 18px;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #ffd700;
-    color: #333;
-    border: 2px solid #ffa500;
-    outline: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+// Flip card logic with number replacement
+function flipCard(card) {
+    if (!flippingAllowed || flippedCards.includes(card)) return;
+
+    if (flippedCards.length < 2) {
+        card.textContent = card.dataset.word; // Replace number with word on flip
+        card.classList.add('flipped');
+        flippedCards.push(card);
+        speakWord(card.dataset.word);
+
+        if (flippedCards.length === 2) {
+            checkForMatch();
+        }
+    }
 }
 
-select:hover {
-    background-color: #ffdf00;
-    border-color: #ff8c00;
+// Check for match
+function checkForMatch() {
+    flippingAllowed = false;
+
+    const [card1, card2] = flippedCards;
+    if (card1.dataset.word === card2.dataset.word) {
+        matchedCards.push(card1, card2);
+        flippedCards = [];
+        card1.classList.add('matched');
+        card2.classList.add('matched');
+        updateScore();
+
+        flippingAllowed = true;
+        if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
+            matchedCards = [];
+            alert('Great job! You completed the set!');
+            startButton.disabled = false; // Enable the start button for replay
+        }
+    } else {
+        setTimeout(() => {
+            card1.textContent = card1.dataset.index;  // Restore the number
+            card2.textContent = card2.dataset.index;  // Restore the number
+            flippedCards = [];
+            flippingAllowed = true;
+        }, 1000);
+    }
 }
 
-select:focus {
-    border-color: #ff4500;
-    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+// Speak the word with special pronunciation for "the" with the schwa sound /ðə/
+function speakWord(word) {
+    let utterance;
+
+    // Special pronunciation for "the" with schwa sound /ðə/
+    if (word === 'the') {
+        utterance = new SpeechSynthesisUtterance('thuh'); // Mimicking the schwa sound for "the"
+    } else if (word === 'a') {
+        utterance = new SpeechSynthesisUtterance('uh'); // Mimicking the schwa sound for "a"
+    } else {
+        utterance = new SpeechSynthesisUtterance(word);
+    }
+
+    utterance.lang = 'en-GB'; // UK English pronunciation
+    speechSynthesis.speak(utterance);
 }
 
-/* Style the dropdown label */
-label {
-    font-family: 'Comic Sans MS', Arial, sans-serif;
-    font-size: 20px;
-    margin-bottom: 10px;
+// Update score
+function updateScore() {
+    score += 10;
+    scoreDisplay.textContent = `Score: ${score}`;
 }
 
-/* Style the card container */
-.card-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    width: 100%;
-    max-width: 600px; /* Set a maximum width to keep cards contained */
-}
+// Start game logic
+startButton.addEventListener('click', () => {
+    const selectedSet = setSelect.value;
+    if (selectedSet === "") {
+        alert('Please select a word set to start the game.');
+        return;
+    }
 
-/* Style for the cards */
-.card {
-    width: 100px;
-    height: 100px;
-    background-color: #ffd700;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    font-family: 'Comic Sans MS', Arial, sans-serif;
-    color: #333;
-    border-radius: 10px;
-    border: 2px solid #ffa500;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    perspective: 1000px; /* Needed for 3D flip */
-}
-
-.card.matched {
-    background-color: #32cd32;
-    color: #fff;
-}
-
-/* Card inner for flip effect */
-.card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-}
-
-.is-flipped {
-    transform: rotateY(180deg);
-}
-
-/* Front and back faces of the card */
-.card-front,
-.card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-}
-
-.card-back {
-    background-color: #ffd700;
-    transform: rotateY(180deg);
-}
-
-/* Style for the start game button */
-#start-button {
-    font-size: 18px;
-    padding: 15px 30px;
-    background-color: #ff4500;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-#start-button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-
-#start-button:hover {
-    background-color: #ff6347;
-}
-
-/* Style for the progress bar */
-.progress-container {
-    width: 100%;
-    max-width: 600px;
-    height: 20px;
-    background-color: #ddd;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-#progress-bar {
-    height: 100%;
-    background-color: #32cd32;
-    width: 0;
-    transition: width 0.4s ease;
-}
-
-/* Set complete message */
-.completion-message {
-    font-size: 24px;
-    color: #32cd32;
-    text-align: center;
-    margin-top: 20px;
-}"
+    currentSet = parseInt(selectedSet, 10);
+    startButton.disabled = true; // Disable the start button after the game starts
+    score = 0;
+    scoreDisplay.textContent = `Score: ${score}`;
+    flippedCards = [];
+    matchedCards = [];
+    flippingAllowed = true; // Allow flipping cards again
+    createCards(); // Create the cards only when the game starts
+});
