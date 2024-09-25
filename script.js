@@ -14,6 +14,9 @@ const MemoryGame = (() => {
         ['was', 'were', 'what', 'when', 'white']
     ];
 
+    // Colors for matched pairs
+    const matchColors = ['#FFB6C1', '#ADD8E6', '#90EE90', '#FFD700', '#FFA07A', '#9370DB', '#FFC0CB', '#66CDAA', '#FFA500', '#20B2AA'];
+
     // DOM Elements
     const cardContainer = document.querySelector('.card-row');
     const startButton = document.getElementById('start-button');
@@ -28,6 +31,11 @@ const MemoryGame = (() => {
     let currentSet = null;
     let flippingAllowed = true;
     let score = 0;
+    let wordColors = {};
+
+    // Sounds
+    const correctSound = new Audio('sounds/correct.mp3');
+    const incorrectSound = new Audio('sounds/incorrect.mp3');
 
     // Shuffle array using Fisher-Yates algorithm
     function shuffleArray(array) {
@@ -45,8 +53,17 @@ const MemoryGame = (() => {
         cardContainer.innerHTML = '';
         flippedCards = [];
         matchedCards = [];
+        wordColors = {};
 
-        const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
+        const currentWords = sightWordsSets[currentSet];
+        const currentWordSet = shuffleArray(currentWords.concat(currentWords));
+
+        // Assign colors to words
+        const colors = shuffleArray(matchColors).slice(0, currentWords.length);
+        currentWords.forEach((word, index) => {
+            wordColors[word] = colors[index];
+        });
+
         currentWordSet.forEach((word, index) => {
             const card = document.createElement('div');
             card.classList.add('card');
@@ -101,6 +118,13 @@ const MemoryGame = (() => {
         if (card1.dataset.word === card2.dataset.word) {
             matchedCards.push(card1, card2);
             updateScore();
+            playSound('correct');
+            // Apply matched color
+            const matchedColor = wordColors[card1.dataset.word];
+            card1.style.backgroundColor = matchedColor;
+            card2.style.backgroundColor = matchedColor;
+            card1.classList.add('matched');
+            card2.classList.add('matched');
             flippedCards = [];
             flippingAllowed = true;
 
@@ -110,6 +134,7 @@ const MemoryGame = (() => {
                 setSelect.disabled = false;
             }
         } else {
+            playSound('incorrect');
             setTimeout(() => {
                 card1.classList.remove('flipped');
                 card2.classList.remove('flipped');
@@ -135,6 +160,17 @@ const MemoryGame = (() => {
 
         utterance.lang = 'en-GB';
         speechSynthesis.speak(utterance);
+    }
+
+    // Play sound for correct or incorrect matches
+    function playSound(type) {
+        if (type === 'correct') {
+            correctSound.currentTime = 0;
+            correctSound.play();
+        } else if (type === 'incorrect') {
+            incorrectSound.currentTime = 0;
+            incorrectSound.play();
+        }
     }
 
     // Update score display
