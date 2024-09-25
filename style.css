@@ -108,14 +108,12 @@ label {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
 }
 
 .card-back {
+    background-color: #ffd700;
     transform: rotateY(180deg);
-}
-
-.card:hover {
-    transform: scale(1.05);
 }
 
 /* Style for the start game button */
@@ -140,12 +138,27 @@ label {
 }
 
 /* Style for the progress bar */
-#progress-bar {
-    width: 0;
+.progress-container {
+    width: 100%;
+    max-width: 600px;
     height: 20px;
-    background-color: #32cd32;
+    background-color: #ddd;
     border-radius: 10px;
-    transition: width 0.3s ease; /* Smooth progress bar growth */
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+#progress-bar {
+    height: 100%;
+    background-color: #32cd32;
+    width: 0;
+    transition: width 0.4s ease;
+}
+
+/* Set complete message */
+.completion-message {
+    font-size: 24px;
+    color: #32cd32;
+    text-align: center;
     margin-top: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
