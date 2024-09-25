@@ -18,9 +18,10 @@ const scoreDisplay = document.getElementById('score-display');
 const progressBar = document.getElementById('progress-bar');
 let flippedCards = [];
 let matchedCards = [];
-let currentSet = null;
+let currentSet = null;  // No set selected initially
 let flippingAllowed = true;
 let score = 0; // Initialize score
+let totalCardsInSet = 0; // Track total cards in the set for the progress bar
 
 // Shuffle array
 function shuffleArray(array) {
@@ -41,19 +42,18 @@ function createCards() {
 
     cardContainer.innerHTML = ''; // Clear the container
     const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
+    totalCardsInSet = currentWordSet.length; // Update total cards
     currentWordSet.forEach((word, index) => {
         const card = document.createElement('div');
         card.classList.add('card');
         card.dataset.word = word;
         card.dataset.index = index + 1; // Store card index for resetting numbers
-        card.innerHTML = `<div class="card-inner">
-                            <div class="card-front">${index + 1}</div>
-                            <div class="card-back">${word}</div>
-                          </div>`;
+        card.textContent = index + 1; // Show card number initially
+        card.style.visibility = 'visible'; // Ensure card is visible
         card.addEventListener('click', () => flipCard(card)); // Pass the card
         cardContainer.appendChild(card);
     });
-    updateProgressBar(); // Reset the progress bar
+    updateProgressBar(); // Reset progress bar at the start of the game
 }
 
 // Flip card logic with number replacement
@@ -61,7 +61,8 @@ function flipCard(card) {
     if (!flippingAllowed || flippedCards.includes(card)) return;
 
     if (flippedCards.length < 2) {
-        card.querySelector('.card-inner').classList.add('is-flipped'); // Flip the card
+        card.textContent = card.dataset.word; // Replace number with word on flip
+        card.classList.add('flipped');
         flippedCards.push(card);
         speakWord(card.dataset.word);
 
@@ -78,20 +79,22 @@ function checkForMatch() {
     const [card1, card2] = flippedCards;
     if (card1.dataset.word === card2.dataset.word) {
         matchedCards.push(card1, card2);
+        flippedCards = [];
         card1.classList.add('matched');
         card2.classList.add('matched');
-        flippedCards = [];
         updateScore();
-        updateProgressBar(); // Update the progress bar
-        flippingAllowed = true;
+        updateProgressBar();
 
+        flippingAllowed = true;
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
-            completeSet();
+            matchedCards = [];
+            setTimeout(() => alert('Great job! You completed the set!'), 300); // Delayed for smoother experience
+            startButton.disabled = false; // Enable the start button for replay
         }
     } else {
         setTimeout(() => {
-            card1.querySelector('.card-inner').classList.remove('is-flipped');
-            card2.querySelector('.card-inner').classList.remove('is-flipped');
+            card1.textContent = card1.dataset.index;  // Restore the number
+            card2.textContent = card2.dataset.index;  // Restore the number
             flippedCards = [];
             flippingAllowed = true;
         }, 1000);
@@ -121,23 +124,10 @@ function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
 }
 
-// Update the progress bar as the player matches cards
+// Update the progress bar
 function updateProgressBar() {
-    const totalCards = sightWordsSets[currentSet].length * 2;
-    const progress = (matchedCards.length / totalCards) * 100;
+    const progress = (matchedCards.length / totalCardsInSet) * 100;
     progressBar.style.width = `${progress}%`;
-}
-
-// Handle set completion without an alert message
-function completeSet() {
-    const completionMessage = document.createElement('div');
-    completionMessage.classList.add('completion-message');
-    completionMessage.textContent = "Set Complete!";
-    cardContainer.appendChild(completionMessage);
-    setTimeout(() => {
-        completionMessage.remove();
-        startButton.disabled = false; // Re-enable start button
-    }, 2000);
 }
 
 // Start game logic
