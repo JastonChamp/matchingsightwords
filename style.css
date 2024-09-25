@@ -3,15 +3,13 @@
     --primary-color: #ffeb3b; /* Bright yellow */
     --secondary-color: #ff9800; /* Orange */
     --accent-color: #f44336;   /* Red */
-    --matched-color: #4caf50;  /* Green */
+    --matched-color: green;    /* Green for matched cards */
     --text-color: #000;
     --font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
 /* Global Styles */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
 }
 
@@ -20,7 +18,7 @@ body {
     font-family: var(--font-family);
     color: var(--text-color);
     background-color: #fff8e1; /* Light yellow background */
-    font-size: 1.25rem; /* Base font size increased */
+    font-size: 1.25rem;
 }
 
 main.game-container {
@@ -171,14 +169,21 @@ button:disabled {
 }
 
 .back-face {
-    background-color: #fff;
+    background-color: transparent; /* Make back-face background transparent */
     transform: rotateY(-180deg);
 }
 
+/* Matched Cards */
 .card.matched {
-    color: #fff;
+    background-color: var(--matched-color); /* Set to green */
+    color: #fff; /* Set text color to white */
     cursor: default;
     animation: matchAnimation 1s forwards;
+}
+
+/* Ensure the back-face text is visible */
+.card.matched .back-face {
+    color: #fff;
 }
 
 /* Match Animation */
