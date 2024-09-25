@@ -11,16 +11,32 @@
     <div class="game-container">
         <!-- Score display -->
         <div id="score-display">Score: 0</div>
+
+        <!-- Dropdown for selecting the word set -->
+        <label for="set-select">Choose a word set:</label>
+        <select id="set-select">
+            <option value="" selected disabled>Select a set</option>
+            <option value="0">Set 1</option>
+            <option value="1">Set 2</option>
+            <option value="2">Set 3</option>
+            <option value="3">Set 4</option>
+            <option value="4">Set 5</option>
+            <option value="5">Set 6</option>
+            <option value="6">Set 7</option>
+            <option value="7">Set 8</option>
+            <option value="8">Set 9</option>
+            <option value="9">Set 10</option>
+        </select>
         
         <!-- Card container where cards will be dynamically added -->
         <div class="card-row">
             <!-- Cards will be dynamically created here by JS -->
         </div>
-        
+
         <!-- Start game button -->
         <button id="start-button">Start Game</button>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
