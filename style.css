@@ -1,75 +1,28 @@
-/* style.css */
-body {
-  font-family: 'Comic Sans MS', Arial, sans-serif; /* Child-friendly font */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Adjusted to start from the top */
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  background-color: #f0f0f0;
-  background-size: cover;
+/* Style for the dropdown (select element) */
+select {
+  font-size: 18px; /* Increase font size */
+  padding: 10px;
+  border-radius: 10px; /* Add rounded corners */
+  background-color: #ffd700; /* Match the bright yellow/gold background */
+  color: #333; /* Darker text color */
+  border: 2px solid #ffa500; /* Add orange border to match the button */
+  outline: none; /* Remove blue outline when selected */
+  cursor: pointer; /* Show pointer cursor */
+  transition: all 0.3s ease; /* Smooth transition */
 }
 
-.card-row {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Ensures 5 cards per row */
-  grid-gap: 10px; /* Space between cards */
-  justify-content: center;
-  margin-top: 20px;
-  width: auto; /* Auto-width to ensure grid fits */
+select:hover {
+  background-color: #ffdf00; /* Lighter yellow on hover */
+  border-color: #ff8c00; /* Darker orange border on hover */
 }
 
-.card {
-  width: 140px;
-  height: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  background-color: #FFD700; /* Bright color for cards */
-  cursor: pointer;
-  user-select: none;
-  border: 3px solid #FFA500; /* Orange border */
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3); /* Light shadow for a raised effect */
-  transition: all 0.4s ease;
-  color: #333; /* Darker text for words */
-  border-radius: 15px; /* Rounded corners */
-  visibility: hidden; /* Initially hidden */
+/* Style the dropdown arrow */
+select::-ms-expand {
+  display: none; /* Remove the default dropdown arrow for IE/Edge */
 }
 
-.card.flipped {
-  visibility: visible; /* Make cards visible when flipped */
-}
-
-.matched {
-  background-color: #32CD32; /* Green color for matched cards */
-  box-shadow: 0 0 15px #32CD32; /* Glowing effect for matches */
-}
-
-#score-display {
-  font-size: 24px;
-  font-weight: bold;
-  margin: 10px 0;
-  padding: 10px 20px;
-  background-color: #f8f8f8;
-  border-radius: 10px;
-  border: 2px solid #FFA500;
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-#start-button {
-  margin-top: 20px;
-  padding: 15px 25px;
-  font-size: 18px;
-  color: white;
-  background-color: #FF4500;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#start-button:hover {
-  background-color: #FF6347;
+/* Style for the dropdown container (to align with overall layout) */
+select:focus {
+  border-color: #ff4500; /* Bright orange border on focus */
+  box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); /* Add glowing effect */
 }
