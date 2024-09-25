@@ -12,7 +12,7 @@ const sightWordsSets = [
 ];
 
 const cardContainer = document.querySelector('.card-row');
-const startButton = document.getElementById('start-game-button');
+const startButton = document.getElementById('start-button'); // Ensure this matches the HTML button ID
 const setSelect = document.getElementById('set-select');
 const scoreDisplay = document.getElementById('score-display');
 let flippedCards = [];
@@ -84,7 +84,7 @@ function checkForMatch() {
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
             matchedCards = [];
             alert('Great job! You completed the set!');
-            // Optionally: You could reload or allow them to pick another set
+            startButton.disabled = false; // Enable the start button for replay
         }
     } else {
         setTimeout(() => {
@@ -119,7 +119,7 @@ function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
 }
 
-// Start game
+// Start game logic
 startButton.addEventListener('click', () => {
     const selectedSet = setSelect.value;
     if (selectedSet === "") {
@@ -131,5 +131,8 @@ startButton.addEventListener('click', () => {
     startButton.disabled = true; // Disable the start button after the game starts
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
+    flippedCards = [];
+    matchedCards = [];
+    flippingAllowed = true; // Allow flipping cards again
     createCards(); // Create the cards only when the game starts
 });
