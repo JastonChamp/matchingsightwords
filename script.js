@@ -14,9 +14,6 @@ const MemoryGame = (() => {
         ['was', 'were', 'what', 'when', 'white']
     ];
 
-    // Colors for matched pairs
-    const matchColors = ['#FFB6C1', '#ADD8E6', '#90EE90', '#FFD700', '#FFA07A', '#9370DB', '#FFC0CB', '#66CDAA', '#FFA500', '#20B2AA'];
-
     // DOM Elements
     const cardContainer = document.querySelector('.card-row');
     const startButton = document.getElementById('start-button');
@@ -31,7 +28,6 @@ const MemoryGame = (() => {
     let currentSet = null;
     let flippingAllowed = true;
     let score = 0;
-    let wordColors = {};
 
     // Sounds
     const correctSound = new Audio('sounds/correct.mp3');
@@ -53,16 +49,9 @@ const MemoryGame = (() => {
         cardContainer.innerHTML = '';
         flippedCards = [];
         matchedCards = [];
-        wordColors = {};
 
         const currentWords = sightWordsSets[currentSet];
         const currentWordSet = shuffleArray(currentWords.concat(currentWords));
-
-        // Assign colors to words
-        const colors = shuffleArray(matchColors).slice(0, currentWords.length);
-        currentWords.forEach((word, index) => {
-            wordColors[word] = colors[index];
-        });
 
         currentWordSet.forEach((word, index) => {
             const card = document.createElement('div');
@@ -119,10 +108,11 @@ const MemoryGame = (() => {
             matchedCards.push(card1, card2);
             updateScore();
             playSound('correct');
-            // Apply matched color
-            const matchedColor = wordColors[card1.dataset.word];
-            card1.style.backgroundColor = matchedColor;
-            card2.style.backgroundColor = matchedColor;
+
+            // Apply green background color
+            card1.style.backgroundColor = 'green';
+            card2.style.backgroundColor = 'green';
+
             card1.classList.add('matched');
             card2.classList.add('matched');
             flippedCards = [];
