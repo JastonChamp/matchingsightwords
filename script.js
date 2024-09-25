@@ -6,17 +6,18 @@ const sightWordsSets = [
     ['into', 'is', 'it', 'know', 'many'],
     ['name', 'not', 'now', 'of', 'on'],
     ['one', 'over', 'said', 'she', 'so'],
-    ['some', 'story', 'the', 'their', 'then'], // "the" included in this set
+    ['some', 'story', 'the', 'their', 'then'],
     ['there', 'this', 'to', 'too', 'want'],
     ['was', 'were', 'what', 'when', 'white']
 ];
 
 const cardContainer = document.querySelector('.card-row');
-const startButton = document.getElementById('start-button');
+const startButton = document.getElementById('start-game-button');
+const setSelect = document.getElementById('set-select');
 const scoreDisplay = document.getElementById('score-display');
 let flippedCards = [];
 let matchedCards = [];
-let currentSet = 0;
+let currentSet = null;  // No set selected initially
 let flippingAllowed = true;
 let score = 0; // Initialize score
 
@@ -32,6 +33,11 @@ function shuffleArray(array) {
 
 // Create and display cards with numbers before flipping
 function createCards() {
+    if (currentSet === null) {
+        alert('Please select a word set to start the game!');
+        return;
+    }
+
     cardContainer.innerHTML = ''; // Clear the container
     const currentWordSet = shuffleArray(sightWordsSets[currentSet].concat(sightWordsSets[currentSet]));
     currentWordSet.forEach((word, index) => {
@@ -77,13 +83,8 @@ function checkForMatch() {
         flippingAllowed = true;
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
             matchedCards = [];
-            currentSet++;
-            if (currentSet < sightWordsSets.length) {
-                setTimeout(() => createCards(), 1000);
-            } else {
-                startButton.textContent = 'Game Over';
-                startButton.disabled = true;
-            }
+            alert('Great job! You completed the set!');
+            // Optionally: You could reload or allow them to pick another set
         }
     } else {
         setTimeout(() => {
@@ -120,6 +121,13 @@ function updateScore() {
 
 // Start game
 startButton.addEventListener('click', () => {
+    const selectedSet = setSelect.value;
+    if (selectedSet === "") {
+        alert('Please select a word set to start the game.');
+        return;
+    }
+
+    currentSet = parseInt(selectedSet, 10);
     startButton.disabled = true; // Disable the start button after the game starts
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
