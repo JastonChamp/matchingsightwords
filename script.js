@@ -15,21 +15,12 @@ const cardContainer = document.querySelector('.card-row');
 const startButton = document.getElementById('start-button');
 const setSelect = document.getElementById('set-select');
 const scoreDisplay = document.getElementById('score-display');
-const body = document.querySelector('body');
-const progressBar = document.createElement('div'); // Create a progress bar element
+const progressBar = document.getElementById('progress-bar');
 let flippedCards = [];
 let matchedCards = [];
-let currentSet = null; // No set selected initially
+let currentSet = null;
 let flippingAllowed = true;
 let score = 0; // Initialize score
-
-// Initialize progress bar
-progressBar.id = 'progress-bar';
-progressBar.style.width = '0%';
-progressBar.style.height = '20px';
-progressBar.style.backgroundColor = '#32cd32';
-progressBar.style.margin = '20px 0';
-document.querySelector('.game-container').appendChild(progressBar);
 
 // Shuffle array
 function shuffleArray(array) {
@@ -55,18 +46,22 @@ function createCards() {
         card.classList.add('card');
         card.dataset.word = word;
         card.dataset.index = index + 1; // Store card index for resetting numbers
-        card.innerHTML = `<div class="card-inner"><div class="card-front">${index + 1}</div><div class="card-back">${word}</div></div>`;
+        card.innerHTML = `<div class="card-inner">
+                            <div class="card-front">${index + 1}</div>
+                            <div class="card-back">${word}</div>
+                          </div>`;
         card.addEventListener('click', () => flipCard(card)); // Pass the card
         cardContainer.appendChild(card);
     });
+    updateProgressBar(); // Reset the progress bar
 }
 
-// Flip card logic with animation and number replacement
+// Flip card logic with number replacement
 function flipCard(card) {
     if (!flippingAllowed || flippedCards.includes(card)) return;
 
     if (flippedCards.length < 2) {
-        card.querySelector('.card-inner').classList.add('is-flipped'); // Add flip animation class
+        card.querySelector('.card-inner').classList.add('is-flipped'); // Flip the card
         flippedCards.push(card);
         speakWord(card.dataset.word);
 
@@ -76,24 +71,22 @@ function flipCard(card) {
     }
 }
 
-// Check for match and update the progress bar
+// Check for match
 function checkForMatch() {
     flippingAllowed = false;
 
     const [card1, card2] = flippedCards;
     if (card1.dataset.word === card2.dataset.word) {
         matchedCards.push(card1, card2);
+        card1.classList.add('matched');
+        card2.classList.add('matched');
         flippedCards = [];
         updateScore();
-
+        updateProgressBar(); // Update the progress bar
         flippingAllowed = true;
-        updateProgressBar();
 
         if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
-            matchedCards = [];
-            alert('Great job! You completed the set!');
-            startButton.disabled = false; // Enable the start button for replay
-            changeBackground(); // Change background after completion
+            completeSet();
         }
     } else {
         setTimeout(() => {
@@ -128,11 +121,23 @@ function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
 }
 
-// Update the progress bar based on matched cards
+// Update the progress bar as the player matches cards
 function updateProgressBar() {
     const totalCards = sightWordsSets[currentSet].length * 2;
-    const progressPercentage = (matchedCards.length / totalCards) * 100;
-    progressBar.style.width = `${progressPercentage}%`;
+    const progress = (matchedCards.length / totalCards) * 100;
+    progressBar.style.width = `${progress}%`;
+}
+
+// Handle set completion without an alert message
+function completeSet() {
+    const completionMessage = document.createElement('div');
+    completionMessage.classList.add('completion-message');
+    completionMessage.textContent = "Set Complete!";
+    cardContainer.appendChild(completionMessage);
+    setTimeout(() => {
+        completionMessage.remove();
+        startButton.disabled = false; // Re-enable start button
+    }, 2000);
 }
 
 // Start game logic
@@ -150,13 +155,5 @@ startButton.addEventListener('click', () => {
     flippedCards = [];
     matchedCards = [];
     flippingAllowed = true; // Allow flipping cards again
-    progressBar.style.width = '0%'; // Reset progress bar
     createCards(); // Create the cards only when the game starts
 });
-
-// Change the background after completing a set
-function changeBackground() {
-    const backgrounds = ['#FFB6C1', '#ADD8E6', '#98FB98', '#FFD700']; // Example background colors
-    const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    body.style.backgroundColor = randomBackground;
-}
