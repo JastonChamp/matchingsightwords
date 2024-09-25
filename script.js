@@ -64,6 +64,8 @@ function flipCard(card) {
     cardInner.classList.add('is-flipped');
     flippedCards.push(card);
 
+    speakWord(card.dataset.word); // Call the Web Speech API here
+
     if (flippedCards.length === 2) {
         checkForMatch();
     }
@@ -92,15 +94,18 @@ function checkForMatch() {
 function resetFlipState(isMatch) {
     flippedCards = [];
     flippingAllowed = true;
+
     if (isMatch && matchedCards.length === sightWordsSets[currentSet].length * 2) {
         alert('Great job! You completed the set!');
-        startButton.disabled = false;
+        matchedCards = []; // Clear matched cards after completion
+        startButton.disabled = false; // Enable the start button for replay
     }
 }
 
-// Speak the word with schwa sound for "the"
+// Speak the word with special pronunciation for "the"
 function speakWord(word) {
     let utterance = new SpeechSynthesisUtterance();
+
     if (word === 'the') {
         utterance.text = 'thuh';
     } else if (word === 'a') {
@@ -108,7 +113,8 @@ function speakWord(word) {
     } else {
         utterance.text = word;
     }
-    utterance.lang = 'en-GB';
+
+    utterance.lang = 'en-GB'; // Set the language to British English
     speechSynthesis.speak(utterance);
 }
 
@@ -127,7 +133,7 @@ startButton.addEventListener('click', () => {
     }
 
     currentSet = parseInt(selectedSet, 10);
-    startButton.disabled = true;
+    startButton.disabled = true; // Disable the start button after the game starts
     score = 0;
     scoreDisplay.textContent = `Score: ${score}`;
     flippedCards = [];
