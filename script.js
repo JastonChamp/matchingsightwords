@@ -106,7 +106,7 @@ const MemoryGame = (() => {
         const [card1, card2] = flippedCards;
         if (card1.dataset.word === card2.dataset.word) {
             matchedCards.push(card1, card2);
-            updateScore();
+            incrementScore(10);
             playSound('correct');
 
             // Apply green background color
@@ -163,10 +163,15 @@ const MemoryGame = (() => {
         }
     }
 
-    // Update score display
+    // Update score display without changing score value
     function updateScore() {
-        score += 10;
         scoreDisplay.textContent = `Score: ${score}`;
+    }
+
+    // Increment score by specified points
+    function incrementScore(points) {
+        score += points;
+        updateScore();
     }
 
     // Display messages to the user
