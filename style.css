@@ -43,70 +43,30 @@ body {
 #score-display {
     font-size: 1.5rem;
     margin: 0.5rem 0;
-    padding: 0.5rem 1rem;
-    background-color: #fff;
-    border: 4px solid var(--secondary-color);
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Controls */
 .controls {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin: 0.5rem 0;
+}
+
+.controls label,
+.controls select,
+.controls button {
+    margin: 0.25rem;
 }
 
 .controls label {
     font-size: 1rem;
-    margin-right: 0.5rem;
 }
 
-.controls select {
-    font-size: 1rem;
-    padding: 0.5rem;
-    border-radius: 20px;
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: 4px solid var(--secondary-color);
-    outline: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-right: 0.5rem;
-}
-
-.controls select:hover,
-.controls select:focus {
-    background-color: #ffe082;
-    border-color: #ffb300;
-}
-
+.controls select,
 .controls button {
     font-size: 1rem;
     padding: 0.5rem 1rem;
-    margin-right: 0.5rem;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.controls button:hover,
-.controls button:focus {
-    background-color: #e53935;
-    outline: none;
-}
-
-button:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-/* Message Display */
 #message-display {
     font-size: 1rem;
     color: var(--accent-color);
@@ -115,43 +75,32 @@ button:disabled {
     text-align: center;
 }
 
-/* Game Container */
 main.game-container {
-    margin-top: calc(100px + 1rem); /* Adjust based on header height */
+    margin-top: 6rem; /* Adjust based on header height */
     padding: 1rem;
-    height: calc(100vh - (100px + 2rem)); /* Adjust for header and padding */
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 /* Card Container */
 .card-row {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(6rem, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
     width: 100%;
     max-width: 800px;
-    height: 100%;
-    overflow-y: auto;
-    padding-bottom: 1rem;
+    margin: 0 auto;
 }
 
 /* Card Styles */
 .card {
+    position: relative;
     width: 100%;
     padding-top: 100%; /* 1:1 Aspect Ratio */
-    position: relative;
     background-color: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
+    font-size: 2rem;
     color: var(--text-color);
-    border-radius: 10px;
+    border-radius: 20px;
     border: 4px solid var(--secondary-color);
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.3s ease;
     overflow: hidden;
@@ -182,7 +131,7 @@ main.game-container {
     position: absolute;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 20px;
     backface-visibility: hidden;
     transition: transform 0.6s;
 }
@@ -213,13 +162,13 @@ main.game-container {
 /* Match Animation */
 @keyframes matchAnimation {
     0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
 
 .card:hover,
 .card:focus {
-    transform: scale(1.03);
+    transform: scale(1.05);
     outline: 2px solid #ff8c00;
 }
 
@@ -228,30 +177,37 @@ main.game-container {
 }
 
 /* Responsive Adjustments */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+    main.game-container {
+        margin-top: 8rem;
+    }
+
     #score-display {
         font-size: 1.25rem;
     }
 
-    .controls label {
-        font-size: 0.9rem;
-    }
-
+    .controls label,
     .controls select,
     .controls button {
         font-size: 0.9rem;
-        padding: 0.5rem;
-    }
-
-    main.game-container {
-        margin-top: calc(120px + 1rem); /* Adjust if header height changes */
-    }
-
-    .card-row {
-        grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
     }
 
     .card {
-        font-size: 1rem;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    main.game-container {
+        margin-top: 10rem;
+    }
+
+    .card-row {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
