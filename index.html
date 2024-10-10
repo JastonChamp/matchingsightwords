@@ -14,9 +14,10 @@
 <body>
     <!-- Fixed Header -->
     <header class="fixed-header">
-        <!-- Score Display and Controls -->
         <div class="header-content">
+            <!-- Score Display -->
             <div id="score-display">Score: 0</div>
+            <!-- Controls -->
             <div class="controls">
                 <label for="set-select">Choose a word set:</label>
                 <select id="set-select" aria-label="Select a word set">
@@ -39,13 +40,14 @@
         <!-- Message Display -->
         <div id="message-display" aria-live="polite"></div>
     </header>
-    <!-- Game Container -->
+
     <main class="game-container">
         <!-- Card Container -->
         <div class="card-row" role="grid">
             <!-- Cards will be dynamically created here by JS -->
         </div>
     </main>
+
     <!-- JavaScript File -->
     <script src="script.js"></script>
 </body>
