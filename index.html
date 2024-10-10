@@ -12,41 +12,40 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="game-container">
-        <!-- Score Display -->
-        <header>
+    <!-- Fixed Header -->
+    <header class="fixed-header">
+        <!-- Score Display and Controls -->
+        <div class="header-content">
             <div id="score-display">Score: 0</div>
-        </header>
-
-        <!-- Controls -->
-        <div class="controls">
-            <label for="set-select">Choose a word set:</label>
-            <select id="set-select" aria-label="Select a word set">
-                <option value="" selected disabled>Select a set</option>
-                <option value="0">Set 1</option>
-                <option value="1">Set 2</option>
-                <option value="2">Set 3</option>
-                <option value="3">Set 4</option>
-                <option value="4">Set 5</option>
-                <option value="5">Set 6</option>
-                <option value="6">Set 7</option>
-                <option value="7">Set 8</option>
-                <option value="8">Set 9</option>
-                <option value="9">Set 10</option>
-            </select>
-            <button id="start-button" type="button">Start Game</button>
-            <button id="reset-button" type="button">Reset Game</button>
+            <div class="controls">
+                <label for="set-select">Choose a word set:</label>
+                <select id="set-select" aria-label="Select a word set">
+                    <option value="" selected disabled>Select a set</option>
+                    <option value="0">Set 1</option>
+                    <option value="1">Set 2</option>
+                    <option value="2">Set 3</option>
+                    <option value="3">Set 4</option>
+                    <option value="4">Set 5</option>
+                    <option value="5">Set 6</option>
+                    <option value="6">Set 7</option>
+                    <option value="7">Set 8</option>
+                    <option value="8">Set 9</option>
+                    <option value="9">Set 10</option>
+                </select>
+                <button id="start-button" type="button">Start Game</button>
+                <button id="reset-button" type="button">Reset Game</button>
+            </div>
         </div>
-
         <!-- Message Display -->
         <div id="message-display" aria-live="polite"></div>
-
+    </header>
+    <!-- Game Container -->
+    <main class="game-container">
         <!-- Card Container -->
         <div class="card-row" role="grid">
             <!-- Cards will be dynamically created here by JS -->
         </div>
     </main>
-
     <!-- JavaScript File -->
     <script src="script.js"></script>
 </body>
