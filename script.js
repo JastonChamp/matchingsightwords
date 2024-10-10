@@ -84,9 +84,6 @@ const MemoryGame = (() => {
 
             cardContainer.appendChild(card);
         });
-
-        // Adjust card container scroll if necessary
-        cardContainer.scrollTop = 0;
     }
 
     // Flip card logic
