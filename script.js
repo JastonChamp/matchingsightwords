@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const setSelect = document.getElementById('set-select');
   const scoreDisplay = document.getElementById('score-display');
   const messageDisplay = document.getElementById('message-display');
+  const fullscreenButton = document.getElementById('fullscreen-button');
 
   // Game State Variables
   let flippedCards = [];
@@ -210,7 +211,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
   };
 
+  // Toggle fullscreen mode using the Fullscreen API
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   // Event Listeners
   startButton.addEventListener('click', startGame);
   resetButton.addEventListener('click', resetGame);
+  fullscreenButton.addEventListener('click', toggleFullscreen);
 });
