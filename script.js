@@ -65,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Create inner container that will flip
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
+      // Ensure proper positioning
+      cardInner.style.top = "0";
+      cardInner.style.left = "0";
 
       // Front face (displays a number)
       const frontFace = document.createElement('div');
@@ -213,6 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Toggle fullscreen mode using the Fullscreen API
   const toggleFullscreen = () => {
+    console.log("Toggle fullscreen clicked");
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch((err) => {
         console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
