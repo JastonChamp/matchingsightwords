@@ -1,269 +1,228 @@
-/* CSS Variables for Consistency */
+/* CSS Variables for Consistent Theming */
 :root {
-    --primary-color: #ffeb3b; /* Bright yellow */
-    --secondary-color: #ff9800; /* Orange */
-    --accent-color: #f44336;   /* Red */
-    --matched-color: green;    /* Green for matched cards */
-    --text-color: #000;
-    --font-family: 'Comic Sans MS', 'Comic Sans', cursive;
+  --primary-color: #ffeb3b;    /* Bright yellow */
+  --secondary-color: #ff9800;  /* Orange */
+  --accent-color: #f44336;     /* Red */
+  --matched-color: green;      /* Green for matched cards */
+  --text-color: #000;
+  --font-family: 'Comic Sans MS', 'Comic Sans', cursive;
 }
 
-/* Global Styles */
+/* Global Resets and Base Styles */
 *, *::before, *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
-
 body {
-    margin: 0;
-    font-family: var(--font-family);
-    color: var(--text-color);
-    background-color: #fff8e1; /* Light yellow background */
-    font-size: 1.25rem;
+  margin: 0;
+  font-family: var(--font-family);
+  color: var(--text-color);
+  background-color: #fff8e1; /* Light yellow */
+  font-size: 1.25rem;
 }
 
 /* Fixed Header */
 .fixed-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background-color: #fff8e1; /* Match background */
-    z-index: 1000;
-    padding: 0.5rem 1rem;
-    border-bottom: 2px solid var(--secondary-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff8e1;
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid var(--secondary-color);
 }
-
 .header-content {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
 }
-
 #score-display {
-    font-size: 1.5rem;
-    margin: 0.5rem 0;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
 }
 
-/* Controls */
+/* Controls Styling */
 .controls {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
-
 .controls label {
-    font-size: 1rem;
-    margin-right: 0.5rem;
+  font-size: 1rem;
+  margin-right: 0.5rem;
 }
-
 .controls select {
-    font-size: 1rem;
-    padding: 0.5rem 2rem 0.5rem 1rem;
-    margin-right: 0.5rem;
-    border-radius: 20px;
-    background-color: var(--primary-color);
-    color: var(--text-color);
-    border: 2px solid var(--secondary-color);
-    outline: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    -webkit-appearance: none; /* Remove default arrow in WebKit browsers */
-    -moz-appearance: none; /* Remove default arrow in Firefox */
-    appearance: none; /* Remove default arrow */
-    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23ff9800"><polygon points="8,10 4,6 12,6"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 0.65rem;
+  font-size: 1rem;
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  margin-right: 0.5rem;
+  border-radius: 20px;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: 2px solid var(--secondary-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23ff9800"><polygon points="8,10 4,6 12,6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.65rem;
 }
-
 .controls select:hover,
 .controls select:focus {
-    background-color: #ffe082;
-    border-color: #ffb300;
+  background-color: #ffe082;
+  border-color: #ffb300;
 }
-
 .controls button {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    margin-right: 0.5rem;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
-
 .controls button:hover,
 .controls button:focus {
-    background-color: #e53935;
-    outline: none;
+  background-color: #e53935;
 }
-
 button:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-    opacity: 0.6;
+  background-color: #aaa;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
-
-/* Ensure the last element in controls doesn't have extra margin */
 .controls > *:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
-
 #message-display {
-    font-size: 1rem;
-    color: var(--accent-color);
-    margin-top: 0.5rem;
-    min-height: 1.5rem; /* Reserve space even when empty */
-    text-align: center;
+  font-size: 1rem;
+  color: var(--accent-color);
+  margin-top: 0.5rem;
+  min-height: 1.5rem;
+  text-align: center;
 }
 
+/* Main Game Container */
 main.game-container {
-    margin-top: 6rem; /* Adjust based on header height */
-    padding: 1rem;
+  margin-top: 6rem; /* Allow space for the fixed header */
+  padding: 1rem;
 }
 
-/* Card Container */
+/* Card Grid */
 .card-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1rem;
-    width: 100%;
-    /* Remove max-width to allow full use of horizontal space */
-    /* max-width: 800px; */
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+  width: 100%;
+  margin: 0 auto;
+  perspective: 1000px; /* For 3D flip effect */
 }
 
 /* Card Styles */
 .card {
-    position: relative;
-    width: 100%;
-    padding-top: 100%; /* 1:1 Aspect Ratio */
-    background-color: var(--primary-color);
-    font-size: 2rem;
-    color: var(--text-color);
-    border-radius: 20px;
-    border: 4px solid var(--secondary-color);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* 1:1 Aspect Ratio */
+  background-color: var(--primary-color);
+  border: 4px solid var(--secondary-color);
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
 }
-
-.card-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    backface-visibility: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.card.flipped .front-face {
-    transform: rotateY(180deg);
-}
-
-.card.flipped .back-face {
-    transform: rotateY(0deg);
-}
-
-.front-face,
-.back-face {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 20px;
-    backface-visibility: hidden;
-    transition: transform 0.6s;
-}
-
-.front-face {
-    background-color: var(--primary-color);
-    transform: rotateY(0deg);
-}
-
-.back-face {
-    background-color: transparent; /* Make back-face background transparent */
-    transform: rotateY(-180deg);
-}
-
-/* Matched Cards */
-.card.matched {
-    background-color: var(--matched-color); /* Set to green */
-    color: #fff; /* Set text color to white */
-    cursor: default;
-    animation: matchAnimation 1s forwards;
-}
-
-/* Ensure the back-face text is visible */
-.card.matched .back-face {
-    color: #fff;
-}
-
-/* Match Animation */
-@keyframes matchAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
-}
-
 .card:hover,
 .card:focus {
-    transform: scale(1.05);
-    outline: 2px solid #ff8c00;
+  transform: scale(1.05);
+  outline: 2px solid #ff8c00;
+}
+.card:focus {
+  outline-offset: -2px;
 }
 
-.card:focus {
-    outline-offset: -2px;
+/* Card Faces */
+.card-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.6s;
+}
+.front-face {
+  background-color: var(--primary-color);
+  transform: rotateY(0deg);
+}
+.back-face {
+  background-color: transparent;
+  transform: rotateY(-180deg);
+}
+
+/* Flipped Card */
+.card.flipped .front-face {
+  transform: rotateY(180deg);
+}
+.card.flipped .back-face {
+  transform: rotateY(0deg);
+}
+
+/* Matched Card */
+.card.matched {
+  background-color: var(--matched-color);
+  color: #fff;
+  cursor: default;
+  animation: matchAnimation 1s forwards;
+}
+.card.matched .back-face {
+  color: #fff;
+}
+
+@keyframes matchAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
 /* Responsive Adjustments */
 @media (max-width: 800px) {
-    main.game-container {
-        margin-top: 8rem;
-    }
-
-    #score-display {
-        font-size: 1.25rem;
-    }
-
-    .controls {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .controls label,
-    .controls select,
-    .controls button {
-        font-size: 0.9rem;
-        margin: 0.25rem 0;
-    }
-
-    .controls select {
-        width: 100%;
-    }
-
-    .card-row {
-        grid-template-columns: repeat(4, 1fr); /* Adjust columns for medium screens */
-    }
-
-    .card {
-        font-size: 1.5rem;
-    }
+  main.game-container {
+    margin-top: 8rem;
+  }
+  #score-display {
+    font-size: 1.25rem;
+  }
+  .controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .controls label,
+  .controls select,
+  .controls button {
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+  }
+  .controls select {
+    width: 100%;
+  }
+  .card-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .card {
+    font-size: 1.5rem;
+  }
 }
-
 @media (max-width: 600px) {
-    main.game-container {
-        margin-top: 10rem;
-    }
-
-    .card-row {
-        grid-template-columns: repeat(2, 1fr); /* Adjust columns for small screens */
-    }
+  main.game-container {
+    margin-top: 10rem;
+  }
+  .card-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
