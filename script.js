@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Sight Words Sets (each set appears twice in the game)
+  // Sight Words Sets
   const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const scoreDisplay = document.getElementById('score-display');
   const messageDisplay = document.getElementById('message-display');
 
-  // Game state variables
+  // Game State Variables
   let flippedCards = [];
   let matchedCards = [];
   let currentSet = null;
   let flippingAllowed = true;
   let score = 0;
 
-  // Audio feedback
+  // Audio Feedback
   const correctSound = new Audio('sounds/correct.mp3');
   const incorrectSound = new Audio('sounds/incorrect.mp3');
 
-  // Shuffle array using the Fisher-Yates algorithm
+  // Shuffle function using Fisher-Yates algorithm
   const shuffleArray = (array) => {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -44,36 +44,41 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
-  // Create and display cards for the selected word set
+  // Create and display cards using a card-inner wrapper for smooth 3D flip
   const createCards = () => {
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
+
     const words = sightWordsSets[currentSet];
-    // Duplicate words so each appears twice, then shuffle
     const cardWords = shuffleArray(words.concat(words));
 
     cardWords.forEach((word, index) => {
+      // Create outer card element
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.dataset.word = word;
-      card.dataset.index = index;
 
-      // Front face shows a number
+      // Create inner container that will flip
+      const cardInner = document.createElement('div');
+      cardInner.classList.add('card-inner');
+
+      // Front face (displays a number)
       const frontFace = document.createElement('div');
-      frontFace.classList.add('front-face', 'card-content');
+      frontFace.classList.add('card-face', 'card-front');
       frontFace.textContent = index + 1;
 
-      // Back face displays the word
+      // Back face (displays the word)
       const backFace = document.createElement('div');
-      backFace.classList.add('back-face', 'card-content');
+      backFace.classList.add('card-face', 'card-back');
       backFace.textContent = word;
 
-      card.append(frontFace, backFace);
+      cardInner.append(frontFace, backFace);
+      card.appendChild(cardInner);
 
-      // Click and keyboard event listeners for flipping
+      // Event Listeners for mouse and keyboard activation
       card.addEventListener('click', () => flipCard(card));
       card.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -85,9 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Handle card flip
+  // Flip card: adds 'flipped' class to trigger CSS transform
   const flipCard = (card) => {
     if (!flippingAllowed || flippedCards.includes(card) || matchedCards.includes(card)) return;
+
     card.classList.add('flipped');
     flippedCards.push(card);
     speakWord(card.dataset.word);
@@ -97,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Check if the two flipped cards match
+  // Check if two flipped cards match
   const checkForMatch = () => {
     flippingAllowed = false;
     const [card1, card2] = flippedCards;
@@ -107,14 +113,14 @@ document.addEventListener('DOMContentLoaded', () => {
       incrementScore(10);
       playSound('correct');
 
-      // Mark cards as matched (CSS will update their appearance)
+      // Add a class to trigger the bounce animation for a match
       card1.classList.add('matched');
       card2.classList.add('matched');
 
       flippedCards = [];
       flippingAllowed = true;
 
-      // If all cards are matched, the set is complete
+      // If all pairs are matched, display a congratulatory message
       if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
         displayMessage('Great job! You completed the set!');
         startButton.disabled = false;
@@ -131,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Pronounce the word using SpeechSynthesis with special cases for "the" and "a"
+  // Use SpeechSynthesis to pronounce words (with special cases for "the" and "a")
   const speakWord = (word) => {
-    speechSynthesis.cancel(); // Stop any ongoing speech
+    speechSynthesis.cancel();
     let utteranceText = word;
     if (word === 'the') {
       utteranceText = 'thuh';
@@ -156,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Update the score display
+  // Update score display
   const updateScore = () => {
     scoreDisplay.textContent = `Score: ${score}`;
   };
@@ -189,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createCards();
   };
 
-  // Reset the game to its initial state
+  // Reset the game state
   const resetGame = () => {
     startButton.disabled = false;
     setSelect.disabled = false;
