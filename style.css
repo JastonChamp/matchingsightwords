@@ -106,8 +106,9 @@ button:disabled {
 }
 
 /* Main Game Container */
+/* Increased top margin to ensure the header does not overlap the cards */
 main.game-container {
-  margin-top: 6rem; /* Leave room for header */
+  margin-top: 100px;
   padding: 1rem;
 }
 
@@ -188,7 +189,7 @@ main.game-container {
 /* Responsive Adjustments */
 @media (max-width: 800px) {
   main.game-container {
-    margin-top: 8rem;
+    margin-top: 100px;
   }
   #score-display {
     font-size: 1.25rem;
@@ -212,7 +213,7 @@ main.game-container {
 }
 @media (max-width: 600px) {
   main.game-container {
-    margin-top: 10rem;
+    margin-top: 120px;
   }
   .card-row {
     grid-template-columns: repeat(2, 1fr);
