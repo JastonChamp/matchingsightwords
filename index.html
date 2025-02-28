@@ -39,6 +39,20 @@
       border-radius: 10px;
       margin-left: 15px;
     }
+    .fullscreen-button {
+      font-size: 1.5rem;
+      padding: 1.25rem 2.75rem;
+      border-radius: 20px;
+      cursor: pointer;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      transition: transform 0.2s ease;
+      font-family: var(--font-family);
+    }
+    .fullscreen-button:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
@@ -73,6 +87,7 @@
           <option value="9">Quest 10</option>
         </select>
         <button id="start-button" type="button">Start Quest!</button>
+        <button id="fullscreen-button" type="button" aria-label="Toggle Full Screen">Full Screen</button>
       </div>
     </div>
   </header>
