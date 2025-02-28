@@ -1,41 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Sight Words Sets
+  // Sight Words Sets (simplified to 5 words per set for young kids)
   const sightWordsSets = [
-    ['a', 'about', 'above', 'again', 'all'],
-    ['also', 'are', 'be', 'came', 'day'],
-    ['do', 'does', 'for', 'go', 'he'],
-    ['her', 'his', 'how', 'I', 'in'],
-    ['into', 'is', 'it', 'know', 'many'],
-    ['name', 'not', 'now', 'of', 'on'],
-    ['one', 'over', 'said', 'she', 'so'],
-    ['some', 'story', 'the', 'their', 'then'],
-    ['there', 'this', 'to', 'too', 'want'],
-    ['was', 'were', 'what', 'when', 'white']
+    ['cat', 'dog', 'run', 'sun', 'big'],  // Jungle Words
+    ['fish', 'boat', 'see', 'blue', 'up'], // Ocean Words
+    ['cow', 'pig', 'eat', 'red', 'go'],    // Farm Words
+    ['star', 'moon', 'fly', 'yes', 'no'],  // Space Words
+    ['hat', 'box', 'me', 'you', 'play'],   // Magic Words
   ];
 
   // DOM Elements
   const cardContainer = document.querySelector('.card-row');
   const startButton = document.getElementById('start-button');
-  const resetButton = document.getElementById('reset-button');
   const setSelect = document.getElementById('set-select');
   const scoreDisplay = document.getElementById('score-display');
-  const messageDisplay = document.getElementById('message-display');
-  const fullscreenButton = document.getElementById('fullscreen-button');
+  const mascotMessage = document.getElementById('mascot-message');
+  const soundToggle = document.getElementById('sound-toggle');
+  const modal = document.getElementById('reward-modal');
+  const finalScore = document.getElementById('final-score');
+  const playAgainButton = document.getElementById('play-again-button');
 
-  // Game State Variables
+  // Game State
   let flippedCards = [];
   let matchedCards = [];
   let currentSet = null;
   let flippingAllowed = true;
   let score = 0;
+  let soundOn = true;
 
-  // Audio Feedback
-  const correctSound = new Audio('sounds/correct.mp3');
-  const incorrectSound = new Audio('sounds/incorrect.mp3');
+  // Audio
+  const correctSound = new Audio('sounds/cheer.mp3');
+  const incorrectSound = new Audio('sounds/whoops.mp3');
+  const bgMusic = new Audio('sounds/adventure.mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = 0.3;
 
-  // Shuffle function using Fisher-Yates algorithm
+  // Shuffle Array
   const shuffleArray = (array) => {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
-  // Create and display cards using a card-inner wrapper for smooth 3D flip
+  // Create Cards
   const createCards = () => {
     cardContainer.innerHTML = '';
     flippedCards = [];
@@ -55,26 +56,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const cardWords = shuffleArray(words.concat(words));
 
     cardWords.forEach((word, index) => {
-      // Create outer card element
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.dataset.word = word;
 
-      // Create inner container that will flip
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
-      // Ensure proper positioning
-      cardInner.style.top = "0";
-      cardInner.style.left = "0";
 
-      // Front face (displays a number)
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
-      frontFace.textContent = index + 1;
+      frontFace.innerHTML = `<img src="card-front.png" alt="Card front" />`;
 
-      // Back face (displays the word)
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
       backFace.textContent = word;
@@ -82,19 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
 
-      // Event Listeners for mouse and keyboard activation
       card.addEventListener('click', () => flipCard(card));
       card.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          flipCard(card);
-        }
+        if (e.key === 'Enter' || e.key === ' ') flipCard(card);
       });
 
       cardContainer.appendChild(card);
     });
   };
 
-  // Flip card: adds 'flipped' class to trigger CSS transform
+  // Flip Card
   const flipCard = (card) => {
     if (!flippingAllowed || flippedCards.includes(card) || matchedCards.includes(card)) return;
 
@@ -107,127 +98,119 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Check if two flipped cards match
+  // Check Match
   const checkForMatch = () => {
     flippingAllowed = false;
     const [card1, card2] = flippedCards;
 
     if (card1.dataset.word === card2.dataset.word) {
       matchedCards.push(card1, card2);
-      incrementScore(10);
+      score += 10;
+      updateScore();
       playSound('correct');
-
-      // Add a class to trigger the bounce animation for a match
       card1.classList.add('matched');
       card2.classList.add('matched');
-
+      mascotMessage.textContent = 'Yay! A match!';
       flippedCards = [];
       flippingAllowed = true;
 
-      // If all pairs are matched, display a congratulatory message
       if (matchedCards.length === sightWordsSets[currentSet].length * 2) {
-        displayMessage('Great job! You completed the set!');
-        startButton.disabled = false;
-        setSelect.disabled = false;
+        showReward();
       }
     } else {
       playSound('incorrect');
+      mascotMessage.textContent = 'Oops, try again!';
       setTimeout(() => {
         card1.classList.remove('flipped');
         card2.classList.remove('flipped');
         flippedCards = [];
         flippingAllowed = true;
+        mascotMessage.textContent = 'Flip a card!';
       }, 1000);
     }
   };
 
-  // Use SpeechSynthesis to pronounce words (with special cases for "the" and "a")
+  // Speak Word
   const speakWord = (word) => {
+    if (!soundOn) return;
     speechSynthesis.cancel();
-    let utteranceText = word;
-    if (word === 'the') {
-      utteranceText = 'thuh';
-    } else if (word === 'a') {
-      utteranceText = 'uh';
-    }
-    const utterance = new SpeechSynthesisUtterance(utteranceText);
-    utterance.lang = 'en-GB';
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.pitch = 1.2; // Higher pitch for kids
+    utterance.rate = 0.8; // Slower for clarity
     speechSynthesis.speak(utterance);
   };
 
-  // Play feedback sounds
+  // Play Sound
   const playSound = (type) => {
+    if (!soundOn) return;
     if (type === 'correct') {
       correctSound.currentTime = 0;
       correctSound.play();
-    } else if (type === 'incorrect') {
+    } else {
       incorrectSound.currentTime = 0;
       incorrectSound.play();
     }
   };
 
-  // Update score display
+  // Update Score
   const updateScore = () => {
-    scoreDisplay.textContent = `Score: ${score}`;
+    scoreDisplay.textContent = `Stars: ${score}`;
   };
 
-  const incrementScore = (points) => {
-    score += points;
-    updateScore();
-  };
-
-  // Display a message to the user
-  const displayMessage = (msg) => {
-    messageDisplay.textContent = msg;
-  };
-
-  // Start a new game
+  // Start Game
   const startGame = () => {
-    const selectedSet = setSelect.value;
-    if (selectedSet === "") {
-      displayMessage('Please select a word set to start the game!');
+    if (!setSelect.value) {
+      mascotMessage.textContent = 'Pick an adventure first!';
       return;
     }
-    currentSet = parseInt(selectedSet, 10);
+    currentSet = parseInt(setSelect.value, 10);
     startButton.disabled = true;
     setSelect.disabled = true;
-    resetButton.disabled = false;
     score = 0;
     updateScore();
-    displayMessage('');
+    mascotMessage.textContent = 'Flip a card!';
     flippingAllowed = true;
     createCards();
+    if (soundOn) bgMusic.play();
   };
 
-  // Reset the game state
+  // Show Reward
+  const showReward = () => {
+    finalScore.textContent = score;
+    modal.classList.add('visible');
+    modal.setAttribute('aria-hidden', 'false');
+    if (soundOn) bgMusic.pause();
+    playSound('correct');
+  };
+
+  // Reset Game
   const resetGame = () => {
+    modal.classList.remove('visible');
+    modal.setAttribute('aria-hidden', 'true');
     startButton.disabled = false;
     setSelect.disabled = false;
-    resetButton.disabled = true;
     score = 0;
     updateScore();
     cardContainer.innerHTML = '';
-    displayMessage('');
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
     setSelect.value = '';
+    mascotMessage.textContent = 'Hi, friend! Let’s play with words!';
+    if (soundOn) bgMusic.play();
   };
 
-  // Toggle fullscreen mode using the Fullscreen API
-  const toggleFullscreen = () => {
-    console.log("Toggle fullscreen clicked");
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.error(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-      });
-    } else {
-      document.exitFullscreen();
-    }
+  // Toggle Sound
+  const toggleSound = () => {
+    soundOn = !soundOn;
+    soundToggle.textContent = soundOn ? '🔊' : '🔇';
+    if (!soundOn) bgMusic.pause();
+    else bgMusic.play();
   };
 
   // Event Listeners
   startButton.addEventListener('click', startGame);
-  resetButton.addEventListener('click', resetGame);
-  fullscreenButton.addEventListener('click', toggleFullscreen);
+  soundToggle.addEventListener('click', toggleSound);
+  playAgainButton.addEventListener('click', resetGame);
 });
