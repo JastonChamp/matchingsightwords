@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
-      backFace.textContent = word; // Only display the sight word, no hints
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
@@ -136,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    speakStatus('Find a match by focusing on the sight words! Use the numbers 1–10 to choose cards.');
+    speakStatus('Find a match by focusing on the numbers 1–10 to choose cards!');
   };
 
   // Flip Card
@@ -163,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      mascotMessage.textContent = `Yay! You matched "${card1.dataset.word}"!`;
-      speakStatus('Great match! Look for another word.');
+      mascotMessage.textContent = `Yay! You matched card ${card1.dataset.position} with "${card1.dataset.word}"!`;
+      speakStatus('Great match! Look for another number.');
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
@@ -177,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
-      speakStatus('No match, try again. Focus on the words!');
+      speakStatus('No match, try again. Focus on the numbers!');
       card1.classList.add('mismatch');
       card2.classList.add('mismatch');
       setTimeout(() => {
@@ -239,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show Reward
   const showReward = () => {
     finalScore.textContent = score;
-    const matchedWords = matchedCards.map(card => card.dataset.word).join(', ');
+    const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
     matchedWordsDisplay.textContent = matchedWords;
     modal.classList.add('visible');
     modal.setAttribute('aria-hidden', 'false');
