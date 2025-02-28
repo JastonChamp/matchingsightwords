@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Original 50 Sight Words for the Program (Limited to 50 words across modes)
-  const sightWords = [
+  // Original 50 Sight Words for Easy Mode (5 words per set, 10 quests)
+  const sightWordsEasy = [
     'a', 'about', 'above', 'again', 'all', 'also', 'are', 'be', 'came', 'day',
     'do', 'does', 'for', 'go', 'he', 'her', 'his', 'how', 'I', 'in',
     'into', 'is', 'it', 'know', 'many', 'name', 'not', 'now', 'of', 'on',
@@ -10,11 +10,20 @@ document.addEventListener('DOMContentLoaded', () => {
     'there', 'this', 'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
   ];
 
-  // Sight Words Sets for Different Modes (Using only the original 50 words)
+  // New Non-Decodable Words for Medium and Hard Modes
+  const sightWordsMedium = [
+    'could', 'should', 'would', 'been', 'have', 'must', 'might', 'shall', 'will', 'can'
+  ];
+
+  const sightWordsHard = [
+    'through', 'thought', 'although', 'always', 'before', 'after', 'because', 'during', 'until', 'since'
+  ];
+
+  // Sight Words Sets for Different Modes
   const sightWordsSets = {
-    easy: sightWords.slice(0, 5),    // First 5 words
-    medium: sightWords.slice(5, 10),  // Next 5 words
-    hard: sightWords.slice(10, 15)    // Next 5 words
+    easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)), // 10 sets of 5 words each
+    medium: Array.from({ length: 2 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 2 sets of 5 words each
+    hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5)) // 2 sets of 5 words each
   };
 
   // DOM Elements
@@ -86,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     flippedCards = [];
     matchedCards = [];
 
-    const words = sightWordsSets[currentMode];
+    const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
 
     Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
@@ -246,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
-    startButton.disabled = false; // Ensure button is enabled in all modes
+    startButton.disabled = false;
     setSelect.disabled = true;
     modeSelect.disabled = true;
     score = 0;
@@ -281,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Dynamic Set Selection
   const updateSetSelect = () => {
     setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
-    const numSets = sightWordsSets[currentMode].length / 5; // Each set has 5 words, limit to 10 total cards
+    const numSets = sightWordsSets[currentMode].length;
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
@@ -297,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMode = modeSelect.value;
     updateSetSelect();
     setSelect.value = '';
-    startButton.disabled = false; // Ensure button stays enabled when mode changes
+    startButton.disabled = false;
     mascotMessage.textContent = 'Choose a quest to begin!';
     speakStatus(`Adventure level set to ${currentMode}.`);
   });
