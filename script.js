@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'easy';
   let flippingAllowed = true;
   let score = 0;
-  let soundOn = true; // Re-enabled for speech API and audio feedback
+  let soundOn = true;
   let isFullscreen = false;
 
   // Audio
@@ -72,12 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     return shuffled;
-  };
-
-  // Randomly Position Cards in Grid
-  const getRandomGridPosition = () => {
-    const positions = Array.from({ length: 10 }, (_, i) => i);
-    return shuffleArray(positions);
   };
 
   // Toggle Full Screen
@@ -110,44 +104,37 @@ document.addEventListener('DOMContentLoaded', () => {
     speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
   };
 
-  // Create Cards with Randomized Positions and Verify Rendering
+  // Create Cards with Randomized Positions
   const createCards = () => {
     cardContainer.innerHTML = ''; // Clear any residual DOM elements
     flippedCards = [];
     matchedCards = [];
 
     const words = sightWordsSets[currentMode][currentSet];
-    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 2x5 grid (10 cards)
-    const gridPositions = getRandomGridPosition(); // Randomize grid positions
+    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
 
-    // Log positions for debugging
-    console.log('Grid Positions:', gridPositions);
-
-    gridPositions.forEach((position, index) => {
-      const word = cardWords[index];
+    cardWords.forEach((word, index) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
+      card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word}`);
       card.dataset.word = word;
-      card.dataset.flipped = 'false'; // Track flip state
-      card.dataset.position = position; // Track grid position for stability
+      card.dataset.flipped = 'false';
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
-      cardInner.style.zIndex = '10'; // Ensure proper stacking
-      cardInner.style.position = 'relative'; // Ensure positioning stays within grid
+      cardInner.style.position = 'relative';
 
-      // Front face with tree image and number
+      // Front face (tree image and number)
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
-        <img src="card-front.png" alt="Tree illustration" />
-        <div class="card-number">${position + 1}</div>
+        <img src="card-front.png" alt="Tree illustration" onerror="this.src='fallback-tree.png'; console.warn('Card front image failed to load');" />
+        <div class="card-number">${index + 1}</div>
       `;
 
-      // Back face with sight word
+      // Back face (sight word)
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
       backFace.textContent = word;
@@ -160,15 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter' || e.key === ' ') flipCard(card);
       });
 
-      // Ensure card is appended correctly and visible
-      try {
-        if (cardContainer.children[position]) {
-          cardContainer.children[position].remove(); // Remove existing if any
-        }
-        cardContainer.appendChild(card);
-      } catch (error) {
-        console.error('Error appending card:', error, 'Position:', position, 'Card:', card);
-      }
+      cardContainer.appendChild(card);
     });
 
     // Verify all cards are rendered
@@ -180,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 12000); // Extended onboarding with enhanced glow
+    setTimeout(() => cardContainer.classList.remove('pulse'), 2000);
     speakStatus('Find a match by focusing on the words, not the numbers!');
   };
 
@@ -192,11 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('flipped');
       card.dataset.flipped = 'true';
       flippedCards.push(card);
-      speakWord(card.dataset.word); // Re-enabled and fixed Web Speech API for sight words
+      speakWord(card.dataset.word);
       if (flippedCards.length === 2) checkForMatch();
-    } else {
-      // Prevent re-flipping until unmatched
-      return;
     }
   };
 
@@ -214,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      card1.dataset.flipped = 'true'; // Ensure state is maintained
+      card1.dataset.flipped = 'true';
       card2.dataset.flipped = 'true';
       mascotMessage.textContent = 'Yay! You found a pair!';
       speakStatus('Great match! Look for another word.');
@@ -231,12 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         card1.classList.remove('flipped', 'mismatch');
         card2.classList.remove('flipped', 'mismatch');
-        card1.dataset.flipped = 'false'; // Reset flip state
+        card1.dataset.flipped = 'false';
         card2.dataset.flipped = 'false';
         flippedCards = [];
         flippingAllowed = true;
         mascotMessage.textContent = 'Find a match!';
-      }, 1200); // Extended feedback delay for clarity
+      }, 1200);
     }
   };
 
@@ -247,12 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Web Speech API not supported in this browser.');
       return;
     }
-    speechSynthesis.cancel(); // Cancel any previous speech
+    speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
-    utterance.onend = () => console.log(`Finished speaking: ${word}`); // Debug log
+    utterance.onend = () => console.log(`Finished speaking: ${word}`);
     utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
     speechSynthesis.speak(utterance);
   };
@@ -268,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
-    utterance.onend = () => console.log(`Finished speaking: ${message}`); // Debug log
+    utterance.onend = () => console.log(`Finished speaking: ${message}`);
     utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
     speechSynthesis.speak(utterance);
   };
@@ -354,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    cardContainer.innerHTML = ''; // Clear any residual cards
+    cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
@@ -372,7 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
       howToPlay.classList.add('visible');
       speakStatus('Hello, explorer! Let’s find words!');
       localStorage.setItem('welcomeShown', 'true');
-    }, 12000); // Extended onboarding with enhanced audio
+    }, 2000);
   }
 
   closeHowToPlay.addEventListener('click', () => {
@@ -385,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
   playAgainButton.addEventListener('click', resetGame);
   modeSelect.addEventListener('change', () => {
     currentMode = modeSelect.value;
-    setSelect.value = ''; // Reset quest selection
+    setSelect.value = '';
     startButton.disabled = true;
     mascotMessage.textContent = 'Choose a quest to begin!';
     speakStatus(`Adventure level set to ${currentMode}.`);
