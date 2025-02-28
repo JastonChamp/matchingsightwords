@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
   const progressBar = document.getElementById('progress-bar');
+  const fullscreenButton = document.getElementById('fullscreen-button');
+  const body = document.body;
 
   // Game State
   let flippedCards = [];
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let flippingAllowed = true;
   let score = 0;
   let soundOn = true; // Re-enabled for speech API and audio feedback
+  let isFullscreen = false;
 
   // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
@@ -71,9 +74,34 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
+  // Toggle Full Screen
+  const toggleFullscreen = () => {
+    if (!isFullscreen) {
+      if (body.requestFullscreen) {
+        body.requestFullscreen();
+      } else if (body.webkitRequestFullscreen) { // Safari
+        body.webkitRequestFullscreen();
+      } else if (body.msRequestFullscreen) { // IE/Edge
+        body.msRequestFullscreen();
+      }
+      fullscreenButton.textContent = 'Exit Full Screen';
+      isFullscreen = true;
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
+      }
+      fullscreenButton.textContent = 'Full Screen';
+      isFullscreen = false;
+    }
+  };
+
   // Create Cards
   const createCards = () => {
-    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication or bugs
+    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication
     flippedCards = [];
     matchedCards = [];
 
@@ -137,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('flipped');
       card.dataset.flipped = 'true';
       flippedCards.push(card);
-      speakWord(card.dataset.word); // Re-enabled speech API for sight words
+      speakWord(card.dataset.word); // Re-enabled and fixed Web Speech API for sight words
       if (flippedCards.length === 2) checkForMatch();
     } else {
       // Prevent re-flipping until unmatched
@@ -183,24 +211,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // Speak Word
+  // Speak Word (Fixed Web Speech API)
   const speakWord = (word) => {
     if (!soundOn) return;
-    speechSynthesis.cancel();
+    // Ensure speech synthesis is available and retry if it fails
+    if (!speechSynthesis) {
+      console.error('Web Speech API not supported in this browser.');
+      return;
+    }
+    speechSynthesis.cancel(); // Cancel any previous speech
     const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
+    utterance.onend = () => console.log(`Finished speaking: ${word}`); // Debug log
+    utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
     speechSynthesis.speak(utterance);
   };
 
   // Speak Status for Accessibility
   const speakStatus = (message) => {
     if (!soundOn) return;
+    if (!speechSynthesis) {
+      console.error('Web Speech API not supported in this browser.');
+      return;
+    }
     const utterance = new SpeechSynthesisUtterance(message);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
+    utterance.onend = () => console.log(`Finished speaking: ${message}`); // Debug log
+    utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
     speechSynthesis.speak(utterance);
   };
 
@@ -307,4 +348,5 @@ document.addEventListener('DOMContentLoaded', () => {
     mascotMessage.textContent = 'Choose a quest to begin!';
     speakStatus(`Adventure level set to ${currentMode}.`);
   });
+  fullscreenButton.addEventListener('click', toggleFullscreen);
 });
