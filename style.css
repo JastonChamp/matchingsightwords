@@ -17,7 +17,7 @@ body {
   margin: 0;
   font-family: var(--font-family);
   color: var(--text-color);
-  background: linear-gradient(135deg, #A5D6A7, #FFD54F); /* Dynamic forest gradient */
+  background: linear-gradient(135deg, #A5D6A7, #FFD54F);
   background-size: cover;
   background-blend-mode: overlay;
   font-size: 1.5rem;
@@ -27,7 +27,7 @@ body {
 
 body.fullscreen {
   overflow: hidden;
-  background: linear-gradient(135deg, #A5D6A7, #FFD54F); /* Nature-themed full-screen background */
+  background: linear-gradient(135deg, #A5D6A7, #FFD54F);
   background-blend-mode: overlay;
   background-size: cover;
   position: relative;
@@ -39,7 +39,7 @@ body.fullscreen::after {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 248, 225, 0.8); /* Semi-transparent overlay for balance */
+  background: rgba(255, 248, 225, 0.8);
   z-index: -1;
 }
 
@@ -49,7 +49,7 @@ body.fullscreen::after {
   padding: 1rem 2rem;
   background-color: var(--secondary-color);
   border-bottom: 4px dotted var(--accent-color);
-  min-height: 150px; /* Ensure space for fox mascot */
+  min-height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,34 +58,34 @@ body.fullscreen::after {
   z-index: 1000;
 }
 #mascot {
-  width: 200px; /* Larger, fully visible mascot */
+  width: 200px;
   max-width: 100%;
-  object-fit: contain; /* Prevents clipping */
+  object-fit: contain;
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
 #mascot.fullscreen {
-  width: 150px; /* Smaller in full-screen for balance */
+  width: 150px;
 }
 #mascot-message {
-  font-size: 2rem; /* Larger, clear text for young users */
+  font-size: 2rem;
   margin-top: 0.5rem;
   text-align: left;
   color: var(--accent-color);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Enhanced clarity */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 #mascot-message.fullscreen {
-  font-size: 2.5rem; /* Larger in full-screen for visibility */
-  animation: twinkle 2s infinite; /* Subtle twinkle for engagement */
+  font-size: 2.5rem;
+  animation: twinkle 2s infinite;
 }
 
 /* Header Styling */
 .fixed-header {
   position: fixed;
-  top: 150px; /* Adjusted for mascot banner */
+  top: 150px;
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1rem 3rem; /* Reduced padding for 100% screen size */
+  padding: 1rem 3rem;
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -93,49 +93,49 @@ body.fullscreen::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 5rem; /* Reduced spacing for 100% screen size */
+  gap: 5rem;
 }
 .header-content.fullscreen {
   flex-direction: row;
-  gap: 8rem; /* Increased spacing in full-screen */
+  gap: 8rem;
 }
 #score-display {
-  font-size: 2.5rem; /* Reduced for 100% screen size clarity */
+  font-size: 2.5rem;
   color: var(--accent-color);
   font-weight: bold;
   display: flex;
   align-items: center;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Enhanced readability */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 #score-display.fullscreen {
-  font-size: 3.5rem; /* Larger in full-screen */
+  font-size: 3.5rem;
 }
 
 /* Controls Styling */
 .controls {
   display: flex;
-  gap: 5rem; /* Reduced spacing for 100% screen size */
+  gap: 5rem;
 }
 .controls.fullscreen {
   flex-direction: row;
-  gap: 8rem; /* Increased spacing in full-screen */
+  gap: 8rem;
 }
 .controls select, .controls button {
-  font-size: 1.5rem; /* Reduced for 100% screen size touch-friendliness */
-  padding: 1.25rem 2.5rem; /* Reduced for 100% screen size */
+  font-size: 1.5rem;
+  padding: 1.25rem 2.5rem;
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  font-family: var(--font-family); /* Match Chewy font */
+  font-family: var(--font-family);
 }
 .controls select.fullscreen, .controls button.fullscreen {
-  font-size: 2rem; /* Larger in full-screen */
-  padding: 1.75rem 3.5rem; /* Larger in full-screen */
+  font-size: 2rem;
+  padding: 1.75rem 3.5rem;
 }
 .controls select {
-  border: 5px solid var(--secondary-color); /* Thicker border for visibility */
+  border: 5px solid var(--secondary-color);
   background-color: var(--primary-color);
-  background-image: url('fox-tail.png'); /* Thematic dropdown arrow */
+  background-image: url('fox-tail.png');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 24px;
@@ -146,7 +146,7 @@ body.fullscreen::after {
   border: none;
 }
 .controls button:hover:not(:disabled) {
-  transform: scale(1.1); /* Enhanced hover effect for interactivity */
+  transform: scale(1.1);
 }
 .controls button:disabled {
   background-color: #B0BEC5;
@@ -155,13 +155,12 @@ body.fullscreen::after {
 
 /* Game Container Styling */
 .game-container {
-  margin-top: 260px; /* Reduced for 100% screen size */
-  padding: 1rem; /* Reduced padding for 100% screen size */
-  transition: all 0.3s ease;
-  height: calc(100vh - 260px); /* Reduced height for 100% screen size */
-  max-width: 1200px; /* Reduced max-width for 100% screen size */
+  margin-top: 260px;
+  padding: 1rem;
+  height: calc(100vh - 260px);
+  max-width: 1200px;
   margin: 0 auto;
-  overflow-x: hidden; /* Prevent horizontal overflow at 100% */
+  overflow-x: hidden;
 }
 .game-container.fullscreen {
   margin: 0;
@@ -176,19 +175,16 @@ body.fullscreen::after {
 /* Cards Grid and Flip Animation */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(220px, 1fr)); /* Reduced for 100% screen size */
-  gap: 3rem; /* Reduced for 100% screen size */
-  max-width: 1100px; /* Reduced max-width for 100% screen size */
+  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  gap: 3rem;
+  max-width: 1100px;
   margin: 0 auto;
-  grid-template-areas:
-    "card1 card2 card3 card4 card5"
-    "card6 card7 card8 card9 card10";
   justify-content: center;
   align-content: center;
 }
 .card-row.fullscreen {
-  max-width: 1400px; /* Slightly larger max-width for full-screen */
-  gap: 6rem; /* Reverted to larger spacing in full-screen */
+  max-width: 1400px;
+  gap: 6rem;
   padding: 1rem;
   justify-content: center;
   align-content: center;
@@ -196,32 +192,22 @@ body.fullscreen::after {
 .card {
   position: relative;
   width: 100%;
-  aspect-ratio: 1; /* Ensures square cards */
-  perspective: 1000px; /* Maintains 3D context, though not used here */
+  aspect-ratio: 1;
+  perspective: 1000px;
 }
-.card:nth-child(1) { grid-area: card1; }
-.card:nth-child(2) { grid-area: card2; }
-.card:nth-child(3) { grid-area: card3; }
-.card:nth-child(4) { grid-area: card4; }
-.card:nth-child(5) { grid-area: card5; }
-.card:nth-child(6) { grid-area: card6; }
-.card:nth-child(7) { grid-area: card7; }
-.card:nth-child(8) { grid-area: card8; }
-.card:nth-child(9) { grid-area: card9; }
-.card:nth-child(10) { grid-area: card10; }
 .card-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   height: 100%;
-  transition: opacity 0.5s ease-in-out; /* Simplified fade animation, no positional change */
+  transition: transform 0.6s ease-in-out;
   transform-style: preserve-3d;
-  z-index: 10; /* Ensure proper stacking */
+}
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
 }
 .card-inner.unmatched {
-  animation: sparkle 1.5s infinite; /* Subtle sparkle for engagement */
-  position: relative; /* Ensure stability */
+  animation: sparkle 1.5s infinite;
+  position: relative;
 }
 .card-inner.unmatched::before {
   content: '';
@@ -247,16 +233,13 @@ body.fullscreen::after {
   opacity: 0.7;
   animation: twinkle 2s infinite;
 }
-.card.flipped .card-inner {
-  z-index: 20; /* Higher z-index on flip to ensure visibility and prevent overlap */
-}
 .card.flipped .card-inner.unmatched {
-  animation: none; /* Remove sparkle on flip */
+  animation: none;
 }
 .card-face {
   position: absolute;
   top: 0;
-  left: 0; /* Explicitly anchor to prevent off-screen issues */
+  left: 0;
   width: 100%;
   height: 100%;
   border-radius: 25px;
@@ -264,13 +247,12 @@ body.fullscreen::after {
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  border: 5px solid var(--secondary-color); /* Yellow border for consistency */
-  box-shadow: 0 8px 16px rgba(165, 214, 167, 0.5); /* Soft green glow for depth */
+  border: 5px solid var(--secondary-color);
+  box-shadow: 0 8px 16px rgba(165, 214, 167, 0.5);
 }
 .card-front {
-  position: relative; /* Allows absolute positioning of the number */
-  background: url('card-front.png') no-repeat center/cover; /* Tree illustration */
-  opacity: 1;
+  background: url('card-front.png') no-repeat center/cover;
+  z-index: 2;
 }
 .card-front img {
   width: 100%;
@@ -280,45 +262,46 @@ body.fullscreen::after {
 }
 .card-number {
   position: absolute;
-  bottom: 10px; /* Bottom-right corner for clarity */
+  bottom: 10px;
   right: 10px;
-  font-size: 1.2rem; /* Reduced for 100% screen size visibility */
+  font-size: 1.2rem;
   font-weight: bold;
-  color: #fff; /* White text for contrast */
-  background-color: rgba(165, 214, 167, 0.2); /* Soft green for thematic consistency */
+  color: #fff;
+  background-color: rgba(165, 214, 167, 0.2);
   padding: 5px 10px;
-  border-radius: 50%; /* Circular badge for numbers */
-  border: 2px solid #fff; /* White outline for clarity */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  opacity: 1; /* Visible on front */
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 1;
 }
 .card-number.fullscreen {
-  font-size: 1.4rem; /* Larger in full-screen */
+  font-size: 1.4rem;
 }
 .card.flipped .card-number {
-  opacity: 0; /* Hide on flip to avoid obstruction */
-  visibility: hidden; /* Ensure complete hiding */
+  opacity: 0;
+  visibility: hidden;
 }
 .card-back {
-  background-color: var(--primary-color); /* Creamy yellow background for words */
-  opacity: 0; /* Hidden initially */
-  font-size: clamp(3rem, 4rem, 4.5rem); /* Reduced and scalable for 100% screen size readability */
+  background-color: var(--primary-color);
+  transform: rotateY(180deg);
+  z-index: 1;
+  font-size: clamp(3rem, 4rem, 4.5rem);
   font-weight: bold;
-  color: var(--text-color); /* Dark brown for contrast */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Enhanced readability */
+  color: var(--text-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 .card-back.fullscreen {
-  font-size: clamp(3.5rem, 4.5rem, 5rem); /* Larger in full-screen */
+  font-size: clamp(3.5rem, 4.5rem, 5rem);
 }
 .card.flipped .card-back {
-  opacity: 1; /* Show on flip */
+  opacity: 1;
 }
 .card.matched .card-face {
-  background-color: var(--matched-color); /* Soft green for matched cards */
-  animation: bounceCard 0.8s ease, sparkle 2s infinite; /* Extended sparkle for celebration */
+  background-color: var(--matched-color);
+  animation: bounceCard 0.8s ease, sparkle 2s infinite;
 }
 .card.mismatch .card-inner {
-  animation: shake 1.2s; /* Enhanced mismatch feedback */
+  animation: shake 1.2s;
 }
 
 /* Animations for Engagement */
@@ -382,15 +365,15 @@ body.fullscreen::after {
   100% { opacity: 1; transform: scale(1); }
 }
 .modal-content {
-  background-color: var(--matched-color); /* Soft green for thematic consistency */
+  background-color: var(--matched-color);
   padding: 2.5rem;
   border-radius: 25px;
   text-align: center;
-  border: 5px dashed var(--secondary-color); /* Yellow dashed border with leaf/paw prints */
+  border: 5px dashed var(--secondary-color);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   position: relative;
-  color: var(--secondary-color); /* Yellow text for contrast */
-  font-size: 4rem; /* Larger for excitement */
+  color: var(--secondary-color);
+  font-size: 4rem;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 .modal-content::before {
@@ -423,13 +406,13 @@ body.fullscreen::after {
 }
 #play-again-button {
   margin-top: 1.5rem;
-  font-size: 2rem; /* Reduced for 100% screen size */
-  padding: 1.25rem 2.5rem; /* Reduced for 100% screen size */
+  font-size: 2rem;
+  padding: 1.25rem 2.5rem;
   animation: bounceCard 1s ease infinite;
 }
 #play-again-button.fullscreen {
-  font-size: 2.5rem; /* Larger in full-screen */
-  padding: 1.75rem 3.5rem; /* Larger in full-screen */
+  font-size: 2.5rem;
+  padding: 1.75rem 3.5rem;
 }
 
 /* How-to-Play Overlay */
@@ -450,8 +433,8 @@ body.fullscreen::after {
 .how-to-play.visible { display: block; }
 .how-to-play img { width: 100px; margin: 0.5rem 0; animation: twinkle 2s infinite; }
 #close-how-to-play {
-  font-size: 1.5rem; /* Reduced for 100% screen size */
-  padding: 0.75rem 1.5rem; /* Reduced for 100% screen size */
+  font-size: 1.5rem;
+  padding: 0.75rem 1.5rem;
   background-color: var(--accent-color);
   color: white;
   border: none;
@@ -460,39 +443,39 @@ body.fullscreen::after {
   animation: bounceCard 1.5s ease infinite;
 }
 #close-how-to-play.fullscreen {
-  font-size: 1.75rem; /* Larger in full-screen */
-  padding: 1rem 2rem; /* Larger in full-screen */
+  font-size: 1.75rem;
+  padding: 1rem 2rem;
 }
 
 /* Responsive Design for Different Screen Sizes */
 @media (max-width: 1200px) {
-  .game-container { margin-top: 240px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 240px; }
   .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 3rem; max-width: 1000px; }
-  .card-back { font-size: 3rem; } /* Reduced for 100% screen size */
-  #score-display, .controls select, .controls button { font-size: 1.25rem; } /* Reduced for 100% screen size */
-  #mascot { width: 180px; } /* Reduced for 100% screen size */
+  .card-back { font-size: 3rem; }
+  #score-display, .controls select, .controls button { font-size: 1.25rem; }
+  #mascot { width: 180px; }
   .mascot-banner { padding: 0.75rem 2rem; }
   .fixed-header { padding: 0.75rem 2.5rem; }
   .header-content, .controls { flex-direction: row; gap: 4rem; }
 }
 
 @media (max-width: 900px) {
-  .game-container { margin-top: 220px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 220px; }
   .card-row { grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 3rem; max-width: 800px; }
-  .card-back { font-size: 2.5rem; } /* Reduced for 100% screen size */
-  #score-display, .controls select, .controls button { font-size: 1rem; } /* Reduced for 100% screen size */
-  #mascot { width: 150px; } /* Reduced for 100% screen size */
+  .card-back { font-size: 2.5rem; }
+  #score-display, .controls select, .controls button { font-size: 1rem; }
+  #mascot { width: 150px; }
   .mascot-banner { padding: 0.5rem 1.5rem; }
   .fixed-header { padding: 0.5rem 2rem; }
   .header-content, .controls { flex-direction: column; gap: 2rem; }
 }
 
 @media (max-width: 600px) {
-  .game-container { margin-top: 200px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 200px; }
   .card-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 2.5rem; max-width: 700px; }
-  .card-back { font-size: 2rem; } /* Reduced for 100% screen size */
-  #score-display, .controls select, .controls button { font-size: 0.9rem; } /* Reduced for 100% screen size */
-  #mascot { width: 120px; } /* Reduced for 100% screen size */
+  .card-back { font-size: 2rem; }
+  #score-display, .controls select, .controls button { font-size: 0.9rem; }
+  #mascot { width: 120px; }
   .mascot-banner { padding: 0.25rem 1rem; }
   .fixed-header { padding: 0.25rem 1.5rem; }
   .header-content, .controls { flex-direction: column; gap: 1.5rem; }
