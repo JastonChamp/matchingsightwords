@@ -27,20 +27,6 @@ body {
 
 body.fullscreen {
   overflow: hidden;
-  background: linear-gradient(135deg, #A5D6A7, #FFD54F); /* Nature-themed full-screen background */
-  background-blend-mode: overlay;
-  background-size: cover;
-  position: relative;
-}
-body.fullscreen::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 248, 225, 0.8); /* Semi-transparent overlay for balance */
-  z-index: -1;
 }
 
 /* Mascot Banner Styling */
@@ -53,9 +39,6 @@ body.fullscreen::after {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
 }
 #mascot {
   width: 200px; /* Larger, fully visible mascot */
@@ -63,29 +46,22 @@ body.fullscreen::after {
   object-fit: contain; /* Prevents clipping */
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
-#mascot.fullscreen {
-  width: 150px; /* Smaller in full-screen for balance */
-}
 #mascot-message {
   font-size: 2rem; /* Larger, clear text for young users */
   margin-top: 0.5rem;
   text-align: left;
   color: var(--accent-color);
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Enhanced clarity */
-}
-#mascot-message.fullscreen {
-  font-size: 2.5rem; /* Larger in full-screen for visibility */
-  animation: twinkle 2.5s infinite; /* Subtle twinkle for engagement */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Header Styling */
 .fixed-header {
   position: fixed;
-  top: 150px; /* Adjusted for mascot banner */
+  top: 0;
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1rem 4rem; /* Reduced padding in full-screen */
+  padding: 1.5rem 5.5rem; /* Increased padding for touch-friendliness */
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -93,33 +69,24 @@ body.fullscreen::after {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 8rem; /* Increased spacing for full-screen */
-}
-.header-content.fullscreen {
-  flex-direction: row;
-  gap: 8rem;
+  gap: 6.5rem; /* Spaced out controls for full-screen button */
 }
 #score-display {
-  font-size: 3.5rem; /* Larger for full-screen clarity */
+  font-size: 3rem; /* Larger, clear text for visibility */
   color: var(--accent-color);
   font-weight: bold;
   display: flex;
   align-items: center;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Enhanced readability */
 }
 
 /* Controls Styling */
 .controls {
   display: flex;
-  gap: 8rem; /* More spacing for full-screen */
-}
-.controls.fullscreen {
-  flex-direction: row;
-  gap: 8rem;
+  gap: 6.5rem; /* More spacing for full-screen button */
 }
 .controls select, .controls button {
-  font-size: 2rem; /* Larger for full-screen touch-friendliness */
-  padding: 1.75rem 3.5rem; /* Larger, touch-friendly buttons */
+  font-size: 1.5rem;
+  padding: 1.25rem 2.75rem; /* Larger, touch-friendly buttons */
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -151,16 +118,12 @@ body.fullscreen::after {
   margin-top: 280px; /* Reverted to accommodate larger grid */
   padding: 1.5rem;
   transition: all 0.3s ease;
-  height: calc(100vh - 280px); /* Ensure full height in regular mode */
 }
 .game-container.fullscreen {
   margin: 0;
   padding: 0;
   height: 100vh;
   width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 /* Cards Grid and Flip Animation */
@@ -173,21 +136,17 @@ body.fullscreen::after {
   grid-template-areas:
     "card1 card2 card3 card4 card5"
     "card6 card7 card8 card9 card10";
-  justify-content: center;
-  align-content: center;
 }
 .card-row.fullscreen {
-  max-width: 1400px; /* Slightly larger max-width for full-screen */
-  gap: 6rem; /* Reverted to larger spacing for full-screen */
+  max-width: 100%; /* Full width in full-screen mode */
+  gap: 5rem; /* Reduced gap in full-screen for better fit */
   padding: 1rem;
-  justify-content: center;
-  align-content: center;
 }
 .card {
   position: relative;
   width: 100%;
   aspect-ratio: 1; /* Ensures square cards */
-  perspective: 1000px; /* Maintains 3D context, though not used here */
+  perspective: 1000px; /* Maintains 3D context for potential future use, but not used here */
 }
 .card:nth-child(1) { grid-area: card1; }
 .card:nth-child(2) { grid-area: card2; }
@@ -209,39 +168,8 @@ body.fullscreen::after {
   transform-style: preserve-3d;
   z-index: 10; /* Ensure proper stacking */
 }
-.card-inner.unmatched {
-  animation: sparkle 1.5s infinite; /* Subtle sparkle for engagement */
-  position: relative; /* Ensure stability */
-}
-.card-inner.unmatched::before {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: url('leaf-icon.png') no-repeat center;
-  background-size: contain;
-  top: -10px;
-  left: -10px;
-  opacity: 0.7;
-  animation: twinkle 2.5s infinite;
-}
-.card-inner.unmatched::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: url('paw-icon.png') no-repeat center;
-  background-size: contain;
-  bottom: -10px;
-  right: -10px;
-  opacity: 0.7;
-  animation: twinkle 2.5s infinite;
-}
 .card.flipped .card-inner {
   z-index: 20; /* Higher z-index on flip to ensure visibility and prevent overlap */
-}
-.card.flipped .card-inner.unmatched {
-  animation: none; /* Remove sparkle on flip */
 }
 .card-face {
   position: absolute;
@@ -255,7 +183,7 @@ body.fullscreen::after {
   justify-content: center;
   backface-visibility: hidden;
   border: 5px solid var(--secondary-color); /* Yellow border for consistency */
-  box-shadow: 0 8px 16px rgba(165, 214, 167, 0.5); /* Soft green glow for depth */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced glow for engagement */
 }
 .card-front {
   position: relative; /* Allows absolute positioning of the number */
@@ -275,7 +203,7 @@ body.fullscreen::after {
   font-size: 1.4rem; /* Smaller, lighter numbers for visibility */
   font-weight: bold;
   color: #fff; /* White text for contrast */
-  background-color: rgba(165, 214, 167, 0.2); /* Soft green for thematic consistency */
+  background-color: rgba(255, 111, 97, 0.2); /* Lighter, semi-transparent coral */
   padding: 5px 10px;
   border-radius: 50%; /* Circular badge for numbers */
   border: 2px solid #fff; /* White outline for clarity */
@@ -289,20 +217,19 @@ body.fullscreen::after {
 .card-back {
   background-color: var(--primary-color); /* Creamy yellow background for words */
   opacity: 0; /* Hidden initially */
-  font-size: clamp(3.5rem, 4.5rem, 5rem); /* Scalable for full-screen readability */
+  font-size: 4.5rem; /* Larger, bold text for readability */
   font-weight: bold;
   color: var(--text-color); /* Dark brown for contrast */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Enhanced readability */
 }
 .card.flipped .card-back {
   opacity: 1; /* Show on flip */
 }
 .card.matched .card-face {
   background-color: var(--matched-color); /* Soft green for matched cards */
-  animation: bounceCard 0.8s ease, sparkle 2.5s infinite; /* Extended sparkle for celebration */
+  animation: bounceCard 0.8s ease, sparkle 1.5s infinite; /* Celebrate matches */
 }
 .card.mismatch .card-inner {
-  animation: shake 1.2s; /* Enhanced mismatch feedback */
+  animation: shake 0.8s; /* Feedback for mismatches */
 }
 
 /* Animations for Engagement */
@@ -321,27 +248,19 @@ body.fullscreen::after {
 }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-30px); }
-  75% { transform: translateX(30px); }
+  25% { transform: translateX(-20px); }
+  75% { transform: translateX(20px); }
 }
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
+  50% { transform: scale(1.02); }
 }
 @keyframes sparkle {
-  0%, 100% { opacity: 0.7; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
-}
-@keyframes foxJump {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* Modal for Rewards with Enhanced Animation */
+/* Modal for Rewards */
 .modal {
   display: none;
   position: fixed;
@@ -357,25 +276,14 @@ body.fullscreen::after {
   justify-content: center;
   align-items: center;
 }
-.modal.animate {
-  animation: fadeIn 3s ease;
-}
-@keyframes fadeIn {
-  0% { opacity: 0; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
-  100% { opacity: 1; transform: scale(1); }
-}
 .modal-content {
-  background-color: var(--matched-color); /* Soft green for thematic consistency */
+  background-color: var(--primary-color);
   padding: 2.5rem;
   border-radius: 25px;
   text-align: center;
-  border: 5px dashed var(--secondary-color); /* Yellow dashed border with leaf/paw prints */
+  border: 5px dashed var(--accent-color);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   position: relative;
-  color: var(--secondary-color); /* Yellow text for contrast */
-  font-size: 4rem; /* Larger for excitement */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 .modal-content::before {
   content: '';
@@ -387,29 +295,13 @@ body.fullscreen::after {
   top: 20px;
   left: 20px;
   opacity: 0.7;
-  animation: sparkle 2.5s infinite;
-}
-.modal-content::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: url('leaf-icon.png') no-repeat center;
-  background-size: contain;
-  bottom: -10px;
-  left: -10px;
-  opacity: 0.7;
-  animation: twinkle 2.5s infinite;
+  animation: sparkle 1.5s infinite;
 }
 .reward-image {
   width: 120px;
-  animation: twinkle 2.5s infinite;
 }
 #play-again-button {
   margin-top: 1.5rem;
-  font-size: 2.5rem;
-  padding: 1.75rem 3.5rem;
-  animation: bounceCard 1.2s ease infinite;
 }
 
 /* How-to-Play Overlay */
@@ -428,16 +320,25 @@ body.fullscreen::after {
   text-align: center;
 }
 .how-to-play.visible { display: block; }
-.how-to-play img { width: 100px; margin: 0.5rem 0; animation: twinkle 2.5s infinite; }
+.how-to-play img { width: 100px; margin: 0.5rem 0; }
 #close-how-to-play {
-  font-size: 1.5rem;
-  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
   background-color: var(--accent-color);
   color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
-  animation: bounceCard 1.5s ease infinite;
+}
+
+/* Progress Bar Styling */
+.progress-bar {
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
+  border: 2px solid #FFD54F;
+  border-radius: 10px;
+  margin-left: 15px;
 }
 
 /* Responsive Design for Different Screen Sizes */
@@ -445,30 +346,22 @@ body.fullscreen::after {
   .game-container { margin-top: 280px; }
   .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 4rem; max-width: 1000px; }
   .card-back { font-size: 3.5rem; }
-  #score-display, .controls select, .controls button { font-size: 1.5rem; }
+  #score-display, .controls select, .controls button { font-size: 1.25rem; }
   #mascot { width: 150px; }
-  .mascot-banner { padding: 0.75rem 2rem; }
-  .fixed-header { padding: 0.75rem 3rem; }
 }
 
 @media (max-width: 900px) {
   .game-container { margin-top: 250px; }
   .card-row { grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 3.5rem; max-width: 800px; }
   .card-back { font-size: 3rem; }
-  #score-display, .controls select, .controls button { font-size: 1.25rem; }
+  #score-display, .controls select, .controls button { font-size: 1rem; }
   #mascot { width: 120px; }
-  .mascot-banner { padding: 0.5rem 1.5rem; }
-  .fixed-header { padding: 0.5rem 2rem; }
-  .header-content, .controls { flex-direction: column; gap: 2rem; }
 }
 
 @media (max-width: 600px) {
   .game-container { margin-top: 220px; }
   .card-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 3rem; max-width: 700px; }
   .card-back { font-size: 2.5rem; }
-  #score-display, .controls select, .controls button { font-size: 1rem; }
+  #score-display, .controls select, .controls button { font-size: 0.9rem; }
   #mascot { width: 100px; }
-  .mascot-banner { padding: 0.25rem 1rem; }
-  .fixed-header { padding: 0.25rem 1.5rem; }
-  .header-content, .controls { flex-direction: column; gap: 1.5rem; }
 }
