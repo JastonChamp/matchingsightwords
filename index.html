@@ -26,9 +26,19 @@
       border: 5px dashed var(--accent-color);
       z-index: 2001;
       display: none;
+      max-width: 300px;
+      text-align: center;
     }
     .how-to-play.visible { display: block; }
     .how-to-play img { width: 100px; margin: 0.5rem 0; }
+    .progress-bar {
+      width: 100px;
+      height: 20px;
+      background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
+      border: 2px solid #FFD54F;
+      border-radius: 10px;
+      margin-left: 10px;
+    }
   </style>
 </head>
 <body>
@@ -39,14 +49,17 @@
 
   <header class="fixed-header">
     <div class="header-content">
-      <div id="score-display" aria-live="polite">Fox Stars: 0 / Pairs: 0/5</div>
+      <div id="score-display" aria-live="polite">
+        <img src="fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
       <div class="controls">
-        <select id="mode-select" aria-label="Choose game mode">
+        <select id="mode-select" aria-label="Choose adventure level">
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
         </select>
-        <select id="set-select" aria-label="Choose your word quest">
+        <select id="set-select" aria-label="Choose word quest">
           <option value="" selected disabled>Pick a Quest!</option>
           <option value="0">Quest 1</option>
           <option value="1">Quest 2</option>
@@ -60,9 +73,6 @@
           <option value="9">Quest 10</option>
         </select>
         <button id="start-button" type="button">Start Quest!</button>
-        <button id="sound-toggle" type="button" aria-label="Toggle sound">
-          <img src="fox-ear.png" alt="Sound toggle" style="width: 24px; height: 24px;" />
-        </button>
       </div>
     </div>
   </header>
