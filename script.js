@@ -1,29 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Sight Words Sets with Definitions
+  // Original 50 Sight Words for the Program (Limited to 50 words across modes)
+  const sightWords = [
+    'a', 'about', 'above', 'again', 'all', 'also', 'are', 'be', 'came', 'day',
+    'do', 'does', 'for', 'go', 'he', 'her', 'his', 'how', 'I', 'in',
+    'into', 'is', 'it', 'know', 'many', 'name', 'not', 'now', 'of', 'on',
+    'one', 'over', 'said', 'she', 'so', 'some', 'story', 'the', 'their', 'then',
+    'there', 'this', 'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
+  ];
+
+  // Sight Words Sets for Different Modes (Using only the original 50 words)
   const sightWordsSets = {
-    easy: [
-      { word: 'a', definition: 'used to point to a person, place, or thing' },
-      { word: 'about', definition: 'concerning or regarding' },
-      { word: 'above', definition: 'higher than or over' },
-      { word: 'again', definition: 'one more time' },
-      { word: 'all', definition: 'every part or whole' }
-    ],
-    medium: [
-      { word: 'the', definition: 'used before a noun to indicate a specific person, place, or thing' },
-      { word: 'said', definition: 'spoken or expressed' },
-      { word: 'was', definition: 'past tense of "to be"' },
-      { word: 'one', definition: 'the number 1' },
-      { word: 'two', definition: 'the number 2' }
-    ],
-    hard: [
-      { word: 'you', definition: 'the person being addressed' },
-      { word: 'they', definition: 'more than one person or thing' },
-      { word: 'where', definition: 'question word asking for a location' },
-      { word: 'there', definition: 'in or at that place' },
-      { word: 'this', definition: 'used to identify a specific person, place, or thing' }
-    ]
+    easy: sightWords.slice(0, 5),    // First 5 words
+    medium: sightWords.slice(5, 10),  // Next 5 words
+    hard: sightWords.slice(10, 15)    // Next 5 words
   };
 
   // DOM Elements
@@ -95,20 +86,17 @@ document.addEventListener('DOMContentLoaded', () => {
     flippedCards = [];
     matchedCards = [];
 
-    const words = sightWordsSets[currentMode].map(item => item.word);
-    const cardWords = shuffleArray(words.concat(words)).slice(0, 10);
-    const definitions = sightWordsSets[currentMode].map(item => item.definition);
+    const words = sightWordsSets[currentMode];
+    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
 
     Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
       const word = cardWords[index];
-      const definition = definitions[words.indexOf(word)];
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
       card.dataset.word = word;
-      card.dataset.definition = definition;
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
@@ -122,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
-      backFace.textContent = word;
+      backFace.textContent = word; // Removed definitions/hints
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
@@ -164,19 +152,12 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      const matchedWord = card1.dataset.word;
-      const definition = card1.dataset.definition;
-      mascotMessage.textContent = `Yay! You matched "${matchedWord}"!`;
-      speakStatus(`Great match! "${matchedWord}" means ${definition}. Look for another word.`);
+      mascotMessage.textContent = `Yay! You matched "${card1.dataset.word}"!`;
+      speakStatus('Great match! Look for another word.');
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
       if (matchedCards.length === 10) showReward();
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
@@ -239,10 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Show Reward with Matched Words
+  // Show Reward
   const showReward = () => {
     finalScore.textContent = score;
-    const matchedWords = matchedCards.map(card => `${card.dataset.word} (${card.dataset.definition})`).join(', ');
+    const matchedWords = matchedCards.map(card => card.dataset.word).join(', ');
     matchedWordsDisplay.textContent = matchedWords;
     modal.classList.add('visible');
     modal.setAttribute('aria-hidden', 'false');
@@ -253,11 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('mascot').classList.add('foxJump');
       setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     }
-    confetti({
-      particleCount: 200,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
     isGameInProgress = false;
   };
 
@@ -270,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
-    startButton.disabled = true;
+    startButton.disabled = false; // Ensure button is enabled in all modes
     setSelect.disabled = true;
     modeSelect.disabled = true;
     score = 0;
@@ -305,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Dynamic Set Selection
   const updateSetSelect = () => {
     setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
-    const numSets = sightWordsSets[currentMode].length;
+    const numSets = sightWordsSets[currentMode].length / 5; // Each set has 5 words, limit to 10 total cards
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
@@ -321,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentMode = modeSelect.value;
     updateSetSelect();
     setSelect.value = '';
-    startButton.disabled = true;
+    startButton.disabled = false; // Ensure button stays enabled when mode changes
     mascotMessage.textContent = 'Choose a quest to begin!';
     speakStatus(`Adventure level set to ${currentMode}.`);
   });
@@ -350,7 +326,4 @@ document.addEventListener('DOMContentLoaded', () => {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
-
-  // Add Confetti Library (external script or CDN for particle effects)
-  // Include <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script> in HTML head
 });
