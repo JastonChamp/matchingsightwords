@@ -194,7 +194,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const speakWord = (word) => {
     if (!soundOn || !speechSynthesis) return;
     speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
+    let utteranceText = word;
+    // Use schwa sound (/ə/) for "a" in casual, unstressed speech (e.g., "uh" as in "a cat" or "a dog")
+    if (word.toLowerCase() === 'a') {
+      utteranceText = 'ə'; // Use the schwa symbol in IPA, which most speech synthesizers interpret as /ə/
+    }
+    const utterance = new SpeechSynthesisUtterance(utteranceText);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
