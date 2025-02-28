@@ -15,7 +15,7 @@ body {
   margin: 0;
   font-family: var(--font-family);
   color: var(--text-color);
-  background: linear-gradient(135deg, #A5D6A7, #FFD54F); /* Dynamic forest gradient */
+  background: linear-gradient(135deg, #A5D6A7, #B2EBF2); /* Dynamic forest gradient */
   background-size: cover;
   background-blend-mode: overlay;
   font-size: 1.5rem;
@@ -30,7 +30,7 @@ body {
   border-bottom: 4px dotted var(--accent-color);
 }
 #mascot {
-  width: 150px; /* Larger, engaging mascot */
+  width: 180px; /* Larger, engaging mascot */
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
 #mascot-message {
@@ -45,7 +45,7 @@ body {
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1rem 2rem; /* Increased padding */
+  padding: 1.5rem 2.5rem; /* Increased padding */
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -53,25 +53,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1.5rem; /* Spaced out controls */
+  gap: 2rem; /* Spaced out controls */
 }
 #score-display {
-  font-size: 2.5rem; /* Larger, clearer text */
+  font-size: 3rem; /* Larger, clearer text */
   color: var(--accent-color);
   font-weight: bold;
-  background: url('fox-icon.png') no-repeat left center;
-  background-size: 30px;
-  padding-left: 40px; /* Space for fox icon */
+  display: flex;
+  align-items: center;
 }
 
 /* Controls */
 .controls {
   display: flex;
-  gap: 1.5rem; /* More spacing */
+  gap: 2rem; /* More spacing */
 }
 .controls select, .controls button {
   font-size: 1.5rem;
-  padding: 0.75rem 1.5rem; /* Larger, touch-friendly */
+  padding: 1rem 1.5rem; /* Larger, touch-friendly */
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -99,15 +98,15 @@ body {
 
 /* Game Container */
 .game-container {
-  margin-top: 240px; /* Adjusted for larger header */
+  margin-top: 260px; /* Adjusted for larger header */
   padding: 1.5rem;
 }
 
 /* Cards */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Larger, spaced cards */
-  gap: 2rem; /* Increased spacing */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Larger, spaced cards */
+  gap: 2.5rem; /* Increased spacing */
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -156,26 +155,27 @@ body {
   position: absolute;
   top: 10px; /* Top-right corner for clarity */
   right: 10px;
-  font-size: 2.5rem; /* Larger, clearer numbers */
+  font-size: 1.8rem; /* Smaller, lighter numbers */
   font-weight: bold;
   color: #fff; /* White text for contrast */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  background-color: rgba(255, 111, 97, 0.4); /* Semi-transparent coral */
   padding: 5px 10px;
-  border-radius: 50%; /* Circular badge for playfulness */
+  border-radius: 50%; /* Circular badge */
+  border: 2px solid #fff; /* White outline */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 .card-back {
   background-color: var(--primary-color);
   transform: rotateY(180deg);
-  font-size: 3.5rem; /* Larger, bold text */
+  font-size: 4rem; /* Larger, bold text */
   font-weight: bold;
 }
 .card.matched .card-face {
   background-color: var(--matched-color);
-  animation: bounceCard 0.8s ease;
+  animation: bounceCard 0.8s ease, sparkle 1.5s infinite;
 }
 .card.mismatch .card-inner {
-  animation: shake 0.7s; /* Enhanced mismatch feedback */
+  animation: shake 0.8s; /* Enhanced mismatch feedback */
 }
 
 /* Animations */
@@ -194,12 +194,16 @@ body {
 }
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
+  25% { transform: translateX(-15px); }
+  75% { transform: translateX(15px); }
 }
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.02); }
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 /* Modal */
@@ -275,9 +279,9 @@ body {
 
 /* Responsive */
 @media (max-width: 700px) {
-  .game-container { margin-top: 260px; }
+  .game-container { margin-top: 280px; }
   .card-row { grid-template-columns: repeat(2, 1fr); }
-  .card-back { font-size: 2.5rem; }
+  .card-back { font-size: 3rem; }
   #score-display, .controls select, .controls button { font-size: 1.25rem; }
   #mascot { width: 120px; }
 }
