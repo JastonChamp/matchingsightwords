@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'easy';
   let flippingAllowed = true;
   let score = 0;
-  let soundOn = false; // Sound toggle removed, but audio can still be re-enabled if needed
+  let soundOn = true; // Re-enabled for speech API and audio feedback
 
-  // Audio (Optional, disabled by default)
+  // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
   const incorrectSound = new Audio('sounds/whoops.mp3');
   const bgMusic = new Audio('sounds/quest.mp3');
@@ -80,7 +80,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 2x5 grid (10 cards)
 
-    cardWords.forEach((word, index) => {
+    // Sort cards to ensure 1–5 on top, 6–10 below
+    const orderedCards = [...cardWords];
+    orderedCards.sort((a, b) => {
+      const indexA = cardWords.indexOf(a) + 1;
+      const indexB = cardWords.indexOf(b) + 1;
+      return indexA - indexB;
+    });
+
+    orderedCards.forEach((word, index) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
@@ -90,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
+      cardInner.style.zIndex = '10'; // Ensure proper stacking
 
       // Front face with tree image and number
       const frontFace = document.createElement('div');
@@ -124,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!flippingAllowed || flippedCards.includes(card) || matchedCards.includes(card)) return;
     card.classList.add('flipped');
     flippedCards.push(card);
-    speakWord(card.dataset.word);
+    speakWord(card.dataset.word); // Re-enabled speech API for sight words
     if (flippedCards.length === 2) checkForMatch();
   };
 
@@ -183,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speechSynthesis.speak(utterance);
   };
 
-  // Play Sound (Optional, re-enabled for accessibility)
+  // Play Sound
   const playSound = (type) => {
     if (!soundOn) return;
     if (type === 'correct') {
