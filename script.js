@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     matchedCards = [];
 
     const words = sightWordsSets[currentMode][currentSet];
-    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Limit to 10 cards
+    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 2x5 grid (10 cards)
 
     cardWords.forEach((word, index) => {
       const card = document.createElement('div');
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 10000); // Extended onboarding
+    setTimeout(() => cardContainer.classList.remove('pulse'), 12000); // Extended onboarding
   };
 
   // Flip Card
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speechSynthesis.speak(utterance);
   };
 
-  // Play Sound (Optional, disabled by default)
+  // Play Sound (Optional, re-enabled for accessibility)
   const playSound = (type) => {
     if (!soundOn) return;
     if (type === 'correct') {
@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
       howToPlay.classList.add('visible');
       localStorage.setItem('welcomeShown', 'true');
-    }, 10000); // Extended onboarding
+    }, 12000); // Extended onboarding
   }
 
   closeHowToPlay.addEventListener('click', () => {
