@@ -76,11 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
-  const getRandomGridPosition = () => {
-    const positions = Array.from({ length: 10 }, (_, i) => i);
-    return shuffleArray(positions);
-  };
-
   // Toggle Full Screen
   const toggleFullscreen = () => {
     if (!isFullscreen) {
@@ -105,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10);
-    const gridPositions = getRandomGridPosition();
+    const gridPositions = Array.from({ length: 10 }, (_, i) => i); // Always 10 cards
 
     gridPositions.forEach((position, index) => {
       const word = cardWords[index];
