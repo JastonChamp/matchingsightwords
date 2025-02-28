@@ -25,17 +25,26 @@ body {
 /* Mascot Banner */
 .mascot-banner {
   text-align: center;
-  padding: 1rem;
+  padding: 1rem 2rem;
   background-color: var(--secondary-color);
   border-bottom: 4px dotted var(--accent-color);
+  min-height: 150px; /* Ensure space for fox */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #mascot {
-  width: 180px; /* Larger, engaging mascot */
+  width: 200px; /* Larger, fully visible mascot */
+  max-width: 100%;
+  object-fit: contain; /* Prevents clipping */
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
 #mascot-message {
-  font-size: 1.75rem; /* Larger text */
+  font-size: 2rem; /* Larger text */
   margin-top: 0.5rem;
+  text-align: left;
+  color: var(--accent-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Header */
@@ -45,7 +54,7 @@ body {
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1.5rem 2.5rem; /* Increased padding */
+  padding: 1.5rem 3rem; /* Increased padding */
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -53,7 +62,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem; /* Spaced out controls */
+  gap: 3rem; /* Spaced out controls */
 }
 #score-display {
   font-size: 3rem; /* Larger, clearer text */
@@ -66,11 +75,11 @@ body {
 /* Controls */
 .controls {
   display: flex;
-  gap: 2rem; /* More spacing */
+  gap: 3rem; /* More spacing */
 }
 .controls select, .controls button {
   font-size: 1.5rem;
-  padding: 1rem 1.5rem; /* Larger, touch-friendly */
+  padding: 1rem 1.75rem; /* Larger, touch-friendly */
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -98,15 +107,15 @@ body {
 
 /* Game Container */
 .game-container {
-  margin-top: 260px; /* Adjusted for larger header */
+  margin-top: 280px; /* Adjusted for larger header and banner */
   padding: 1.5rem;
 }
 
 /* Cards */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Larger, spaced cards */
-  gap: 2.5rem; /* Increased spacing */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Ensure 2x5 grid */
+  gap: 3rem; /* Increased spacing */
   max-width: 1000px;
   margin: 0 auto;
 }
@@ -153,22 +162,27 @@ body {
 }
 .card-number {
   position: absolute;
-  top: 10px; /* Top-right corner for clarity */
+  bottom: 10px; /* Bottom-right corner for clarity */
   right: 10px;
-  font-size: 1.8rem; /* Smaller, lighter numbers */
+  font-size: 1.5rem; /* Smaller, lighter numbers */
   font-weight: bold;
   color: #fff; /* White text for contrast */
-  background-color: rgba(255, 111, 97, 0.4); /* Semi-transparent coral */
+  background-color: rgba(255, 111, 97, 0.3); /* Lighter, semi-transparent coral */
   padding: 5px 10px;
   border-radius: 50%; /* Circular badge */
   border: 2px solid #fff; /* White outline */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  opacity: 1; /* Visible on front */
+}
+.card.flipped .card-number {
+  opacity: 0; /* Hide on flip to avoid obstruction */
 }
 .card-back {
   background-color: var(--primary-color);
   transform: rotateY(180deg);
   font-size: 4rem; /* Larger, bold text */
   font-weight: bold;
+  color: var(--text-color);
 }
 .card.matched .card-face {
   background-color: var(--matched-color);
@@ -204,6 +218,10 @@ body {
 @keyframes sparkle {
   0%, 100% { opacity: 0.7; }
   50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 
 /* Modal */
@@ -279,7 +297,7 @@ body {
 
 /* Responsive */
 @media (max-width: 700px) {
-  .game-container { margin-top: 280px; }
+  .game-container { margin-top: 300px; }
   .card-row { grid-template-columns: repeat(2, 1fr); }
   .card-back { font-size: 3rem; }
   #score-display, .controls select, .controls button { font-size: 1.25rem; }
