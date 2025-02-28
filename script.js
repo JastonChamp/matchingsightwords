@@ -1,13 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Sight Words Sets (simplified to 5 words per set for young kids)
+  // Original Sight Words Sets (50 words, 5 per set)
   const sightWordsSets = [
-    ['cat', 'dog', 'run', 'sun', 'big'],  // Jungle Words
-    ['fish', 'boat', 'see', 'blue', 'up'], // Ocean Words
-    ['cow', 'pig', 'eat', 'red', 'go'],    // Farm Words
-    ['star', 'moon', 'fly', 'yes', 'no'],  // Space Words
-    ['hat', 'box', 'me', 'you', 'play'],   // Magic Words
+    ['a', 'about', 'above', 'again', 'all'],
+    ['also', 'are', 'be', 'came', 'day'],
+    ['do', 'does', 'for', 'go', 'he'],
+    ['her', 'his', 'how', 'I', 'in'],
+    ['into', 'is', 'it', 'know', 'many'],
+    ['name', 'not', 'now', 'of', 'on'],
+    ['one', 'over', 'said', 'she', 'so'],
+    ['some', 'story', 'the', 'their', 'then'],
+    ['there', 'this', 'to', 'too', 'want'],
+    ['was', 'were', 'what', 'when', 'white']
   ];
 
   // DOM Elements
@@ -32,9 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
   const incorrectSound = new Audio('sounds/whoops.mp3');
-  const bgMusic = new Audio('sounds/adventure.mp3');
+  const bgMusic = new Audio('sounds/quest.mp3');
   bgMusic.loop = true;
-  bgMusic.volume = 0.3;
+  bgMusic.volume = 0.2;
 
   // Shuffle Array
   const shuffleArray = (array) => {
@@ -55,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const words = sightWordsSets[currentSet];
     const cardWords = shuffleArray(words.concat(words));
 
-    cardWords.forEach((word, index) => {
+    cardWords.forEach((word) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
@@ -110,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playSound('correct');
       card1.classList.add('matched');
       card2.classList.add('matched');
-      mascotMessage.textContent = 'Yay! A match!';
+      mascotMessage.textContent = 'Woohoo! You found a pair!';
       flippedCards = [];
       flippingAllowed = true;
 
@@ -119,14 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else {
       playSound('incorrect');
-      mascotMessage.textContent = 'Oops, try again!';
+      mascotMessage.textContent = 'Oh no! Try again!';
       setTimeout(() => {
         card1.classList.remove('flipped');
         card2.classList.remove('flipped');
         flippedCards = [];
         flippingAllowed = true;
-        mascotMessage.textContent = 'Flip a card!';
-      }, 1000);
+        mascotMessage.textContent = 'Find a match!';
+      }, 1200); // Slightly longer delay for kids to process
     }
   };
 
@@ -134,10 +139,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const speakWord = (word) => {
     if (!soundOn) return;
     speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(word);
+    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word); // Adjust "a" pronunciation
     utterance.lang = 'en-US';
-    utterance.pitch = 1.2; // Higher pitch for kids
-    utterance.rate = 0.8; // Slower for clarity
+    utterance.pitch = 1.3;
+    utterance.rate = 0.7;
     speechSynthesis.speak(utterance);
   };
 
@@ -161,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Start Game
   const startGame = () => {
     if (!setSelect.value) {
-      mascotMessage.textContent = 'Pick an adventure first!';
+      mascotMessage.textContent = 'Choose a quest first!';
       return;
     }
     currentSet = parseInt(setSelect.value, 10);
@@ -169,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.disabled = true;
     score = 0;
     updateScore();
-    mascotMessage.textContent = 'Flip a card!';
+    mascotMessage.textContent = 'Find a match!';
     flippingAllowed = true;
     createCards();
     if (soundOn) bgMusic.play();
@@ -197,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
     matchedCards = [];
     currentSet = null;
     setSelect.value = '';
-    mascotMessage.textContent = 'Hi, friend! Let’s play with words!';
+    mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
     if (soundOn) bgMusic.play();
   };
 
