@@ -14,12 +14,10 @@
 }
 
 body {
-  margin: 0;
   font-family: var(--font-family);
   color: var(--text-color);
-  background: linear-gradient(135deg, #A5D6A7, #FFD54F); /* Dynamic forest gradient */
+  background: linear-gradient(135deg, #A5D6A7, #FFD54F);
   background-size: cover;
-  background-blend-mode: overlay;
   font-size: 1.5rem;
   overflow-x: hidden;
   transition: all 0.3s ease;
@@ -29,96 +27,107 @@ body.fullscreen {
   overflow: hidden;
 }
 
-/* Mascot Banner Styling */
+/* Mascot Banner */
 .mascot-banner {
   text-align: center;
   padding: 1rem 2rem;
   background-color: var(--secondary-color);
   border-bottom: 4px dotted var(--accent-color);
-  min-height: 150px; /* Ensure space for fox mascot */
+  min-height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 #mascot {
-  width: 200px; /* Larger, fully visible mascot */
+  width: 200px;
   max-width: 100%;
-  object-fit: contain; /* Prevents clipping */
+  object-fit: contain;
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
+
 #mascot-message {
-  font-size: 2rem; /* Larger, clear text for young users */
+  font-size: 2rem;
   margin-top: 0.5rem;
   text-align: left;
   color: var(--accent-color);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Header Styling */
+/* Header */
 .fixed-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1.5rem 5.5rem; /* Increased padding for touch-friendliness */
+  padding: 1.5rem 5.5rem;
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
+
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 6.5rem; /* Spaced out controls for full-screen button */
+  gap: 6.5rem;
 }
+
 #score-display {
-  font-size: 3rem; /* Larger, clear text for visibility */
+  font-size: 3rem;
   color: var(--accent-color);
   font-weight: bold;
   display: flex;
   align-items: center;
 }
 
-/* Controls Styling */
+/* Controls */
 .controls {
   display: flex;
-  gap: 6.5rem; /* More spacing for full-screen button */
+  gap: 6.5rem;
 }
-.controls select, .controls button {
+
+.controls select,
+.controls button {
   font-size: 1.5rem;
-  padding: 1.25rem 2.75rem; /* Larger, touch-friendly buttons */
+  padding: 1.25rem 2.75rem;
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  font-family: var(--font-family); /* Match Chewy font */
+  font-family: var(--font-family);
 }
+
 .controls select {
-  border: 5px solid var(--secondary-color); /* Thicker border for visibility */
+  border: 5px solid var(--secondary-color);
   background-color: var(--primary-color);
-  background-image: url('fox-tail.png'); /* Thematic dropdown arrow */
+  background-image: url('fox-tail.png');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 24px;
 }
+
 .controls button {
   background-color: var(--accent-color);
   color: white;
   border: none;
 }
+
 .controls button:hover:not(:disabled) {
-  transform: scale(1.1); /* Enhanced hover effect for interactivity */
+  transform: scale(1.1);
 }
+
 .controls button:disabled {
   background-color: #B0BEC5;
   cursor: not-allowed;
 }
 
-/* Game Container Styling */
+/* Game Container */
 .game-container {
-  margin-top: 280px; /* Reverted to accommodate larger grid */
+  margin-top: 280px;
   padding: 1.5rem;
   transition: all 0.3s ease;
 }
+
 .game-container.fullscreen {
   margin: 0;
   padding: 0;
@@ -126,28 +135,35 @@ body.fullscreen {
   width: 100vw;
 }
 
-/* Cards Grid and Flip Animation */
+/* Card Grid */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(270px, 1fr)); /* Reverted to larger cards for visibility */
-  gap: 6rem; /* Reverted to larger spacing for clarity */
-  max-width: 1350px; /* Reverted to larger max-width for better fit on screens */
+  grid-template-columns: repeat(5, minmax(270px, 1fr));
+  gap: 6rem;
+  max-width: 1350px;
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
     "card6 card7 card8 card9 card10";
 }
+
 .card-row.fullscreen {
-  max-width: 100%; /* Full width in full-screen mode */
-  gap: 5rem; /* Reduced gap in full-screen for better fit */
+  max-width: 100%;
+  gap: 5rem;
   padding: 1rem;
 }
+
+.card-row.pulse {
+  animation: pulse 2s 3; /* Pulse 3 times for 6 seconds total */
+}
+
 .card {
   position: relative;
   width: 100%;
-  aspect-ratio: 1; /* Ensures square cards */
-  perspective: 1000px; /* Maintains 3D context for potential future use, but not used here */
+  aspect-ratio: 1;
+  perspective: 1000px;
 }
+
 .card:nth-child(1) { grid-area: card1; }
 .card:nth-child(2) { grid-area: card2; }
 .card:nth-child(3) { grid-area: card3; }
@@ -158,109 +174,114 @@ body.fullscreen {
 .card:nth-child(8) { grid-area: card8; }
 .card:nth-child(9) { grid-area: card9; }
 .card:nth-child(10) { grid-area: card10; }
+
 .card-inner {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  transition: opacity 0.5s ease-in-out; /* Simplified fade animation, no positional change */
-  transform-style: preserve-3d;
-  z-index: 10; /* Ensure proper stacking */
+  z-index: 10;
 }
+
 .card.flipped .card-inner {
-  z-index: 20; /* Higher z-index on flip to ensure visibility and prevent overlap */
+  z-index: 20;
 }
+
 .card-face {
   position: absolute;
   top: 0;
-  left: 0; /* Explicitly anchor to prevent off-screen issues */
+  left: 0;
   width: 100%;
   height: 100%;
   border-radius: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  backface-visibility: hidden;
-  border: 5px solid var(--secondary-color); /* Yellow border for consistency */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced glow for engagement */
+  border: 5px solid var(--secondary-color);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.5s ease-in-out; /* Smooth flip transition */
 }
+
 .card-front {
-  position: relative; /* Allows absolute positioning of the number */
-  background: url('card-front.png') no-repeat center/cover; /* Tree illustration */
-  opacity: 1;
+  background: url('card-front.png') no-repeat center/cover;
+  opacity: 1; /* Initially visible */
 }
+
 .card-front img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
 }
+
 .card-number {
   position: absolute;
-  bottom: 10px; /* Bottom-right corner for clarity */
+  bottom: 10px;
   right: 10px;
-  font-size: 1.4rem; /* Smaller, lighter numbers for visibility */
+  font-size: 1.4rem;
   font-weight: bold;
-  color: #fff; /* White text for contrast */
-  background-color: rgba(255, 111, 97, 0.2); /* Lighter, semi-transparent coral */
+  color: #fff;
+  background-color: rgba(255, 111, 97, 0.2);
   padding: 5px 10px;
-  border-radius: 50%; /* Circular badge for numbers */
-  border: 2px solid #fff; /* White outline for clarity */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  opacity: 1; /* Visible on front */
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
 .card.flipped .card-number {
-  opacity: 0; /* Hide on flip to avoid obstruction */
-  visibility: hidden; /* Ensure complete hiding */
+  opacity: 0;
+  visibility: hidden;
 }
+
 .card-back {
-  background-color: var(--primary-color); /* Creamy yellow background for words */
-  opacity: 0; /* Hidden initially */
-  font-size: 4.5rem; /* Larger, bold text for readability */
+  background-color: var(--primary-color);
+  opacity: 0; /* Initially hidden */
+  font-size: 4.5rem;
   font-weight: bold;
-  color: var(--text-color); /* Dark brown for contrast */
+  color: var(--text-color);
 }
+
 .card.flipped .card-back {
-  opacity: 1; /* Show on flip */
+  opacity: 1; /* Visible when flipped */
 }
+
 .card.matched .card-face {
-  background-color: var(--matched-color); /* Soft green for matched cards */
-  animation: bounceCard 0.8s ease, sparkle 1.5s infinite; /* Celebrate matches */
+  background-color: var(--matched-color);
+  animation: bounceCard 0.8s ease, sparkle 1.5s infinite;
 }
+
 .card.mismatch .card-inner {
-  animation: shake 0.8s; /* Feedback for mismatches */
+  animation: shake 0.8s;
 }
 
-/* Animations for Engagement */
-@keyframes bounceMascot {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes rotateMascot {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(5deg); }
-}
-@keyframes bounceCard {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-20px); }
-  75% { transform: translateX(20px); }
-}
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-}
-@keyframes sparkle {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; transform: scale(1.2); }
+/* Progress Bar */
+.progress-bar {
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
+  border: 2px solid #FFD54F;
+  border-radius: 10px;
+  margin-left: 15px;
+  position: relative;
 }
 
-/* Modal for Rewards */
+.progress-bar .star-icon {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background: url('star-icon.png') no-repeat center;
+  background-size: contain;
+  opacity: 0.3;
+}
+
+.progress-bar .star-icon:nth-child(1) { left: 10%; }
+.progress-bar .star-icon:nth-child(2) { left: 30%; }
+.progress-bar .star-icon:nth-child(3) { left: 50%; }
+.progress-bar .star-icon:nth-child(4) { left: 70%; }
+.progress-bar .star-icon:nth-child(5) { left: 90%; }
+
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -271,11 +292,13 @@ body.fullscreen {
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 2000;
 }
+
 .modal.visible {
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 .modal-content {
   background-color: var(--primary-color);
   padding: 2.5rem;
@@ -283,28 +306,17 @@ body.fullscreen {
   text-align: center;
   border: 5px dashed var(--accent-color);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  position: relative;
 }
-.modal-content::before {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background: url('sparkle.png') no-repeat center;
-  background-size: contain;
-  top: 20px;
-  left: 20px;
-  opacity: 0.7;
-  animation: sparkle 1.5s infinite;
-}
+
 .reward-image {
   width: 120px;
 }
+
 #play-again-button {
   margin-top: 1.5rem;
 }
 
-/* How-to-Play Overlay */
+/* How-to-Play */
 .how-to-play {
   position: fixed;
   top: 50%;
@@ -319,8 +331,16 @@ body.fullscreen {
   max-width: 300px;
   text-align: center;
 }
-.how-to-play.visible { display: block; }
-.how-to-play img { width: 100px; margin: 0.5rem 0; }
+
+.how-to-play.visible {
+  display: block;
+}
+
+.how-to-play img {
+  width: 100px;
+  margin: 0.5rem 0;
+}
+
 #close-how-to-play {
   font-size: 1.25rem;
   padding: 0.5rem 1rem;
@@ -331,17 +351,40 @@ body.fullscreen {
   cursor: pointer;
 }
 
-/* Progress Bar Styling */
-.progress-bar {
-  width: 120px;
-  height: 20px;
-  background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
-  border: 2px solid #FFD54F;
-  border-radius: 10px;
-  margin-left: 15px;
+/* Animations */
+@keyframes bounceMascot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
-/* Responsive Design for Different Screen Sizes */
+@keyframes rotateMascot {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes bounceCard {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-20px); }
+  75% { transform: translateX(20px); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Responsive Design */
 @media (max-width: 1200px) {
   .game-container { margin-top: 280px; }
   .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 4rem; max-width: 1000px; }
