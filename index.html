@@ -4,16 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Word Explorer Game</title>
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet" onerror="this.href='https://fonts.googleapis.com/css2?family=Ariel&display=swap'; console.warn('Chewy font failed to load, using Arial as fallback');">
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
   <style>
     .card-row.pulse {
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); box-shadow: 0 0 15px #A5D6A7; }
+      50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
     }
     .how-to-play {
       position: fixed;
@@ -30,7 +30,7 @@
       text-align: center;
     }
     .how-to-play.visible { display: block; }
-    .how-to-play img { width: 100px; margin: 0.5rem 0; animation: twinkle 2s infinite; }
+    .how-to-play img { width: 100px; margin: 0.5rem 0; }
     .progress-bar {
       width: 120px;
       height: 20px;
@@ -44,28 +44,42 @@
       position: absolute;
       width: 15px;
       height: 15px;
-      background: url('images/star-icon.png') no-repeat center;
+      background: url('star-icon.png') no-repeat center;
       background-size: contain;
       opacity: 0.3;
-      animation: twinkle 2s infinite;
+      animation: twinkle 2.5s infinite;
     }
     .progress-bar .star-icon:nth-child(1) { left: 10%; }
     .progress-bar .star-icon:nth-child(2) { left: 30%; }
     .progress-bar .star-icon:nth-child(3) { left: 50%; }
     .progress-bar .star-icon:nth-child(4) { left: 70%; }
     .progress-bar .star-icon:nth-child(5) { left: 90%; }
+    .fullscreen-button {
+      font-size: 2rem; /* Larger for full-screen clarity */
+      padding: 1.75rem 3.5rem; /* Larger, touch-friendly buttons */
+      border-radius: 20px;
+      cursor: pointer;
+      background-color: #FFD54F; /* Softer yellow for theme consistency */
+      color: white;
+      border: none;
+      transition: transform 0.2s ease;
+      font-family: var(--font-family);
+    }
+    .fullscreen-button:hover {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
   <div class="mascot-banner">
-    <img src="images/mascot.png" alt="Friendly fox mascot" id="mascot" onerror="this.src='images/fallback-fox.png'; console.warn('Mascot image failed to load');" />
+    <img src="mascot.png" alt="Friendly fox mascot" id="mascot" />
     <div id="mascot-message" aria-live="polite">Hello, explorer! Let’s find words!</div>
   </div>
 
   <header class="fixed-header">
     <div class="header-content">
       <div id="score-display" aria-live="polite">
-        <img src="images/fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" onerror="this.src='images/fallback-fox.png'; console.warn('Fox icon failed to load');" /> Fox Stars: 0 / Pairs: 0/5
+        <img src="fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
         <div class="progress-bar" id="progress-bar">
           <div class="star-icon" style="left: 10%;"></div>
           <div class="star-icon" style="left: 30%;"></div>
@@ -94,6 +108,7 @@
           <option value="9">Quest 10</option>
         </select>
         <button id="start-button" type="button">Start Quest!</button>
+        <button id="fullscreen-button" type="button" aria-label="Toggle Full Screen">Full Screen</button>
       </div>
     </div>
   </header>
@@ -105,7 +120,7 @@
   <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
     <div class="modal-content">
       <h2>Amazing Job!</h2>
-      <img src="images/star-badge.png" alt="Star Badge" class="reward-image" onerror="this.src='images/fallback-star.png'; console.warn('Star badge image failed to load');" />
+      <img src="star-badge.png" alt="Star Badge" class="reward-image" />
       <p>You collected <span id="final-score"></span> Fox Stars!</p>
       <button id="play-again-button" type="button">New Quest</button>
     </div>
@@ -115,7 +130,7 @@
     <h3>How to Play</h3>
     <p>Tap or click a card to flip it and focus on the words, not the numbers!</p>
     <p>Find matching words to earn Fox Stars.</p>
-    <img src="images/card-flip.png" alt="Card flipping example" onerror="this.src='images/fallback-card.png'; console.warn('Card flip image failed to load');" />
+    <img src="card-flip.png" alt="Card flipping example" />
     <button id="close-how-to-play">Got It!</button>
   </div>
 
