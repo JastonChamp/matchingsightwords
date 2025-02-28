@@ -44,8 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
   const progressBar = document.getElementById('progress-bar');
-  const fullscreenButton = document.getElementById('fullscreen-button');
-  const body = document.body;
 
   // Game State
   let flippedCards = [];
@@ -55,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let flippingAllowed = true;
   let score = 0;
   let soundOn = true;
-  let isFullscreen = false;
 
   // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
@@ -77,39 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
-  // Toggle Full Screen
-  const toggleFullscreen = () => {
-    if (!isFullscreen) {
-      if (body.requestFullscreen) {
-        body.requestFullscreen();
-      } else if (body.webkitRequestFullscreen) { // Safari
-        body.webkitRequestFullscreen();
-      } else if (body.msRequestFullscreen) { // IE/Edge
-        body.msRequestFullscreen();
-      }
-      fullscreenButton.textContent = 'Exit Full Screen';
-      fullscreenButton.classList.add('fullscreen');
-      isFullscreen = true;
-      document.getElementById('mascot').classList.add('foxJump');
-      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) { // Safari
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { // IE/Edge
-        document.msExitFullscreen();
-      }
-      fullscreenButton.textContent = 'Full Screen';
-      fullscreenButton.classList.remove('fullscreen');
-      isFullscreen = false;
-    }
-    speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
-  };
-
   // Create Cards with Randomized Words
   const createCards = () => {
-    cardContainer.innerHTML = ''; // Clear any residual DOM elements
+    cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
 
@@ -120,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
+    const cardWords = shuffleArray(words.concat(words)).slice(0, 10);
     console.log('Creating cards with words:', cardWords);
 
     cardWords.forEach((word, index) => {
@@ -129,14 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word || 'unknown'}`);
-      card.dataset.word = word || 'unknown'; // Fallback if word is undefined
+      card.dataset.word = word || 'unknown';
       card.dataset.flipped = 'false';
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
       cardInner.style.position = 'relative';
 
-      // Front face (tree image and number)
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
@@ -144,10 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="card-number">${index + 1}</div>
       `;
 
-      // Back face (sight word)
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
-      backFace.textContent = word || 'Error'; // Fallback text if word is undefined
+      backFace.textContent = word || 'Error';
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
@@ -160,18 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
       cardContainer.appendChild(card);
     });
 
-    // Verify all cards are rendered
-    const cards = cardContainer.querySelectorAll('.card');
-    if (cards.length !== 10) {
-      console.warn('Not all cards rendered. Expected 10, found:', cards.length);
-      mascotMessage.textContent = `Warning: Only ${cards.length} cards rendered. Please check console for details.`;
-    } else {
-      console.log('All 10 cards rendered successfully.');
-    }
-
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 2000);
-    speakStatus('Find a match by focusing on the words, not the numbers!');
   };
 
   // Flip Card
@@ -182,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('flipped');
       card.dataset.flipped = 'true';
       flippedCards.push(card);
-      speakWord(card.dataset.word);
       if (flippedCards.length === 2) checkForMatch();
     }
   };
@@ -201,28 +155,19 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      card1.dataset.flipped = 'true';
-      card2.dataset.flipped = 'true';
-      mascotMessage.textContent = 'Yay! You found a pair!';
-      speakStatus('Great match! Look for another word.');
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
       if (matchedCards.length === sightWordsSets[currentMode][currentSet].length * 2) showReward();
     } else {
       playSound('incorrect');
-      mascotMessage.textContent = 'Oh no! Try again!';
-      speakStatus('No match, try again. Focus on the words!');
       card1.classList.add('mismatch');
       card2.classList.add('mismatch');
       setTimeout(() => {
         card1.classList.remove('flipped', 'mismatch');
         card2.classList.remove('flipped', 'mismatch');
-        card1.dataset.flipped = 'false';
-        card2.dataset.flipped = 'false';
         flippedCards = [];
         flippingAllowed = true;
-        mascotMessage.textContent = 'Find a match!';
       }, 1200);
     }
   };
@@ -240,22 +185,6 @@ document.addEventListener('DOMContentLoaded', () => {
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
     utterance.onend = () => console.log(`Finished speaking: ${word}`);
-    utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
-    speechSynthesis.speak(utterance);
-  };
-
-  // Speak Status for Accessibility
-  const speakStatus = (message) => {
-    if (!soundOn) return;
-    if (!speechSynthesis) {
-      console.warn('Web Speech API not supported in this browser. Status sound disabled.');
-      return;
-    }
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = 'en-US';
-    utterance.pitch = 1.3;
-    utterance.rate = 0.7;
-    utterance.onend = () => console.log(`Finished speaking: ${message}`);
     utterance.onerror = (event) => console.error(`Speech synthesis error: ${event.error}`);
     speechSynthesis.speak(utterance);
   };
@@ -278,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalPairs = sightWordsSets[currentMode][currentSet].length;
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
-    speakStatus(`Fox Stars: ${score}, Pairs: ${matchedPairs} out of ${totalPairs}`);
   };
 
   // Update Progress Bar
@@ -297,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
-      speakStatus('Please choose a quest first.');
       return;
     }
     currentSet = parseInt(setSelect.value, 10);
@@ -311,11 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     flippingAllowed = true;
     createCards();
     if (soundOn) {
-      bgMusic.play().catch(error => console.warn(`Failed to play background music: ${error}`));
-    }
-    if (currentMode === 'easy' && Math.random() < 0.3) {
-      const hintWord = sightWordsSets.easy[currentSet][Math.floor(Math.random() * 5)];
-      setTimeout(() => speakStatus(`Look for the word ${hintWord}!`), 2000);
+      bgMusic.play().catch(error => console.warn('Failed to play background music'));
     }
   };
 
@@ -328,9 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) {
       bgMusic.pause();
       playSound('correct');
-      speakStatus(`Amazing job! You collected ${score} Fox Stars!`);
-      document.getElementById('mascot').classList.add('foxJump');
-      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     }
     setTimeout(() => modal.classList.remove('animate'), 3000);
   };
@@ -358,18 +278,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Onboarding and How-to-Play
   if (!localStorage.getItem('welcomeShown')) {
     mascotMessage.textContent = 'Tap a card to flip it and find matches!';
-    speakStatus('Tap a card to flip it and find matches!');
     setTimeout(() => {
       mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
       howToPlay.classList.add('visible');
-      speakStatus('Hello, explorer! Let’s find words!');
       localStorage.setItem('welcomeShown', 'true');
     }, 2000);
   }
 
   closeHowToPlay.addEventListener('click', () => {
     howToPlay.classList.remove('visible');
-    speakStatus('Got it! Start your quest.');
   });
 
   // Event Listeners
@@ -380,7 +297,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     startButton.disabled = true;
     mascotMessage.textContent = 'Choose a quest to begin!';
-    speakStatus(`Adventure level set to ${currentMode}.`);
   });
-  fullscreenButton.addEventListener('click', toggleFullscreen);
 });
