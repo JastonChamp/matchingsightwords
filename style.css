@@ -20,6 +20,11 @@ body {
   background-blend-mode: overlay;
   font-size: 1.5rem;
   overflow-x: hidden;
+  transition: all 0.3s ease;
+}
+
+body.fullscreen {
+  overflow: hidden;
 }
 
 /* Mascot Banner */
@@ -108,12 +113,12 @@ body {
 
 /* Game Container */
 .game-container {
-  margin-top: 250px; /* Reduced to accommodate smaller grid and full-screen */
+  margin-top: 280px; /* Reverted to accommodate larger grid */
   padding: 1.5rem;
-  height: calc(100vh - 250px); /* Ensure full height in regular mode */
+  transition: all 0.3s ease;
 }
 .game-container.fullscreen {
-  margin-top: 0;
+  margin: 0;
   padding: 0;
   height: 100vh;
   width: 100vw;
@@ -122,9 +127,9 @@ body {
 /* Cards */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(220px, 1fr)); /* Maintain compact size */
-  gap: 4rem; /* Reduced spacing for compactness */
-  max-width: 1100px; /* Reduced max-width for better fit on screens */
+  grid-template-columns: repeat(5, minmax(270px, 1fr)); /* Reverted to larger cards */
+  gap: 6rem; /* Reverted to larger spacing */
+  max-width: 1350px; /* Reverted to larger max-width for better visibility */
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
@@ -132,7 +137,7 @@ body {
 }
 .card-row.fullscreen {
   max-width: 100%; /* Full width in full-screen mode */
-  gap: 4rem;
+  gap: 5rem; /* Reduced gap in full-screen for better fit */
   padding: 1rem;
 }
 .card {
@@ -155,7 +160,7 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out; /* New fade and slide animation */
+  transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out; /* Fade and slide animation */
   transform-style: preserve-3d;
   z-index: 10; /* Ensure proper stacking */
 }
@@ -328,24 +333,24 @@ body {
 
 /* Responsive */
 @media (max-width: 1200px) {
-  .game-container { margin-top: 250px; }
-  .card-row { grid-template-columns: repeat(3, minmax(180px, 1fr)); gap: 3rem; max-width: 900px; }
+  .game-container { margin-top: 280px; }
+  .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 4rem; max-width: 1000px; }
   .card-back { font-size: 3.5rem; }
   #score-display, .controls select, .controls button { font-size: 1.25rem; }
   #mascot { width: 150px; }
 }
 
 @media (max-width: 900px) {
-  .game-container { margin-top: 220px; }
-  .card-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 2.5rem; max-width: 700px; }
+  .game-container { margin-top: 250px; }
+  .card-row { grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 3.5rem; max-width: 800px; }
   .card-back { font-size: 3rem; }
   #score-display, .controls select, .controls button { font-size: 1rem; }
   #mascot { width: 120px; }
 }
 
 @media (max-width: 600px) {
-  .game-container { margin-top: 200px; }
-  .card-row { grid-template-columns: repeat(2, minmax(140px, 1fr)); gap: 2rem; max-width: 600px; }
+  .game-container { margin-top: 220px; }
+  .card-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 3rem; max-width: 700px; }
   .card-back { font-size: 2.5rem; }
   #score-display, .controls select, .controls button { font-size: 0.9rem; }
   #mascot { width: 100px; }
