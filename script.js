@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  // Original Sight Words Sets (50 words, 5 per set)
   const sightWordsSets = [
     ['a', 'about', 'above', 'again', 'all'],
     ['also', 'are', 'be', 'came', 'day'],
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ['was', 'were', 'what', 'when', 'white']
   ];
 
+  // DOM Elements
   const cardContainer = document.querySelector('.card-row');
   const startButton = document.getElementById('start-button');
   const setSelect = document.getElementById('set-select');
@@ -24,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const finalScore = document.getElementById('final-score');
   const playAgainButton = document.getElementById('play-again-button');
 
+  // Game State
   let flippedCards = [];
   let matchedCards = [];
   let currentSet = null;
@@ -31,12 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
   let score = 0;
   let soundOn = true;
 
+  // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
   const incorrectSound = new Audio('sounds/whoops.mp3');
   const bgMusic = new Audio('sounds/quest.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
 
+  // Shuffle Array
   const shuffleArray = (array) => {
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -46,28 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
+  // Create Cards
   const createCards = () => {
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
-    const words = sightWordsSets[currentSet];
-    const cardWords = shuffleArray(words.concat(words));
 
-    cardWords.forEach((word) => {
+    const words = sightWordsSets[currentSet];
+    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Limit to 10 cards
+
+    cardWords.forEach((word, index) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card with word ${word}`);
+      card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word}`);
       card.dataset.word = word;
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
 
+      // Front face with tree image and number
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
-      frontFace.innerHTML = `<img src="card-front.png" alt="Card front" />`;
+      frontFace.innerHTML = `
+        <img src="card-front.png" alt="Tree illustration" />
+        <div class="card-number">${index + 1}</div>
+      `;
 
+      // Back face with sight word
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
       backFace.textContent = word;
@@ -87,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => cardContainer.classList.remove('pulse'), 5000); // 5s guidance
   };
 
+  // Flip Card
   const flipCard = (card) => {
     if (!flippingAllowed || flippedCards.includes(card) || matchedCards.includes(card)) return;
     card.classList.add('flipped');
@@ -95,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (flippedCards.length === 2) checkForMatch();
   };
 
+  // Check Match
   const checkForMatch = () => {
     flippingAllowed = false;
     const [card1, card2] = flippedCards;
@@ -125,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Speak Word
   const speakWord = (word) => {
     if (!soundOn) return;
     speechSynthesis.cancel();
@@ -135,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speechSynthesis.speak(utterance);
   };
 
+  // Play Sound
   const playSound = (type) => {
     if (!soundOn) return;
     if (type === 'correct') {
@@ -146,12 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // Update Score
   const updateScore = () => {
     const totalPairs = sightWordsSets[currentSet].length;
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
   };
 
+  // Start Game
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
@@ -168,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) bgMusic.play();
   };
 
+  // Show Reward
   const showReward = () => {
     finalScore.textContent = score;
     modal.classList.add('visible');
@@ -176,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     playSound('correct');
   };
 
+  // Reset Game
   const resetGame = () => {
     modal.classList.remove('visible');
     modal.setAttribute('aria-hidden', 'true');
@@ -192,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) bgMusic.play();
   };
 
+  // Toggle Sound
   const toggleSound = () => {
     soundOn = !soundOn;
     soundToggle.textContent = soundOn ? '🔊' : '🔇';
@@ -199,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else bgMusic.play();
   };
 
+  // Onboarding Guidance
   if (!localStorage.getItem('welcomeShown')) {
     mascotMessage.textContent = 'Tap a card to flip it and find matches!';
     setTimeout(() => {
@@ -207,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 5000); // Extended onboarding
   }
 
+  // Event Listeners
   startButton.addEventListener('click', startGame);
   soundToggle.addEventListener('click', toggleSound);
   playAgainButton.addEventListener('click', resetGame);
