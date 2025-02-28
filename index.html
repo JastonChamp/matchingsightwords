@@ -2,48 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sight Words Matching Game</title>
+  <title>Word Adventure Matching Game</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Fixed Header with Controls -->
+  <!-- Mascot Banner -->
+  <div class="mascot-banner">
+    <img src="mascot.png" alt="Friendly owl mascot" id="mascot" />
+    <div id="mascot-message" aria-live="polite">Hi, friend! Let’s play with words!</div>
+  </div>
+
+  <!-- Fixed Header -->
   <header class="fixed-header">
     <div class="header-content">
-      <div id="score-display" aria-live="polite">Score: 0</div>
+      <div id="score-display" aria-live="polite">Stars: 0</div>
       <div class="controls">
-        <label for="set-select">Choose a word set:</label>
-        <select id="set-select" aria-label="Select a word set">
-          <option value="" selected disabled>Select a set</option>
-          <option value="0">Set 1</option>
-          <option value="1">Set 2</option>
-          <option value="2">Set 3</option>
-          <option value="3">Set 4</option>
-          <option value="4">Set 5</option>
-          <option value="5">Set 6</option>
-          <option value="6">Set 7</option>
-          <option value="7">Set 8</option>
-          <option value="8">Set 9</option>
-          <option value="9">Set 10</option>
+        <select id="set-select" aria-label="Pick your adventure">
+          <option value="" selected disabled>Pick an Adventure!</option>
+          <option value="0">Jungle Words</option>
+          <option value="1">Ocean Words</option>
+          <option value="2">Farm Words</option>
+          <option value="3">Space Words</option>
+          <option value="4">Magic Words</option>
         </select>
-        <button id="start-button" type="button">Start Game</button>
-        <button id="reset-button" type="button" disabled>Reset Game</button>
-        <button id="fullscreen-button" type="button">Fullscreen</button>
+        <button id="start-button" type="button">Let’s Go!</button>
+        <button id="sound-toggle" type="button" aria-label="Toggle sound">🔊</button>
       </div>
     </div>
-    <div id="message-display" aria-live="polite"></div>
   </header>
 
   <!-- Main Game Container -->
   <main class="game-container">
-    <div class="card-row" role="grid" aria-label="Sight Words Cards">
-      <!-- Cards will be created dynamically by script.js -->
-    </div>
+    <div class="card-row" role="grid" aria-label="Word Adventure Cards"></div>
   </main>
 
-  <!-- JavaScript -->
+  <!-- Reward Modal -->
+  <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Wow, You Did It!</h2>
+      <img src="trophy.png" alt="Trophy" class="reward-image" />
+      <p>You earned <span id="final-score"></span> stars!</p>
+      <button id="play-again-button" type="button">Play Again</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
