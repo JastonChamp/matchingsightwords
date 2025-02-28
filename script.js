@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
   };
 
-  // Create Cards with Randomized Positions
+  // Create Cards with Randomized Words
   const createCards = () => {
     cardContainer.innerHTML = ''; // Clear any residual DOM elements
     flippedCards = [];
