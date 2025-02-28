@@ -1,14 +1,16 @@
 :root {
-  --primary-color: #FFF8E1;    /* Creamy yellow */
-  --secondary-color: #FFD54F;  /* Warm yellow */
-  --accent-color: #FF6F61;     /* Vibrant coral */
-  --matched-color: #A5D6A7;    /* Soft green */
-  --text-color: #3E2723;
+  --primary-color: #FFF8E1;    /* Creamy yellow for card backs and backgrounds */
+  --secondary-color: #FFD54F;  /* Warm yellow for borders and headers */
+  --accent-color: #FF6F61;     /* Vibrant coral for buttons and text highlights */
+  --matched-color: #A5D6A7;    /* Soft green for matched cards */
+  --text-color: #3E2723;       /* Dark brown for text readability */
   --font-family: 'Chewy', cursive;
 }
 
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
@@ -27,13 +29,13 @@ body.fullscreen {
   overflow: hidden;
 }
 
-/* Mascot Banner */
+/* Mascot Banner Styling */
 .mascot-banner {
   text-align: center;
   padding: 1rem 2rem;
   background-color: var(--secondary-color);
   border-bottom: 4px dotted var(--accent-color);
-  min-height: 150px; /* Ensure space for fox */
+  min-height: 150px; /* Ensure space for fox mascot */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,21 +47,21 @@ body.fullscreen {
   animation: bounceMascot 1.5s infinite, rotateMascot 4s infinite;
 }
 #mascot-message {
-  font-size: 2rem; /* Larger text */
+  font-size: 2rem; /* Larger, clear text for young users */
   margin-top: 0.5rem;
   text-align: left;
   color: var(--accent-color);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Header */
+/* Header Styling */
 .fixed-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1.5rem 5.5rem; /* Increased padding */
+  padding: 1.5rem 5.5rem; /* Increased padding for touch-friendliness */
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -70,28 +72,28 @@ body.fullscreen {
   gap: 6.5rem; /* Spaced out controls for full-screen button */
 }
 #score-display {
-  font-size: 3rem; /* Larger, clearer text */
+  font-size: 3rem; /* Larger, clear text for visibility */
   color: var(--accent-color);
   font-weight: bold;
   display: flex;
   align-items: center;
 }
 
-/* Controls */
+/* Controls Styling */
 .controls {
   display: flex;
   gap: 6.5rem; /* More spacing for full-screen button */
 }
 .controls select, .controls button {
   font-size: 1.5rem;
-  padding: 1.25rem 2.75rem; /* Larger, touch-friendly */
+  padding: 1.25rem 2.75rem; /* Larger, touch-friendly buttons */
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
   font-family: var(--font-family); /* Match Chewy font */
 }
 .controls select {
-  border: 5px solid var(--secondary-color); /* Thicker border */
+  border: 5px solid var(--secondary-color); /* Thicker border for visibility */
   background-color: var(--primary-color);
   background-image: url('fox-tail.png'); /* Thematic dropdown arrow */
   background-repeat: no-repeat;
@@ -104,14 +106,14 @@ body.fullscreen {
   border: none;
 }
 .controls button:hover:not(:disabled) {
-  transform: scale(1.1); /* Enhanced hover effect */
+  transform: scale(1.1); /* Enhanced hover effect for interactivity */
 }
 .controls button:disabled {
   background-color: #B0BEC5;
   cursor: not-allowed;
 }
 
-/* Game Container */
+/* Game Container Styling */
 .game-container {
   margin-top: 280px; /* Reverted to accommodate larger grid */
   padding: 1.5rem;
@@ -124,12 +126,12 @@ body.fullscreen {
   width: 100vw;
 }
 
-/* Cards */
+/* Cards Grid and Flip Animation */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(270px, 1fr)); /* Reverted to larger cards */
-  gap: 6rem; /* Reverted to larger spacing */
-  max-width: 1350px; /* Reverted to larger max-width for better visibility */
+  grid-template-columns: repeat(5, minmax(270px, 1fr)); /* Reverted to larger cards for visibility */
+  gap: 6rem; /* Reverted to larger spacing for clarity */
+  max-width: 1350px; /* Reverted to larger max-width for better fit on screens */
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
@@ -143,8 +145,8 @@ body.fullscreen {
 .card {
   position: relative;
   width: 100%;
-  aspect-ratio: 1;
-  perspective: 1000px;
+  aspect-ratio: 1; /* Ensures square cards */
+  perspective: 1000px; /* Maintains 3D context for potential future use, but not used here */
 }
 .card:nth-child(1) { grid-area: card1; }
 .card:nth-child(2) { grid-area: card2; }
@@ -158,19 +160,21 @@ body.fullscreen {
 .card:nth-child(10) { grid-area: card10; }
 .card-inner {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   transition: opacity 0.5s ease-in-out; /* Simplified fade animation, no positional change */
   transform-style: preserve-3d;
   z-index: 10; /* Ensure proper stacking */
-  top: 0;
-  left: 0; /* Explicitly position to prevent off-screen issues */
 }
 .card.flipped .card-inner {
   z-index: 20; /* Higher z-index on flip to ensure visibility and prevent overlap */
 }
 .card-face {
   position: absolute;
+  top: 0;
+  left: 0; /* Explicitly anchor to prevent off-screen issues */
   width: 100%;
   height: 100%;
   border-radius: 25px;
@@ -178,15 +182,12 @@ body.fullscreen {
   align-items: center;
   justify-content: center;
   backface-visibility: hidden;
-  border: 5px solid var(--secondary-color);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced glow */
+  border: 5px solid var(--secondary-color); /* Yellow border for consistency */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Enhanced glow for engagement */
 }
 .card-front {
   position: relative; /* Allows absolute positioning of the number */
-  background-color: var(--primary-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: url('card-front.png') no-repeat center/cover; /* Tree illustration */
   opacity: 1;
 }
 .card-front img {
@@ -199,14 +200,14 @@ body.fullscreen {
   position: absolute;
   bottom: 10px; /* Bottom-right corner for clarity */
   right: 10px;
-  font-size: 1.4rem; /* Smaller, lighter numbers */
+  font-size: 1.4rem; /* Smaller, lighter numbers for visibility */
   font-weight: bold;
   color: #fff; /* White text for contrast */
   background-color: rgba(255, 111, 97, 0.2); /* Lighter, semi-transparent coral */
   padding: 5px 10px;
-  border-radius: 50%; /* Circular badge */
-  border: 2px solid #fff; /* White outline */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  border-radius: 50%; /* Circular badge for numbers */
+  border: 2px solid #fff; /* White outline for clarity */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   opacity: 1; /* Visible on front */
 }
 .card.flipped .card-number {
@@ -214,24 +215,24 @@ body.fullscreen {
   visibility: hidden; /* Ensure complete hiding */
 }
 .card-back {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color); /* Creamy yellow background for words */
   opacity: 0; /* Hidden initially */
-  font-size: 4.5rem; /* Larger, bold text */
+  font-size: 4.5rem; /* Larger, bold text for readability */
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--text-color); /* Dark brown for contrast */
 }
 .card.flipped .card-back {
   opacity: 1; /* Show on flip */
 }
 .card.matched .card-face {
-  background-color: var(--matched-color);
-  animation: bounceCard 0.8s ease, sparkle 1.5s infinite;
+  background-color: var(--matched-color); /* Soft green for matched cards */
+  animation: bounceCard 0.8s ease, sparkle 1.5s infinite; /* Celebrate matches */
 }
 .card.mismatch .card-inner {
-  animation: shake 0.8s; /* Enhanced mismatch feedback */
+  animation: shake 0.8s; /* Feedback for mismatches */
 }
 
-/* Animations */
+/* Animations for Engagement */
 @keyframes bounceMascot {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
@@ -259,7 +260,7 @@ body.fullscreen {
   50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* Modal */
+/* Modal for Rewards */
 .modal {
   display: none;
   position: fixed;
@@ -330,7 +331,17 @@ body.fullscreen {
   cursor: pointer;
 }
 
-/* Responsive */
+/* Progress Bar Styling */
+.progress-bar {
+  width: 120px;
+  height: 20px;
+  background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
+  border: 2px solid #FFD54F;
+  border-radius: 10px;
+  margin-left: 15px;
+}
+
+/* Responsive Design for Different Screen Sizes */
 @media (max-width: 1200px) {
   .game-container { margin-top: 280px; }
   .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 4rem; max-width: 1000px; }
