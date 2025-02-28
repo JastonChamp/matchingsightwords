@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
+      card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word} on the back`);
       card.dataset.word = word;
       card.dataset.position = position + 1; // Store card number for display
 
@@ -115,12 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
         <img src="card-front.png" alt="Tree illustration" />
-        <div class="card-word">${word}</div>
         <div class="card-number">${position + 1}</div>
       `;
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
+      backFace.textContent = word; // Display sight word on the back
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    speakStatus('Find a match by focusing on the numbers 1–10 to choose cards!');
+    speakStatus('Find a match by focusing on the numbers 1–10 to choose cards and reveal words on the back!');
   };
 
   // Flip Card
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
-    speakStatus('Here’s how to play: Tap or click a card numbered 1–10 to flip it and match the sight words!');
+    speakStatus('Here’s how to play: Tap or click a card numbered 1–10 to flip it and match the sight words on the back!');
   });
 
   closeHowToPlay.addEventListener('click', () => {
