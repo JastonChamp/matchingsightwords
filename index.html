@@ -13,7 +13,7 @@
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); }
+      50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
     }
     .how-to-play {
       position: fixed;
@@ -38,13 +38,28 @@
       border: 2px solid #FFD54F;
       border-radius: 10px;
       margin-left: 15px;
+      position: relative;
     }
+    .progress-bar .star-icon {
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      background: url('star-icon.png') no-repeat center;
+      background-size: contain;
+      opacity: 0.3;
+      animation: twinkle 2.5s infinite;
+    }
+    .progress-bar .star-icon:nth-child(1) { left: 10%; }
+    .progress-bar .star-icon:nth-child(2) { left: 30%; }
+    .progress-bar .star-icon:nth-child(3) { left: 50%; }
+    .progress-bar .star-icon:nth-child(4) { left: 70%; }
+    .progress-bar .star-icon:nth-child(5) { left: 90%; }
     .fullscreen-button {
-      font-size: 1.5rem;
-      padding: 1.25rem 2.75rem;
+      font-size: 2rem; /* Larger for full-screen clarity */
+      padding: 1.75rem 3.5rem; /* Larger, touch-friendly buttons */
       border-radius: 20px;
       cursor: pointer;
-      background-color: var(--accent-color);
+      background-color: #FFD54F; /* Softer yellow for theme consistency */
       color: white;
       border: none;
       transition: transform 0.2s ease;
@@ -65,7 +80,13 @@
     <div class="header-content">
       <div id="score-display" aria-live="polite">
         <img src="fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
-        <div class="progress-bar" id="progress-bar"></div>
+        <div class="progress-bar" id="progress-bar">
+          <div class="star-icon" style="left: 10%;"></div>
+          <div class="star-icon" style="left: 30%;"></div>
+          <div class="star-icon" style="left: 50%;"></div>
+          <div class="star-icon" style="left: 70%;"></div>
+          <div class="star-icon" style="left: 90%;"></div>
+        </div>
       </div>
       <div class="controls">
         <select id="mode-select" aria-label="Choose adventure level">
@@ -107,7 +128,7 @@
 
   <div id="how-to-play" class="how-to-play">
     <h3>How to Play</h3>
-    <p>Tap or click a card to flip it!</p>
+    <p>Tap or click a card to flip it and focus on the words, not the numbers!</p>
     <p>Find matching words to earn Fox Stars.</p>
     <img src="card-flip.png" alt="Card flipping example" />
     <button id="close-how-to-play">Got It!</button>
