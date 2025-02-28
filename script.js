@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
       card.dataset.word = word;
+      card.dataset.position = position + 1; // Store card number for display
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
@@ -115,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
       frontFace.innerHTML = `
         <img src="card-front.png" alt="Tree illustration" />
         <div class="card-word">${word}</div>
+        <div class="card-number">${position + 1}</div>
       `;
 
       const backFace = document.createElement('div');
@@ -134,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    speakStatus('Find a match by focusing on the sight words!');
+    speakStatus('Find a match by focusing on the sight words! Use the numbers 1–10 to choose cards.');
   };
 
   // Flip Card
@@ -167,6 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
       flippingAllowed = true;
       updateProgressBar();
       if (matchedCards.length === 10) showReward();
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
@@ -243,6 +250,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('mascot').classList.add('foxJump');
       setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     }
+    confetti({
+      particleCount: 200,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
     isGameInProgress = false;
   };
 
@@ -321,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
-    speakStatus('Here’s how to play: Tap or click a card to flip it and match the sight words!');
+    speakStatus('Here’s how to play: Tap or click a card numbered 1–10 to flip it and match the sight words!');
   });
 
   closeHowToPlay.addEventListener('click', () => {
@@ -335,4 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
+
+  // Add Confetti Library (external script or CDN for particle effects)
+  // Include <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script> in HTML head
 });
