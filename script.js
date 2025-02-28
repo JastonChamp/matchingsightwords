@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Create Cards
   const createCards = () => {
-    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication
+    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication or bugs
     flippedCards = [];
     matchedCards = [];
 
@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word}`);
       card.dataset.word = word;
+      card.dataset.flipped = 'false'; // Track flip state to prevent bugs
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
@@ -130,11 +131,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Flip Card
   const flipCard = (card) => {
-    if (!flippingAllowed || flippedCards.includes(card) || matchedCards.includes(card)) return;
-    card.classList.add('flipped');
-    flippedCards.push(card);
-    speakWord(card.dataset.word); // Re-enabled speech API for sight words
-    if (flippedCards.length === 2) checkForMatch();
+    if (!flippingAllowed || card.dataset.flipped === 'true' || matchedCards.includes(card)) return;
+
+    if (!card.classList.contains('flipped')) {
+      card.classList.add('flipped');
+      card.dataset.flipped = 'true';
+      flippedCards.push(card);
+      speakWord(card.dataset.word); // Re-enabled speech API for sight words
+      if (flippedCards.length === 2) checkForMatch();
+    } else {
+      // Prevent re-flipping until unmatched
+      return;
+    }
   };
 
   // Check Match
@@ -149,6 +157,8 @@ document.addEventListener('DOMContentLoaded', () => {
       playSound('correct');
       card1.classList.add('matched');
       card2.classList.add('matched');
+      card1.dataset.flipped = 'true'; // Ensure state is maintained
+      card2.dataset.flipped = 'true';
       mascotMessage.textContent = 'Yay! You found a pair!';
       speakStatus('Great match!');
       flippedCards = [];
@@ -164,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         card1.classList.remove('flipped', 'mismatch');
         card2.classList.remove('flipped', 'mismatch');
+        card1.dataset.flipped = 'false'; // Reset flip state
+        card2.dataset.flipped = 'false';
         flippedCards = [];
         flippingAllowed = true;
         mascotMessage.textContent = 'Find a match!';
