@@ -1,35 +1,55 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Original Sight Words Sets (50 words, 5 per set)
-  const sightWordsSets = [
-    ['a', 'about', 'above', 'again', 'all'],
-    ['also', 'are', 'be', 'came', 'day'],
-    ['do', 'does', 'for', 'go', 'he'],
-    ['her', 'his', 'how', 'I', 'in'],
-    ['into', 'is', 'it', 'know', 'many'],
-    ['name', 'not', 'now', 'of', 'on'],
-    ['one', 'over', 'said', 'she', 'so'],
-    ['some', 'story', 'the', 'their', 'then'],
-    ['there', 'this', 'to', 'too', 'want'],
-    ['was', 'were', 'what', 'when', 'white']
-  ];
+  // Sight Words Sets for different modes
+  const sightWordsSets = {
+    easy: [
+      ['a', 'about', 'above', 'again', 'all'],
+      ['also', 'are', 'be', 'came', 'day'],
+      ['do', 'does', 'for', 'go', 'he'],
+      ['her', 'his', 'how', 'I', 'in'],
+      ['into', 'is', 'it', 'know', 'many'],
+      ['name', 'not', 'now', 'of', 'on'],
+      ['one', 'over', 'said', 'she', 'so'],
+      ['some', 'story', 'the', 'their', 'then'],
+      ['there', 'this', 'to', 'too', 'want'],
+      ['was', 'were', 'what', 'when', 'white']
+    ],
+    medium: [
+      ['the', 'said', 'was', 'one', 'two'],
+      ['a', 'about', 'above', 'again', 'all'],
+      ['also', 'are', 'be', 'came', 'day'],
+      ['do', 'does', 'for', 'go', 'he'],
+      ['her', 'his', 'how', 'I', 'in']
+    ],
+    hard: [
+      ['you', 'they', 'where', 'there', 'this'],
+      ['the', 'said', 'was', 'one', 'two'],
+      ['a', 'about', 'above', 'again', 'all'],
+      ['also', 'are', 'be', 'came', 'day'],
+      ['do', 'does', 'for', 'go', 'he']
+    ]
+  };
 
   // DOM Elements
   const cardContainer = document.querySelector('.card-row');
   const startButton = document.getElementById('start-button');
   const setSelect = document.getElementById('set-select');
+  const modeSelect = document.getElementById('mode-select');
   const scoreDisplay = document.getElementById('score-display');
   const mascotMessage = document.getElementById('mascot-message');
   const soundToggle = document.getElementById('sound-toggle');
   const modal = document.getElementById('reward-modal');
   const finalScore = document.getElementById('final-score');
   const playAgainButton = document.getElementById('play-again-button');
+  const howToPlay = document.getElementById('how-to-play');
+  const closeHowToPlay = document.getElementById('close-how-to-play');
 
   // Game State
   let flippedCards = [];
   let matchedCards = [];
   let currentSet = null;
+  let currentMode = 'easy';
   let flippingAllowed = true;
   let score = 0;
   let soundOn = true;
@@ -57,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     flippedCards = [];
     matchedCards = [];
 
-    const words = sightWordsSets[currentSet];
+    const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Limit to 10 cards
 
     cardWords.forEach((word, index) => {
@@ -96,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 5000); // 5s guidance
+    setTimeout(() => cardContainer.classList.remove('pulse'), 7000); // Extended onboarding
   };
 
   // Flip Card
@@ -120,10 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
       playSound('correct');
       card1.classList.add('matched');
       card2.classList.add('matched');
-      mascotMessage.textContent = 'Woohoo! You found a pair!';
+      mascotMessage.textContent = 'Yay! You found a pair!';
       flippedCards = [];
       flippingAllowed = true;
-      if (matchedCards.length === sightWordsSets[currentSet].length * 2) showReward();
+      if (matchedCards.length === sightWordsSets[currentMode][currentSet].length * 2) showReward();
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
@@ -135,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
         flippedCards = [];
         flippingAllowed = true;
         mascotMessage.textContent = 'Find a match!';
+        speakStatus('No match found, try again.');
       }, 1000); // Faster feedback
     }
   };
@@ -144,6 +165,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!soundOn) return;
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
+    utterance.lang = 'en-US';
+    utterance.pitch = 1.3;
+    utterance.rate = 0.7;
+    speechSynthesis.speak(utterance);
+  };
+
+  // Speak Status for Accessibility
+  const speakStatus = (message) => {
+    if (!soundOn) return;
+    const utterance = new SpeechSynthesisUtterance(message);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
@@ -164,20 +195,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Update Score
   const updateScore = () => {
-    const totalPairs = sightWordsSets[currentSet].length;
+    const totalPairs = sightWordsSets[currentMode][currentSet].length;
     const matchedPairs = matchedCards.length / 2;
-    scoreDisplay.textContent = `Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
+    scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
   };
 
   // Start Game
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
+      speakStatus('Please choose a quest first.');
       return;
     }
     currentSet = parseInt(setSelect.value, 10);
+    currentMode = modeSelect.value;
     startButton.disabled = true;
     setSelect.disabled = true;
+    modeSelect.disabled = true;
     score = 0;
     updateScore();
     mascotMessage.textContent = 'Find a match!';
@@ -191,8 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
     finalScore.textContent = score;
     modal.classList.add('visible');
     modal.setAttribute('aria-hidden', 'false');
-    if (soundOn) bgMusic.pause();
-    playSound('correct');
+    if (soundOn) {
+      bgMusic.pause();
+      playSound('correct');
+      speakStatus(`Amazing job! You collected ${score} Fox Stars!`);
+    }
   };
 
   // Reset Game
@@ -201,6 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.setAttribute('aria-hidden', 'true');
     startButton.disabled = false;
     setSelect.disabled = false;
+    modeSelect.disabled = false;
     score = 0;
     updateScore();
     cardContainer.innerHTML = '';
@@ -215,22 +253,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // Toggle Sound
   const toggleSound = () => {
     soundOn = !soundOn;
-    soundToggle.textContent = soundOn ? '🔊' : '🔇';
+    soundToggle.querySelector('img').src = soundOn ? 'fox-ear-on.png' : 'fox-ear-off.png';
     if (!soundOn) bgMusic.pause();
     else bgMusic.play();
+    speakStatus(`Sound is now ${soundOn ? 'on' : 'off'}.`);
   };
 
-  // Onboarding Guidance
+  // Onboarding and How-to-Play
   if (!localStorage.getItem('welcomeShown')) {
     mascotMessage.textContent = 'Tap a card to flip it and find matches!';
     setTimeout(() => {
       mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
+      howToPlay.classList.add('visible');
       localStorage.setItem('welcomeShown', 'true');
-    }, 5000); // Extended onboarding
+    }, 7000);
   }
+
+  closeHowToPlay.addEventListener('click', () => {
+    howToPlay.classList.remove('visible');
+    speakStatus('Got it! Start your quest.');
+  });
 
   // Event Listeners
   startButton.addEventListener('click', startGame);
   soundToggle.addEventListener('click', toggleSound);
   playAgainButton.addEventListener('click', resetGame);
+  modeSelect.addEventListener('change', () => {
+    currentMode = modeSelect.value;
+    setSelect.value = ''; // Reset quest selection
+    startButton.disabled = true;
+    mascotMessage.textContent = 'Choose a quest to begin!';
+    speakStatus(`Game mode set to ${currentMode}.`);
+  });
 });
