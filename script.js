@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Create Cards
   const createCards = () => {
-    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication
+    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication or mispositioning
     flippedCards = [];
     matchedCards = [];
 
@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner');
       cardInner.style.zIndex = '10'; // Ensure proper stacking
+      cardInner.style.position = 'relative'; // Ensure positioning stays within grid
 
       // Front face with tree image and number
       const frontFace = document.createElement('div');
@@ -315,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    cardContainer.innerHTML = ''; // Clear any residual cards to prevent duplication
+    cardContainer.innerHTML = ''; // Clear any residual cards to prevent duplication or mispositioning
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
