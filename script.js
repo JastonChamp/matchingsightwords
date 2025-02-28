@@ -1,33 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  // Sight Words Sets
+  // Sight Words Sets with Definitions
   const sightWordsSets = {
     easy: [
-      ['a', 'about', 'above', 'again', 'all'],
-      ['also', 'are', 'be', 'came', 'day'],
-      ['do', 'does', 'for', 'go', 'he'],
-      ['her', 'his', 'how', 'I', 'in'],
-      ['into', 'is', 'it', 'know', 'many'],
-      ['name', 'not', 'now', 'of', 'on'],
-      ['one', 'over', 'said', 'she', 'so'],
-      ['some', 'story', 'the', 'their', 'then'],
-      ['there', 'this', 'to', 'too', 'want'],
-      ['was', 'were', 'what', 'when', 'white']
+      { word: 'a', definition: 'used to point to a person, place, or thing' },
+      { word: 'about', definition: 'concerning or regarding' },
+      { word: 'above', definition: 'higher than or over' },
+      { word: 'again', definition: 'one more time' },
+      { word: 'all', definition: 'every part or whole' }
     ],
     medium: [
-      ['the', 'said', 'was', 'one', 'two'],
-      ['a', 'about', 'above', 'again', 'all'],
-      ['also', 'are', 'be', 'came', 'day'],
-      ['do', 'does', 'for', 'go', 'he'],
-      ['her', 'his', 'how', 'I', 'in']
+      { word: 'the', definition: 'used before a noun to indicate a specific person, place, or thing' },
+      { word: 'said', definition: 'spoken or expressed' },
+      { word: 'was', definition: 'past tense of "to be"' },
+      { word: 'one', definition: 'the number 1' },
+      { word: 'two', definition: 'the number 2' }
     ],
     hard: [
-      ['you', 'they', 'where', 'there', 'this'],
-      ['the', 'said', 'was', 'one', 'two'],
-      ['a', 'about', 'above', 'again', 'all'],
-      ['also', 'are', 'be', 'came', 'day'],
-      ['do', 'does', 'for', 'go', 'he']
+      { word: 'you', definition: 'the person being addressed' },
+      { word: 'they', definition: 'more than one person or thing' },
+      { word: 'where', definition: 'question word asking for a location' },
+      { word: 'there', definition: 'in or at that place' },
+      { word: 'this', definition: 'used to identify a specific person, place, or thing' }
     ]
   };
 
@@ -40,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const mascotMessage = document.getElementById('mascot-message');
   const modal = document.getElementById('reward-modal');
   const finalScore = document.getElementById('final-score');
+  const matchedWordsDisplay = document.getElementById('matched-words');
   const playAgainButton = document.getElementById('play-again-button');
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
   const progressBar = document.getElementById('progress-bar');
   const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
+  const howToPlayButton = document.getElementById('how-to-play-button');
   const body = document.body;
 
   // Game State
@@ -98,18 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
     flippedCards = [];
     matchedCards = [];
 
-    const words = sightWordsSets[currentMode][currentSet];
+    const words = sightWordsSets[currentMode].map(item => item.word);
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10);
-    const gridPositions = Array.from({ length: 10 }, (_, i) => i); // Always 10 cards
+    const definitions = sightWordsSets[currentMode].map(item => item.definition);
 
-    gridPositions.forEach((position, index) => {
+    Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
       const word = cardWords[index];
+      const definition = definitions[words.indexOf(word)];
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
       card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
       card.dataset.word = word;
+      card.dataset.definition = definition;
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
@@ -118,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
         <img src="card-front.png" alt="Tree illustration" />
-        <div class="card-number">${position + 1}</div>
+        <div class="card-word">${word}</div>
       `;
 
       const backFace = document.createElement('div');
@@ -138,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    speakStatus('Find a match by focusing on the words, not the numbers!');
+    speakStatus('Find a match by focusing on the sight words!');
   };
 
   // Flip Card
@@ -165,12 +164,19 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      mascotMessage.textContent = 'Yay! You found a pair!';
-      speakStatus('Great match! Look for another word.');
+      const matchedWord = card1.dataset.word;
+      const definition = card1.dataset.definition;
+      mascotMessage.textContent = `Yay! You matched "${matchedWord}"!`;
+      speakStatus(`Great match! "${matchedWord}" means ${definition}. Look for another word.`);
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
       if (matchedCards.length === 10) showReward();
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
@@ -222,6 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
+    speakStatus(`Fox Stars: ${score}, Pairs: ${matchedPairs} out of 5`);
   };
 
   const updateProgressBar = () => {
@@ -230,6 +237,28 @@ document.addEventListener('DOMContentLoaded', () => {
     progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
       star.style.opacity = index < matchedCards.length / 2 ? 1 : 0.3;
     });
+  };
+
+  // Show Reward with Matched Words
+  const showReward = () => {
+    finalScore.textContent = score;
+    const matchedWords = matchedCards.map(card => `${card.dataset.word} (${card.dataset.definition})`).join(', ');
+    matchedWordsDisplay.textContent = matchedWords;
+    modal.classList.add('visible');
+    modal.setAttribute('aria-hidden', 'false');
+    if (soundOn) {
+      bgMusic.pause();
+      playSound('correct');
+      speakStatus(`Amazing job! You collected ${score} Fox Stars! Here are your matched words: ${matchedWords}`);
+      document.getElementById('mascot').classList.add('foxJump');
+      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+    }
+    confetti({
+      particleCount: 200,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+    isGameInProgress = false;
   };
 
   // Game Control
@@ -251,18 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
     isGameInProgress = true;
     createCards();
     if (soundOn) bgMusic.play();
-  };
-
-  const showReward = () => {
-    finalScore.textContent = score;
-    modal.classList.add('visible');
-    modal.setAttribute('aria-hidden', 'false');
-    if (soundOn) {
-      bgMusic.pause();
-      playSound('correct');
-      speakStatus(`Amazing job! You collected ${score} Fox Stars!`);
-    }
-    isGameInProgress = false;
+    document.getElementById('mascot').classList.add('foxCheer');
+    setTimeout(() => document.getElementById('mascot').classList.remove('foxCheer'), 2000);
   };
 
   const resetGame = () => {
@@ -280,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
     isGameInProgress = false;
+    if (soundOn) bgMusic.play();
   };
 
   // Dynamic Set Selection
@@ -314,6 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
     speechSynthesis.cancel();
   });
 
+  howToPlayButton.addEventListener('click', () => {
+    howToPlay.classList.add('visible');
+    speakStatus('Here’s how to play: Tap or click a card to flip it and match the sight words!');
+  });
+
   closeHowToPlay.addEventListener('click', () => {
     howToPlay.classList.remove('visible');
     speakStatus('Got it! Start your quest.');
@@ -325,4 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
+
+  // Add Confetti Library (external script or CDN for particle effects)
+  // Include <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script> in HTML head
 });
