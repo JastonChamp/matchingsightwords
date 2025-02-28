@@ -74,6 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
+  // Randomly Position Cards in Grid
+  const getRandomGridPosition = () => {
+    const positions = Array.from({ length: 10 }, (_, i) => i);
+    return shuffleArray(positions);
+  };
+
   // Toggle Full Screen
   const toggleFullscreen = () => {
     if (!isFullscreen) {
@@ -86,6 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       fullscreenButton.textContent = 'Exit Full Screen';
       isFullscreen = true;
+      document.getElementById('mascot').classList.add('foxJump');
+      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen();
@@ -100,34 +108,29 @@ document.addEventListener('DOMContentLoaded', () => {
     speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
   };
 
-  // Create Cards
+  // Create Cards with Randomized Positions
   const createCards = () => {
-    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication or mispositioning
+    cardContainer.innerHTML = ''; // Clear any residual DOM elements
     flippedCards = [];
     matchedCards = [];
 
     const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 2x5 grid (10 cards)
+    const gridPositions = getRandomGridPosition(); // Randomize grid positions
 
-    // Sort cards to ensure 1–5 on top, 6–10 below
-    const orderedCards = [...cardWords];
-    orderedCards.sort((a, b) => {
-      const indexA = cardWords.indexOf(a) + 1;
-      const indexB = cardWords.indexOf(b) + 1;
-      return indexA - indexB;
-    });
-
-    orderedCards.forEach((word, index) => {
+    gridPositions.forEach((position, index) => {
+      const word = cardWords[index];
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word}`);
+      card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word}`);
       card.dataset.word = word;
-      card.dataset.flipped = 'false'; // Track flip state to prevent bugs
+      card.dataset.flipped = 'false'; // Track flip state
+      card.dataset.position = position; // Track grid position for stability
 
       const cardInner = document.createElement('div');
-      cardInner.classList.add('card-inner');
+      cardInner.classList.add('card-inner', 'unmatched');
       cardInner.style.zIndex = '10'; // Ensure proper stacking
       cardInner.style.position = 'relative'; // Ensure positioning stays within grid
 
@@ -136,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
         <img src="card-front.png" alt="Tree illustration" />
-        <div class="card-number">${index + 1}</div>
+        <div class="card-number">${position + 1}</div>
       `;
 
       // Back face with sight word
@@ -152,11 +155,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter' || e.key === ' ') flipCard(card);
       });
 
+      // Append to specific grid position
+      cardContainer.children[position]?.remove(); // Remove existing if any
       cardContainer.appendChild(card);
     });
 
     cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 12000); // Extended onboarding
+    setTimeout(() => cardContainer.classList.remove('pulse'), 12000); // Extended onboarding with enhanced glow
+    speakStatus('Find a match by focusing on the words, not the numbers!');
   };
 
   // Flip Card
@@ -187,10 +193,12 @@ document.addEventListener('DOMContentLoaded', () => {
       playSound('correct');
       card1.classList.add('matched');
       card2.classList.add('matched');
+      card1.classList.remove('unmatched');
+      card2.classList.remove('unmatched');
       card1.dataset.flipped = 'true'; // Ensure state is maintained
       card2.dataset.flipped = 'true';
       mascotMessage.textContent = 'Yay! You found a pair!';
-      speakStatus('Great match!');
+      speakStatus('Great match! Look for another word.');
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
@@ -198,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
-      speakStatus('No match, try again.');
+      speakStatus('No match, try again. Focus on the words!');
       card1.classList.add('mismatch');
       card2.classList.add('mismatch');
       setTimeout(() => {
@@ -209,14 +217,13 @@ document.addEventListener('DOMContentLoaded', () => {
         flippedCards = [];
         flippingAllowed = true;
         mascotMessage.textContent = 'Find a match!';
-      }, 1000); // Faster feedback
+      }, 1200); // Extended feedback delay for clarity
     }
   };
 
   // Speak Word (Fixed Web Speech API)
   const speakWord = (word) => {
     if (!soundOn) return;
-    // Ensure speech synthesis is available and retry if it fails
     if (!speechSynthesis) {
       console.error('Web Speech API not supported in this browser.');
       return;
@@ -264,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalPairs = sightWordsSets[currentMode][currentSet].length;
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
-    updateProgressBar();
+    speakStatus(`Fox Stars: ${score}, Pairs: ${matchedPairs} out of ${totalPairs}`);
   };
 
   // Update Progress Bar
@@ -273,9 +280,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const matchedPairs = matchedCards.length / 2;
     const progress = (matchedPairs / totalPairs) * 100;
     progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
+    progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
+      if (index < matchedPairs) star.style.opacity = 1;
+      else star.style.opacity = 0.3;
+    });
   };
 
-  // Start Game
+  // Start Game with Randomized Difficulty
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
@@ -293,30 +304,39 @@ document.addEventListener('DOMContentLoaded', () => {
     flippingAllowed = true;
     createCards();
     if (soundOn) bgMusic.play();
+    // Add fox hint for "Easy" mode
+    if (currentMode === 'easy' && Math.random() < 0.3) {
+      const hintWord = sightWordsSets.easy[currentSet][Math.floor(Math.random() * 5)];
+      setTimeout(() => speakStatus(`Look for the word ${hintWord}!`), 2000);
+    }
   };
 
-  // Show Reward
+  // Show Reward with Enhanced Animation
   const showReward = () => {
     finalScore.textContent = score;
     modal.classList.add('visible');
     modal.setAttribute('aria-hidden', 'false');
+    modal.classList.add('animate');
     if (soundOn) {
       bgMusic.pause();
       playSound('correct');
       speakStatus(`Amazing job! You collected ${score} Fox Stars!`);
+      document.getElementById('mascot').classList.add('foxJump');
+      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     }
+    setTimeout(() => modal.classList.remove('animate'), 3000);
   };
 
   // Reset Game
   const resetGame = () => {
-    modal.classList.remove('visible');
+    modal.classList.remove('visible', 'animate');
     modal.setAttribute('aria-hidden', 'true');
     startButton.disabled = false;
     setSelect.disabled = false;
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    cardContainer.innerHTML = ''; // Clear any residual cards to prevent duplication or mispositioning
+    cardContainer.innerHTML = ''; // Clear any residual cards
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
@@ -328,11 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // Onboarding and How-to-Play
   if (!localStorage.getItem('welcomeShown')) {
     mascotMessage.textContent = 'Tap a card to flip it and find matches!';
+    speakStatus('Tap a card to flip it and find matches!');
     setTimeout(() => {
       mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
       howToPlay.classList.add('visible');
+      speakStatus('Hello, explorer! Let’s find words!');
       localStorage.setItem('welcomeShown', 'true');
-    }, 12000); // Extended onboarding
+    }, 12000); // Extended onboarding with enhanced audio
   }
 
   closeHowToPlay.addEventListener('click', () => {
