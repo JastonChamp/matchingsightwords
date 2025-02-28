@@ -232,21 +232,24 @@ document.addEventListener('DOMContentLoaded', () => {
     finalScore.textContent = score;
     const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
     matchedWordsDisplay.textContent = matchedWords;
-    modal.classList.add('visible');
-    modal.setAttribute('aria-hidden', 'false');
-    if (soundOn) {
-      bgMusic.pause();
-      playSound('correct');
-      // No spoken feedback for reward to reduce audio annoyance
-      document.getElementById('mascot').classList.add('foxJump');
-      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
-    }
-    confetti({
-      particleCount: 200,
-      spread: 70,
-      origin: { y: 0.6 }
-    });
-    isGameInProgress = false;
+    // Delay the modal appearance to allow review of revealed words
+    setTimeout(() => {
+      modal.classList.add('visible');
+      modal.setAttribute('aria-hidden', 'false');
+      if (soundOn) {
+        bgMusic.pause();
+        playSound('correct');
+        // No spoken feedback for reward to reduce audio annoyance
+        document.getElementById('mascot').classList.add('foxJump');
+        setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+      }
+      confetti({
+        particleCount: 200,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      isGameInProgress = false;
+    }, 3000); // Delay of 3 seconds (3,000 ms) to allow time for review
   };
 
   // Game Control
