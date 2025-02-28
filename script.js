@@ -199,18 +199,47 @@ document.addEventListener('DOMContentLoaded', () => {
   const speakWord = (word) => {
     if (!soundOn || !speechSynthesis) return;
     speechSynthesis.cancel();
+
     let utteranceText = word;
     // Use schwa sound (/ə/) for "a" in casual, unstressed speech (e.g., "uh" as in "a cat" or "a dog")
     if (word.toLowerCase() === 'a') {
-      utteranceText = 'uh'; // Use "uh" for a reliable schwa-like pronunciation across browsers
-      // Alternative fallback if "uh" doesn't work: utteranceText = 'ə'; // IPA schwa, but may not work consistently
+      utteranceText = 'uh'; // Use "uh" for a reliable schwa-like pronunciation
     }
+
     const utterance = new SpeechSynthesisUtterance(utteranceText);
-    utterance.lang = 'en-US';
-    utterance.pitch = 1.3;
-    utterance.rate = 0.7;
-    // Add error handling for speech synthesis
+    utterance.lang = 'en-US'; // Standard American English
+
+    // Dynamically select a voice that supports English phonetics well
+    let bestVoice = null;
+    const voices = speechSynthesis.getVoices(); // Get available voices
+    if (voices.length > 0) {
+      bestVoice = voices.find(voice => 
+        voice.lang.startsWith('en-US') && // Prefer American English voices
+        voice.name.toLowerCase().includes('female') // Optional: Prefer a female voice for clarity (adjust as needed)
+      ) || voices.find(voice => voice.lang.startsWith('en-US')); // Fallback to any English US voice
+    } else {
+      // Handle case where voices aren't loaded yet (async loading in some browsers)
+      speechSynthesis.onvoiceschanged = () => {
+        const updatedVoices = speechSynthesis.getVoices();
+        bestVoice = updatedVoices.find(voice => 
+          voice.lang.startsWith('en-US') && 
+          voice.name.toLowerCase().includes('female')
+        ) || updatedVoices.find(voice => voice.lang.startsWith('en-US'));
+        if (bestVoice) {
+          utterance.voice = bestVoice;
+          speechSynthesis.speak(utterance);
+        }
+      };
+    }
+
+    if (bestVoice) {
+      utterance.voice = bestVoice;
+    }
+
+    utterance.pitch = 1.3; // Higher pitch for child-friendly tone
+    utterance.rate = 0.7; // Slower rate for clarity
     utterance.onerror = (error) => console.error('Speech synthesis error for word:', word, error);
+
     speechSynthesis.speak(utterance);
   };
 
