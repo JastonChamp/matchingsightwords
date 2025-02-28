@@ -59,10 +59,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Audio
   const correctSound = new Audio('sounds/cheer.mp3');
+  correctSound.onerror = () => console.warn('Cheer sound failed to load');
   const incorrectSound = new Audio('sounds/whoops.mp3');
+  incorrectSound.onerror = () => console.warn('Whoops sound failed to load');
   const bgMusic = new Audio('sounds/quest.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
+  bgMusic.onerror = () => console.warn('Quest music failed to load');
 
   // Shuffle Array
   const shuffleArray = (array) => {
@@ -111,15 +114,22 @@ document.addEventListener('DOMContentLoaded', () => {
     matchedCards = [];
 
     const words = sightWordsSets[currentMode][currentSet];
+    if (!words || words.length === 0) {
+      console.error('No words found for current mode and set:', currentMode, currentSet);
+      mascotMessage.textContent = 'Error loading words. Please try again!';
+      return;
+    }
+
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
+    console.log('Creating cards with words:', cardWords);
 
     cardWords.forEach((word, index) => {
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word}`);
-      card.dataset.word = word;
+      card.setAttribute('aria-label', `Flip card ${index + 1} with word ${word || 'unknown'}`);
+      card.dataset.word = word || 'unknown'; // Fallback if word is undefined
       card.dataset.flipped = 'false';
 
       const cardInner = document.createElement('div');
@@ -130,14 +140,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
-        <img src="card-front.png" alt="Tree illustration" onerror="this.src='fallback-tree.png'; console.warn('Card front image failed to load');" />
+        <img src="images/card-front.png" alt="Tree illustration" onerror="this.src='images/fallback-tree.png'; console.warn('Card front image failed to load for card ${index}');" />
         <div class="card-number">${index + 1}</div>
       `;
 
       // Back face (sight word)
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
-      backFace.textContent = word;
+      backFace.textContent = word || 'Error'; // Fallback text if word is undefined
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
@@ -154,6 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = cardContainer.querySelectorAll('.card');
     if (cards.length !== 10) {
       console.warn('Not all cards rendered. Expected 10, found:', cards.length);
+      mascotMessage.textContent = `Warning: Only ${cards.length} cards rendered. Please check console for details.`;
     } else {
       console.log('All 10 cards rendered successfully.');
     }
@@ -220,11 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const speakWord = (word) => {
     if (!soundOn) return;
     if (!speechSynthesis) {
-      console.error('Web Speech API not supported in this browser.');
+      console.warn('Web Speech API not supported in this browser. Sound disabled.');
       return;
     }
     speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
+    const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word || 'unknown');
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
@@ -237,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const speakStatus = (message) => {
     if (!soundOn) return;
     if (!speechSynthesis) {
-      console.error('Web Speech API not supported in this browser.');
+      console.warn('Web Speech API not supported in this browser. Status sound disabled.');
       return;
     }
     const utterance = new SpeechSynthesisUtterance(message);
@@ -252,13 +263,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Play Sound
   const playSound = (type) => {
     if (!soundOn) return;
+    let sound;
     if (type === 'correct') {
-      correctSound.currentTime = 0;
-      correctSound.play();
+      sound = correctSound;
     } else {
-      incorrectSound.currentTime = 0;
-      incorrectSound.play();
+      sound = incorrectSound;
     }
+    sound.currentTime = 0;
+    sound.play().catch(error => console.warn(`Failed to play ${type} sound: ${error}`));
   };
 
   // Update Score
@@ -298,7 +310,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mascotMessage.textContent = 'Find a match!';
     flippingAllowed = true;
     createCards();
-    if (soundOn) bgMusic.play();
+    if (soundOn) {
+      bgMusic.play().catch(error => console.warn(`Failed to play background music: ${error}`));
+    }
     if (currentMode === 'easy' && Math.random() < 0.3) {
       const hintWord = sightWordsSets.easy[currentSet][Math.floor(Math.random() * 5)];
       setTimeout(() => speakStatus(`Look for the word ${hintWord}!`), 2000);
@@ -336,7 +350,9 @@ document.addEventListener('DOMContentLoaded', () => {
     currentSet = null;
     setSelect.value = '';
     mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
-    if (soundOn) bgMusic.play();
+    if (soundOn) {
+      bgMusic.play().catch(error => console.warn('Failed to play background music on reset'));
+    }
   };
 
   // Onboarding and How-to-Play
