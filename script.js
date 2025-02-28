@@ -52,19 +52,22 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'easy';
   let flippingAllowed = true;
   let score = 0;
-  let soundOn = true;
+  let soundOn = true; // Ensure sound stays on by default
   let isFullscreen = false;
   let isGameInProgress = false;
 
-  // Audio with Error Handling
+  // Audio with Enhanced Error Handling
   const correctSound = new Audio('sounds/cheer.mp3');
-  correctSound.onerror = () => console.error('Failed to load cheer.mp3');
+  correctSound.onerror = () => console.warn('Failed to load cheer.mp3. Sound may be disabled.');
+  correctSound.onended = () => console.log('Cheer sound ended successfully');
 
   const incorrectSound = new Audio('sounds/whoops.mp3');
-  incorrectSound.onerror = () => console.error('Failed to load whoops.mp3');
+  incorrectSound.onerror = () => console.warn('Failed to load whoops.mp3. Sound may be disabled.');
+  incorrectSound.onended = () => console.log('Whoops sound ended successfully');
 
   const bgMusic = new Audio('sounds/quest.mp3');
-  bgMusic.onerror = () => console.error('Failed to load quest.mp3');
+  bgMusic.onerror = () => console.warn('Failed to load quest.mp3. Background music may be disabled.');
+  bgMusic.onended = () => console.log('Background music ended successfully');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
 
@@ -215,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (voices.length > 0) {
       bestVoice = voices.find(voice => 
         voice.lang.startsWith('en-US') && // Prefer American English voices
-        voice.name.toLowerCase().includes('female') // Optional: Prefer a female voice for clarity (adjust as needed)
+        (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('male')) // Prefer clear voices (adjust as needed)
       ) || voices.find(voice => voice.lang.startsWith('en-US')); // Fallback to any English US voice
     } else {
       // Handle case where voices aren't loaded yet (async loading in some browsers)
@@ -223,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const updatedVoices = speechSynthesis.getVoices();
         bestVoice = updatedVoices.find(voice => 
           voice.lang.startsWith('en-US') && 
-          voice.name.toLowerCase().includes('female')
+          (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('male'))
         ) || updatedVoices.find(voice => voice.lang.startsWith('en-US'));
         if (bestVoice) {
           utterance.voice = bestVoice;
@@ -234,6 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (bestVoice) {
       utterance.voice = bestVoice;
+    } else {
+      // Fallback if no voice is found, use default voice with explicit phonetic hint
+      utteranceText = word.toLowerCase() === 'a' ? 'uh' : word; // Ensure "a" uses "uh" even with default voice
     }
 
     utterance.pitch = 1.3; // Higher pitch for child-friendly tone
@@ -247,10 +253,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!soundOn) return;
     const audio = type === 'correct' ? correctSound : incorrectSound;
     audio.play().catch((error) => {
-      console.error(`Failed to play ${type} sound:`, error);
-      // Optional: Disable sound or show a message
-      soundOn = false;
-      soundToggle.textContent = 'Sound Off';
+      console.warn(`Failed to play ${type} sound:`, error);
+      // Instead of disabling sound completely, retry or show a warning
+      console.log('Attempting to re-enable sound...');
+      audio.load(); // Reload the audio to attempt recovery
+      audio.play().catch((retryError) => {
+        console.error(`Retry failed for ${type} sound:`, retryError);
+        // Optional: Show a user message instead of disabling sound
+        alert('Some sounds may not play due to an error. Check audio files or browser settings.');
+      });
     });
   };
 
@@ -312,7 +323,13 @@ document.addEventListener('DOMContentLoaded', () => {
     flippingAllowed = true;
     isGameInProgress = true;
     createCards();
-    if (soundOn) bgMusic.play();
+    if (soundOn) {
+      bgMusic.play().catch((error) => {
+        console.warn('Failed to play background music:', error);
+        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
+      });
+    }
     document.getElementById('mascot').classList.add('foxCheer');
     setTimeout(() => document.getElementById('mascot').classList.remove('foxCheer'), 2000);
   };
@@ -332,7 +349,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
     isGameInProgress = false;
-    if (soundOn) bgMusic.play();
+    if (soundOn) {
+      bgMusic.play().catch((error) => {
+        console.warn('Failed to play background music:', error);
+        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
+      });
+    }
   };
 
   // Dynamic Set Selection
@@ -360,10 +383,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
-    soundOn = !soundOn;
+    soundOn = true; // Reset soundOn to true when toggling back on
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
-    if (soundOn && isGameInProgress) bgMusic.play();
-    else bgMusic.pause();
+    if (soundOn && isGameInProgress) {
+      bgMusic.play().catch((error) => {
+        console.warn('Failed to play background music:', error);
+        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
+      });
+    } else {
+      bgMusic.pause();
+    }
     // No spoken feedback for sound toggle
   });
 
