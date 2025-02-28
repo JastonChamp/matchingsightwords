@@ -54,7 +54,7 @@ body {
   left: 0;
   right: 0;
   background-color: rgba(255, 248, 225, 0.9);
-  padding: 1.5rem 5rem; /* Increased padding */
+  padding: 1.5rem 5.5rem; /* Increased padding */
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
 }
@@ -62,7 +62,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 5.5rem; /* Spaced out controls */
+  gap: 6rem; /* Spaced out controls */
 }
 #score-display {
   font-size: 3rem; /* Larger, clearer text */
@@ -75,11 +75,11 @@ body {
 /* Controls */
 .controls {
   display: flex;
-  gap: 5.5rem; /* More spacing */
+  gap: 6rem; /* More spacing */
 }
 .controls select, .controls button {
   font-size: 1.5rem;
-  padding: 1.25rem 2.5rem; /* Larger, touch-friendly */
+  padding: 1.25rem 2.75rem; /* Larger, touch-friendly */
   border-radius: 20px;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -115,9 +115,9 @@ body {
 /* Cards */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(260px, 1fr)); /* Strict 2x5 grid, larger cards */
-  gap: 5.5rem; /* Increased spacing */
-  max-width: 1300px; /* Allow more room for larger cards */
+  grid-template-columns: repeat(5, minmax(270px, 1fr)); /* Strict 2x5 grid, larger cards */
+  gap: 6rem; /* Increased spacing */
+  max-width: 1350px; /* Allow more room for larger cards */
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
@@ -143,12 +143,12 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s ease-in-out, opacity 0.3s ease-in-out; /* New 2D flip with fade */
+  transition: transform 0.7s ease-in-out, opacity 0.3s ease-in-out; /* New 2D vertical flip with fade */
   transform-style: preserve-3d;
   z-index: 10; /* Ensure proper stacking */
 }
 .card.flipped .card-inner {
-  transform: scaleX(-1); /* 2D horizontal flip */
+  transform: rotateX(180deg); /* 2D vertical flip */
   z-index: 20; /* Higher z-index on flip to prevent overlap */
 }
 .card-face {
@@ -197,7 +197,7 @@ body {
 }
 .card-back {
   background-color: var(--primary-color);
-  transform: scaleX(1); /* Default state */
+  transform: rotateX(0deg); /* Default state */
   opacity: 0; /* Hidden initially */
   font-size: 4.5rem; /* Larger, bold text */
   font-weight: bold;
@@ -205,7 +205,7 @@ body {
 }
 .card.flipped .card-back {
   opacity: 1; /* Show on flip */
-  transform: scaleX(-1); /* Match 2D flip */
+  transform: rotateX(180deg); /* Match 2D vertical flip */
 }
 .card.matched .card-face {
   background-color: var(--matched-color);
