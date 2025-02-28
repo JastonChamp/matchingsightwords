@@ -62,7 +62,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 6rem; /* Spaced out controls */
+  gap: 6.5rem; /* Spaced out controls for full-screen button */
 }
 #score-display {
   font-size: 3rem; /* Larger, clearer text */
@@ -75,7 +75,7 @@ body {
 /* Controls */
 .controls {
   display: flex;
-  gap: 6rem; /* More spacing */
+  gap: 6.5rem; /* More spacing for full-screen button */
 }
 .controls select, .controls button {
   font-size: 1.5rem;
@@ -108,20 +108,32 @@ body {
 
 /* Game Container */
 .game-container {
-  margin-top: 250px; /* Reduced to accommodate smaller grid */
+  margin-top: 250px; /* Reduced to accommodate smaller grid and full-screen */
   padding: 1.5rem;
+  height: calc(100vh - 250px); /* Ensure full height in regular mode */
+}
+.game-container.fullscreen {
+  margin-top: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 /* Cards */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(220px, 1fr)); /* Smaller cards for better visibility */
+  grid-template-columns: repeat(5, minmax(220px, 1fr)); /* Maintain compact size */
   gap: 4rem; /* Reduced spacing for compactness */
   max-width: 1100px; /* Reduced max-width for better fit on screens */
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
     "card6 card7 card8 card9 card10";
+}
+.card-row.fullscreen {
+  max-width: 100%; /* Full width in full-screen mode */
+  gap: 4rem;
+  padding: 1rem;
 }
 .card {
   position: relative;
@@ -143,12 +155,12 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  transition: transform 0.7s ease-in-out, opacity 0.3s ease-in-out; /* 2D vertical flip with fade */
+  transition: transform 0.5s ease-in-out, opacity 0.3s ease-in-out; /* New fade and slide animation */
   transform-style: preserve-3d;
   z-index: 10; /* Ensure proper stacking */
 }
 .card.flipped .card-inner {
-  transform: rotateX(180deg); /* 2D vertical flip */
+  transform: translateX(-100%); /* Slide left for back face */
   z-index: 20; /* Higher z-index on flip to prevent overlap */
 }
 .card-face {
@@ -197,7 +209,7 @@ body {
 }
 .card-back {
   background-color: var(--primary-color);
-  transform: rotateX(0deg); /* Default state */
+  transform: translateX(100%); /* Slide right for back face */
   opacity: 0; /* Hidden initially */
   font-size: 4.5rem; /* Larger, bold text */
   font-weight: bold;
@@ -205,7 +217,7 @@ body {
 }
 .card.flipped .card-back {
   opacity: 1; /* Show on flip */
-  transform: rotateX(180deg); /* Match 2D vertical flip */
+  transform: translateX(0); /* Slide back to center */
 }
 .card.matched .card-face {
   background-color: var(--matched-color);
