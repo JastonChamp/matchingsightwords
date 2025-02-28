@@ -13,7 +13,7 @@
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
+      50% { transform: scale(1.02); box-shadow: 0 0 15px #A5D6A7; }
     }
     .how-to-play {
       position: fixed;
@@ -30,7 +30,7 @@
       text-align: center;
     }
     .how-to-play.visible { display: block; }
-    .how-to-play img { width: 100px; margin: 0.5rem 0; }
+    .how-to-play img { width: 100px; margin: 0.5rem 0; animation: twinkle 2s infinite; }
     .progress-bar {
       width: 120px;
       height: 20px;
@@ -47,7 +47,7 @@
       background: url('star-icon.png') no-repeat center;
       background-size: contain;
       opacity: 0.3;
-      animation: twinkle 2.5s infinite;
+      animation: twinkle 2s infinite;
     }
     .progress-bar .star-icon:nth-child(1) { left: 10%; }
     .progress-bar .star-icon:nth-child(2) { left: 30%; }
@@ -55,11 +55,11 @@
     .progress-bar .star-icon:nth-child(4) { left: 70%; }
     .progress-bar .star-icon:nth-child(5) { left: 90%; }
     .fullscreen-button {
-      font-size: 2rem; /* Larger for full-screen clarity */
-      padding: 1.75rem 3.5rem; /* Larger, touch-friendly buttons */
+      font-size: 1.5rem; /* Reduced for 100% screen size */
+      padding: 1.25rem 2.5rem; /* Reduced for 100% screen size */
       border-radius: 20px;
       cursor: pointer;
-      background-color: #FFD54F; /* Softer yellow for theme consistency */
+      background-color: #FF8A80; /* Softer coral for theme consistency */
       color: white;
       border: none;
       transition: transform 0.2s ease;
@@ -67,6 +67,10 @@
     }
     .fullscreen-button:hover {
       transform: scale(1.1);
+    }
+    .fullscreen-button.fullscreen {
+      font-size: 2rem; /* Larger in full-screen */
+      padding: 1.75rem 3.5rem; /* Larger in full-screen */
     }
   </style>
 </head>
