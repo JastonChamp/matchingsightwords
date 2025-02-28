@@ -135,13 +135,28 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Glow effect */
 }
 .card-front {
+  position: relative; /* Allows absolute positioning of the number */
   background-color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .card-front img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
+}
+.card-number {
+  position: absolute;
+  top: 10px; /* Top-left corner; adjust as needed */
+  left: 10px;
+  font-size: 2rem; /* Large and readable */
+  font-weight: bold;
+  color: #fff; /* White text for contrast */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 .card-back {
   background-color: var(--primary-color);
@@ -171,6 +186,10 @@ body {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 /* Modal */
