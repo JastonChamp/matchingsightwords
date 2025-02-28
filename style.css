@@ -64,7 +64,7 @@ body.fullscreen {
   padding: 1rem 1rem;
   border-bottom: 4px dotted var(--secondary-color);
   z-index: 1000;
-  backdrop-filter: blur(5px); /* Subtle blur for modern look */
+  backdrop-filter: blur(5px);
 }
 
 .header-content {
@@ -72,12 +72,12 @@ body.fullscreen {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap; /* Allows stacking on smaller screens */
+  flex-wrap: wrap;
 }
 
 #score-display {
   font-size: 2.5rem;
-  color: #FF8A80; /* Softer coral for better contrast */
+  color: #FF8A80;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@ body.fullscreen {
 .controls {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap; /* Ensures buttons wrap on small screens */
+  flex-wrap: wrap;
 }
 
 .controls select,
@@ -98,7 +98,7 @@ body.fullscreen {
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.3s ease;
   font-family: var(--font-family);
-  min-width: 120px; /* Minimum width for touch targets */
+  min-width: 120px;
 }
 
 .controls select {
@@ -118,7 +118,7 @@ body.fullscreen {
 
 .controls button:hover:not(:disabled) {
   transform: scale(1.1);
-  background-color: #FF8A80; /* Lighter coral for hover */
+  background-color: #FF8A80;
 }
 
 .controls button:disabled {
@@ -131,7 +131,7 @@ body.fullscreen {
   margin-top: 200px;
   padding: 1rem;
   transition: all 0.3s ease;
-  min-height: calc(100vh - 200px); /* Ensures content fills screen */
+  min-height: calc(100vh - 200px);
 }
 
 .game-container.fullscreen {
@@ -144,7 +144,7 @@ body.fullscreen {
 /* Card Grid */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Responsive, smaller cards */
+  grid-template-columns: repeat(5, minmax(150px, 1fr)); /* Two rows of 5 cards */
   gap: 1.5rem;
   max-width: 100%;
   margin: 0 auto;
@@ -155,7 +155,7 @@ body.fullscreen {
 .card {
   position: relative;
   width: 100%;
-  aspect-ratio: 1; /* Maintain square cards */
+  aspect-ratio: 1;
   perspective: 1000px;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -173,7 +173,7 @@ body.fullscreen {
   height: 100%;
   z-index: 10;
   transform-style: preserve-3d;
-  transition: transform 0.6s ease-in-out; /* Smooth 3D flip */
+  transition: transform 0.6s ease-in-out;
 }
 
 .card.flipped .card-inner {
@@ -217,7 +217,7 @@ body.fullscreen {
   font-size: 1.2rem;
   font-weight: bold;
   color: #fff;
-  background-color: rgba(165, 214, 167, 0.7); /* Soft green for visibility */
+  background-color: rgba(165, 214, 167, 0.7);
   padding: 5px 10px;
   border-radius: 10px;
   border: 2px solid #fff;
@@ -232,7 +232,7 @@ body.fullscreen {
 .card-back {
   background-color: var(--primary-color);
   transform: rotateY(180deg);
-  font-size: 2.5rem; /* Larger, readable text */
+  font-size: 2.5rem;
   font-weight: bold;
   color: var(--text-color);
   display: flex;
@@ -291,7 +291,7 @@ body.fullscreen {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 2000;
-  backdrop-filter: blur(5px); /* Subtle blur for modern look */
+  backdrop-filter: blur(5px);
 }
 
 .modal.visible {
@@ -435,7 +435,7 @@ body.fullscreen {
 
 @media (max-width: 900px) {
   .game-container { margin-top: 150px; }
-  .card-row { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+  .card-row { grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 1rem; }
   .card-back { font-size: 1.8rem; }
   #score-display { font-size: 1.8rem; }
   .controls select, .controls button { font-size: 1rem; padding: 0.5rem 1rem; }
@@ -445,7 +445,7 @@ body.fullscreen {
 
 @media (max-width: 600px) {
   .game-container { margin-top: 120px; }
-  .card-row { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.8rem; }
+  .card-row { grid-template-columns: repeat(5, minmax(100px, 1fr)); gap: 0.8rem; }
   .card-back { font-size: 1.5rem; }
   #score-display { font-size: 1.5rem; }
   .controls select, .controls button { font-size: 0.9rem; padding: 0.4rem 0.8rem; }
