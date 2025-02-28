@@ -56,10 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
   let isFullscreen = false;
   let isGameInProgress = false;
 
-  // Audio
+  // Audio with Error Handling
   const correctSound = new Audio('sounds/cheer.mp3');
+  correctSound.onerror = () => console.error('Failed to load cheer.mp3');
+
   const incorrectSound = new Audio('sounds/whoops.mp3');
+  incorrectSound.onerror = () => console.error('Failed to load whoops.mp3');
+
   const bgMusic = new Audio('sounds/quest.mp3');
+  bgMusic.onerror = () => console.error('Failed to load quest.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
 
@@ -197,24 +202,27 @@ document.addEventListener('DOMContentLoaded', () => {
     let utteranceText = word;
     // Use schwa sound (/ə/) for "a" in casual, unstressed speech (e.g., "uh" as in "a cat" or "a dog")
     if (word.toLowerCase() === 'a') {
-      utteranceText = 'ə'; // Use the schwa symbol in IPA, which most speech synthesizers interpret as /ə/
+      utteranceText = 'uh'; // Use "uh" for a reliable schwa-like pronunciation across browsers
+      // Alternative fallback if "uh" doesn't work: utteranceText = 'ə'; // IPA schwa, but may not work consistently
     }
     const utterance = new SpeechSynthesisUtterance(utteranceText);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
+    // Add error handling for speech synthesis
+    utterance.onerror = (error) => console.error('Speech synthesis error for word:', word, error);
     speechSynthesis.speak(utterance);
   };
 
   const playSound = (type) => {
     if (!soundOn) return;
-    if (type === 'correct') {
-      correctSound.currentTime = 0;
-      correctSound.play();
-    } else {
-      incorrectSound.currentTime = 0;
-      incorrectSound.play();
-    }
+    const audio = type === 'correct' ? correctSound : incorrectSound;
+    audio.play().catch((error) => {
+      console.error(`Failed to play ${type} sound:`, error);
+      // Optional: Disable sound or show a message
+      soundOn = false;
+      soundToggle.textContent = 'Sound Off';
+    });
   };
 
   // Update UI
