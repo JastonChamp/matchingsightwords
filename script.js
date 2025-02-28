@@ -97,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fullscreenButton.textContent = 'Full Screen';
       isFullscreen = false;
     }
+    speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
   };
 
   // Create Cards
