@@ -7,68 +7,6 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
-  <style>
-    .card-row.pulse {
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.02); box-shadow: 0 0 20px #A5D6A7; }
-    }
-    .how-to-play {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(255, 248, 225, 0.9);
-      padding: 2rem;
-      border-radius: 25px;
-      border: 5px dashed var(--accent-color);
-      z-index: 2001;
-      display: none;
-      max-width: 300px;
-      text-align: center;
-    }
-    .how-to-play.visible { display: block; }
-    .how-to-play img { width: 100px; margin: 0.5rem 0; }
-    .progress-bar {
-      width: 120px;
-      height: 20px;
-      background: linear-gradient(to right, #FFD54F 0%, #FFD54F 0%, transparent 0%);
-      border: 2px solid #FFD54F;
-      border-radius: 10px;
-      margin-left: 15px;
-      position: relative;
-    }
-    .progress-bar .star-icon {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: url('star-icon.png') no-repeat center;
-      background-size: contain;
-      opacity: 0.3;
-      animation: twinkle 2.5s infinite;
-    }
-    .progress-bar .star-icon:nth-child(1) { left: 10%; }
-    .progress-bar .star-icon:nth-child(2) { left: 30%; }
-    .progress-bar .star-icon:nth-child(3) { left: 50%; }
-    .progress-bar .star-icon:nth-child(4) { left: 70%; }
-    .progress-bar .star-icon:nth-child(5) { left: 90%; }
-    .fullscreen-button {
-      font-size: 2rem; /* Larger for full-screen clarity */
-      padding: 1.75rem 3.5rem; /* Larger, touch-friendly buttons */
-      border-radius: 20px;
-      cursor: pointer;
-      background-color: #FFD54F; /* Softer yellow for theme consistency */
-      color: white;
-      border: none;
-      transition: transform 0.2s ease;
-      font-family: var(--font-family);
-    }
-    .fullscreen-button:hover {
-      transform: scale(1.1);
-    }
-  </style>
 </head>
 <body>
   <div class="mascot-banner">
@@ -96,19 +34,10 @@
         </select>
         <select id="set-select" aria-label="Choose word quest">
           <option value="" selected disabled>Pick a Quest!</option>
-          <option value="0">Quest 1</option>
-          <option value="1">Quest 2</option>
-          <option value="2">Quest 3</option>
-          <option value="3">Quest 4</option>
-          <option value="4">Quest 5</option>
-          <option value="5">Quest 6</option>
-          <option value="6">Quest 7</option>
-          <option value="7">Quest 8</option>
-          <option value="8">Quest 9</option>
-          <option value="9">Quest 10</option>
         </select>
         <button id="start-button" type="button">Start Quest!</button>
         <button id="fullscreen-button" type="button" aria-label="Toggle Full Screen">Full Screen</button>
+        <button id="sound-toggle" type="button">Sound On</button>
       </div>
     </div>
   </header>
