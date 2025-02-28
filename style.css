@@ -155,10 +155,10 @@ body.fullscreen::after {
 
 /* Game Container Styling */
 .game-container {
-  margin-top: 280px; /* Reverted to accommodate larger grid */
-  padding: 1.5rem;
+  margin-top: 260px; /* Reduced for 100% screen size */
+  padding: 1rem; /* Reduced padding for 100% screen size */
   transition: all 0.3s ease;
-  height: calc(100vh - 280px); /* Ensure full height in regular mode */
+  height: calc(100vh - 260px); /* Reduced height for 100% screen size */
   max-width: 1200px; /* Reduced max-width for 100% screen size */
   margin: 0 auto;
   overflow-x: hidden; /* Prevent horizontal overflow at 100% */
@@ -176,9 +176,9 @@ body.fullscreen::after {
 /* Cards Grid and Flip Animation */
 .card-row {
   display: grid;
-  grid-template-columns: repeat(5, minmax(240px, 1fr)); /* Reduced for 100% screen size */
-  gap: 4rem; /* Reduced for 100% screen size */
-  max-width: 1200px; /* Reduced max-width for 100% screen size */
+  grid-template-columns: repeat(5, minmax(220px, 1fr)); /* Reduced for 100% screen size */
+  gap: 3rem; /* Reduced for 100% screen size */
+  max-width: 1100px; /* Reduced max-width for 100% screen size */
   margin: 0 auto;
   grid-template-areas:
     "card1 card2 card3 card4 card5"
@@ -466,7 +466,7 @@ body.fullscreen::after {
 
 /* Responsive Design for Different Screen Sizes */
 @media (max-width: 1200px) {
-  .game-container { margin-top: 260px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 240px; } /* Reduced for 100% screen size */
   .card-row { grid-template-columns: repeat(3, minmax(200px, 1fr)); gap: 3rem; max-width: 1000px; }
   .card-back { font-size: 3rem; } /* Reduced for 100% screen size */
   #score-display, .controls select, .controls button { font-size: 1.25rem; } /* Reduced for 100% screen size */
@@ -477,7 +477,7 @@ body.fullscreen::after {
 }
 
 @media (max-width: 900px) {
-  .game-container { margin-top: 240px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 220px; } /* Reduced for 100% screen size */
   .card-row { grid-template-columns: repeat(2, minmax(180px, 1fr)); gap: 3rem; max-width: 800px; }
   .card-back { font-size: 2.5rem; } /* Reduced for 100% screen size */
   #score-display, .controls select, .controls button { font-size: 1rem; } /* Reduced for 100% screen size */
@@ -488,7 +488,7 @@ body.fullscreen::after {
 }
 
 @media (max-width: 600px) {
-  .game-container { margin-top: 220px; } /* Reduced for 100% screen size */
+  .game-container { margin-top: 200px; } /* Reduced for 100% screen size */
   .card-row { grid-template-columns: repeat(2, minmax(160px, 1fr)); gap: 2.5rem; max-width: 700px; }
   .card-back { font-size: 2rem; } /* Reduced for 100% screen size */
   #score-display, .controls select, .controls button { font-size: 0.9rem; } /* Reduced for 100% screen size */
