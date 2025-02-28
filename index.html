@@ -15,6 +15,20 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.02); }
     }
+    .how-to-play {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 248, 225, 0.9);
+      padding: 2rem;
+      border-radius: 25px;
+      border: 5px dashed var(--accent-color);
+      z-index: 2001;
+      display: none;
+    }
+    .how-to-play.visible { display: block; }
+    .how-to-play img { width: 100px; margin: 0.5rem 0; }
   </style>
 </head>
 <body>
@@ -25,8 +39,13 @@
 
   <header class="fixed-header">
     <div class="header-content">
-      <div id="score-display" aria-live="polite">Stars: 0 / Pairs: 0/5</div>
+      <div id="score-display" aria-live="polite">Fox Stars: 0 / Pairs: 0/5</div>
       <div class="controls">
+        <select id="mode-select" aria-label="Choose game mode">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
         <select id="set-select" aria-label="Choose your word quest">
           <option value="" selected disabled>Pick a Quest!</option>
           <option value="0">Quest 1</option>
@@ -41,7 +60,9 @@
           <option value="9">Quest 10</option>
         </select>
         <button id="start-button" type="button">Start Quest!</button>
-        <button id="sound-toggle" type="button" aria-label="Toggle sound">🔊</button>
+        <button id="sound-toggle" type="button" aria-label="Toggle sound">
+          <img src="fox-ear.png" alt="Sound toggle" style="width: 24px; height: 24px;" />
+        </button>
       </div>
     </div>
   </header>
@@ -54,9 +75,17 @@
     <div class="modal-content">
       <h2>Amazing Job!</h2>
       <img src="star-badge.png" alt="Star Badge" class="reward-image" />
-      <p>You collected <span id="final-score"></span> stars!</p>
+      <p>You collected <span id="final-score"></span> Fox Stars!</p>
       <button id="play-again-button" type="button">New Quest</button>
     </div>
+  </div>
+
+  <div id="how-to-play" class="how-to-play">
+    <h3>How to Play</h3>
+    <p>Tap or click a card to flip it!</p>
+    <p>Find matching words to earn Fox Stars.</p>
+    <img src="card-flip.png" alt="Card flipping example" />
+    <button id="close-how-to-play">Got It!</button>
   </div>
 
   <script src="script.js"></script>
