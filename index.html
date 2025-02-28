@@ -37,7 +37,8 @@
         </select>
         <button id="start-button" type="button">Start Quest!</button>
         <button id="fullscreen-button" type="button" aria-label="Toggle Full Screen">Full Screen</button>
-        <button id="sound-toggle" type="button">Sound On</button>
+        <button id="sound-toggle" type="button" aria-label="Toggle Sound">Sound On</button>
+        <button id="how-to-play-button" type="button" aria-label="Show How to Play">How to Play</button>
       </div>
     </div>
   </header>
@@ -51,14 +52,15 @@
       <h2>Amazing Job!</h2>
       <img src="star-badge.png" alt="Star Badge" class="reward-image" />
       <p>You collected <span id="final-score"></span> Fox Stars!</p>
+      <p>Matched Words: <span id="matched-words"></span></p>
       <button id="play-again-button" type="button">New Quest</button>
     </div>
   </div>
 
   <div id="how-to-play" class="how-to-play">
     <h3>How to Play</h3>
-    <p>Tap or click a card to flip it and focus on the words, not the numbers!</p>
-    <p>Find matching words to earn Fox Stars.</p>
+    <p>Tap or click a card to flip it and match the sight words!</p>
+    <p>Focus on the words, not the numbers. Find pairs to earn Fox Stars.</p>
     <img src="card-flip.png" alt="Card flipping example" />
     <button id="close-how-to-play">Got It!</button>
   </div>
