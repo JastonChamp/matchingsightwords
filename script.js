@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body.msRequestFullscreen();
       }
       fullscreenButton.textContent = 'Exit Full Screen';
+      fullscreenButton.classList.add('fullscreen');
       isFullscreen = true;
       document.getElementById('mascot').classList.add('foxJump');
       setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
@@ -103,12 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.msExitFullscreen();
       }
       fullscreenButton.textContent = 'Full Screen';
+      fullscreenButton.classList.remove('fullscreen');
       isFullscreen = false;
     }
     speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
   };
 
-  // Create Cards with Randomized Positions
+  // Create Cards with Randomized Positions and Verify Rendering
   const createCards = () => {
     cardContainer.innerHTML = ''; // Clear any residual DOM elements
     flippedCards = [];
@@ -117,6 +119,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const words = sightWordsSets[currentMode][currentSet];
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 2x5 grid (10 cards)
     const gridPositions = getRandomGridPosition(); // Randomize grid positions
+
+    // Log positions for debugging
+    console.log('Grid Positions:', gridPositions);
 
     gridPositions.forEach((position, index) => {
       const word = cardWords[index];
@@ -155,10 +160,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Enter' || e.key === ' ') flipCard(card);
       });
 
-      // Append to specific grid position
-      cardContainer.children[position]?.remove(); // Remove existing if any
-      cardContainer.appendChild(card);
+      // Ensure card is appended correctly and visible
+      try {
+        if (cardContainer.children[position]) {
+          cardContainer.children[position].remove(); // Remove existing if any
+        }
+        cardContainer.appendChild(card);
+      } catch (error) {
+        console.error('Error appending card:', error, 'Position:', position, 'Card:', card);
+      }
     });
+
+    // Verify all cards are rendered
+    const cards = cardContainer.querySelectorAll('.card');
+    if (cards.length !== 10) {
+      console.warn('Not all cards rendered. Expected 10, found:', cards.length);
+    } else {
+      console.log('All 10 cards rendered successfully.');
+    }
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 12000); // Extended onboarding with enhanced glow
@@ -286,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Start Game with Randomized Difficulty
+  // Start Game
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
@@ -304,14 +323,13 @@ document.addEventListener('DOMContentLoaded', () => {
     flippingAllowed = true;
     createCards();
     if (soundOn) bgMusic.play();
-    // Add fox hint for "Easy" mode
     if (currentMode === 'easy' && Math.random() < 0.3) {
       const hintWord = sightWordsSets.easy[currentSet][Math.floor(Math.random() * 5)];
       setTimeout(() => speakStatus(`Look for the word ${hintWord}!`), 2000);
     }
   };
 
-  // Show Reward with Enhanced Animation
+  // Show Reward
   const showReward = () => {
     finalScore.textContent = score;
     modal.classList.add('visible');
