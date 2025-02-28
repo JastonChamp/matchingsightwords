@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
-      backFace.textContent = word; // Removed definitions/hints
+      backFace.textContent = word; // Only display the sight word, no hints
 
       cardInner.append(frontFace, backFace);
       card.appendChild(cardInner);
