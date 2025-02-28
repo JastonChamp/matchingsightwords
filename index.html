@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Word Adventure Matching Game</title>
+  <title>Word Explorer Game</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
@@ -11,8 +11,8 @@
 <body>
   <!-- Mascot Banner -->
   <div class="mascot-banner">
-    <img src="mascot.png" alt="Friendly owl mascot" id="mascot" />
-    <div id="mascot-message" aria-live="polite">Hi, friend! Let’s play with words!</div>
+    <img src="mascot.png" alt="Friendly fox mascot" id="mascot" />
+    <div id="mascot-message" aria-live="polite">Hello, explorer! Let’s find words!</div>
   </div>
 
   <!-- Fixed Header -->
@@ -20,15 +20,20 @@
     <div class="header-content">
       <div id="score-display" aria-live="polite">Stars: 0</div>
       <div class="controls">
-        <select id="set-select" aria-label="Pick your adventure">
-          <option value="" selected disabled>Pick an Adventure!</option>
-          <option value="0">Jungle Words</option>
-          <option value="1">Ocean Words</option>
-          <option value="2">Farm Words</option>
-          <option value="3">Space Words</option>
-          <option value="4">Magic Words</option>
+        <select id="set-select" aria-label="Choose your word quest">
+          <option value="" selected disabled>Pick a Quest!</option>
+          <option value="0">Quest 1</option>
+          <option value="1">Quest 2</option>
+          <option value="2">Quest 3</option>
+          <option value="3">Quest 4</option>
+          <option value="4">Quest 5</option>
+          <option value="5">Quest 6</option>
+          <option value="6">Quest 7</option>
+          <option value="7">Quest 8</option>
+          <option value="8">Quest 9</option>
+          <option value="9">Quest 10</option>
         </select>
-        <button id="start-button" type="button">Let’s Go!</button>
+        <button id="start-button" type="button">Start Quest!</button>
         <button id="sound-toggle" type="button" aria-label="Toggle sound">🔊</button>
       </div>
     </div>
@@ -36,16 +41,16 @@
 
   <!-- Main Game Container -->
   <main class="game-container">
-    <div class="card-row" role="grid" aria-label="Word Adventure Cards"></div>
+    <div class="card-row" role="grid" aria-label="Word Explorer Cards"></div>
   </main>
 
   <!-- Reward Modal -->
   <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
     <div class="modal-content">
-      <h2>Wow, You Did It!</h2>
-      <img src="trophy.png" alt="Trophy" class="reward-image" />
-      <p>You earned <span id="final-score"></span> stars!</p>
-      <button id="play-again-button" type="button">Play Again</button>
+      <h2>Amazing Job!</h2>
+      <img src="star-badge.png" alt="Star Badge" class="reward-image" />
+      <p>You collected <span id="final-score"></span> stars!</p>
+      <button id="play-again-button" type="button">New Quest</button>
     </div>
   </div>
 
