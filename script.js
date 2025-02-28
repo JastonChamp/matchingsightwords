@@ -177,15 +177,18 @@ document.addEventListener('DOMContentLoaded', () => {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
       speakStatus('No match, try again. Focus on the numbers!');
-      card1.classList.add('mismatch');
-      card2.classList.add('mismatch');
+      // Delay the mismatch animation to allow the flip to complete first
       setTimeout(() => {
-        card1.classList.remove('flipped', 'mismatch');
-        card2.classList.remove('flipped', 'mismatch');
-        flippedCards = [];
-        flippingAllowed = true;
-        mascotMessage.textContent = 'Find a match!';
-      }, 1200);
+        card1.classList.add('mismatch');
+        card2.classList.add('mismatch');
+        setTimeout(() => {
+          card1.classList.remove('flipped', 'mismatch');
+          card2.classList.remove('flipped', 'mismatch');
+          flippedCards = [];
+          flippingAllowed = true;
+          mascotMessage.textContent = 'Find a match!';
+        }, 1000); // Match the duration of the shake animation (1s)
+      }, 600); // Delay after the flip animation completes (0.6s as per CSS transition)
     }
   };
 
