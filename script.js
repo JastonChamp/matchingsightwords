@@ -38,12 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeSelect = document.getElementById('mode-select');
   const scoreDisplay = document.getElementById('score-display');
   const mascotMessage = document.getElementById('mascot-message');
-  const soundToggle = document.getElementById('sound-toggle');
   const modal = document.getElementById('reward-modal');
   const finalScore = document.getElementById('final-score');
   const playAgainButton = document.getElementById('play-again-button');
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
+  const progressBar = document.getElementById('progress-bar');
 
   // Game State
   let flippedCards = [];
@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentMode = 'easy';
   let flippingAllowed = true;
   let score = 0;
-  let soundOn = true;
+  let soundOn = false; // Sound toggle removed, but audio can still be re-enabled if needed
 
-  // Audio
+  // Audio (Optional, disabled by default)
   const correctSound = new Audio('sounds/cheer.mp3');
   const incorrectSound = new Audio('sounds/whoops.mp3');
   const bgMusic = new Audio('sounds/quest.mp3');
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 7000); // Extended onboarding
+    setTimeout(() => cardContainer.classList.remove('pulse'), 10000); // Extended onboarding
   };
 
   // Flip Card
@@ -141,12 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
       card1.classList.add('matched');
       card2.classList.add('matched');
       mascotMessage.textContent = 'Yay! You found a pair!';
+      speakStatus('Great match!');
       flippedCards = [];
       flippingAllowed = true;
+      updateProgressBar();
       if (matchedCards.length === sightWordsSets[currentMode][currentSet].length * 2) showReward();
     } else {
       playSound('incorrect');
       mascotMessage.textContent = 'Oh no! Try again!';
+      speakStatus('No match, try again.');
       card1.classList.add('mismatch');
       card2.classList.add('mismatch');
       setTimeout(() => {
@@ -155,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
         flippedCards = [];
         flippingAllowed = true;
         mascotMessage.textContent = 'Find a match!';
-        speakStatus('No match found, try again.');
       }, 1000); // Faster feedback
     }
   };
@@ -181,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     speechSynthesis.speak(utterance);
   };
 
-  // Play Sound
+  // Play Sound (Optional, disabled by default)
   const playSound = (type) => {
     if (!soundOn) return;
     if (type === 'correct') {
@@ -198,6 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalPairs = sightWordsSets[currentMode][currentSet].length;
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/${totalPairs}`;
+    updateProgressBar();
+  };
+
+  // Update Progress Bar
+  const updateProgressBar = () => {
+    const totalPairs = sightWordsSets[currentMode][currentSet].length;
+    const matchedPairs = matchedCards.length / 2;
+    const progress = (matchedPairs / totalPairs) * 100;
+    progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
   };
 
   // Start Game
@@ -250,15 +261,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) bgMusic.play();
   };
 
-  // Toggle Sound
-  const toggleSound = () => {
-    soundOn = !soundOn;
-    soundToggle.querySelector('img').src = soundOn ? 'fox-ear-on.png' : 'fox-ear-off.png';
-    if (!soundOn) bgMusic.pause();
-    else bgMusic.play();
-    speakStatus(`Sound is now ${soundOn ? 'on' : 'off'}.`);
-  };
-
   // Onboarding and How-to-Play
   if (!localStorage.getItem('welcomeShown')) {
     mascotMessage.textContent = 'Tap a card to flip it and find matches!';
@@ -266,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
       howToPlay.classList.add('visible');
       localStorage.setItem('welcomeShown', 'true');
-    }, 7000);
+    }, 10000); // Extended onboarding
   }
 
   closeHowToPlay.addEventListener('click', () => {
@@ -276,13 +278,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Event Listeners
   startButton.addEventListener('click', startGame);
-  soundToggle.addEventListener('click', toggleSound);
   playAgainButton.addEventListener('click', resetGame);
   modeSelect.addEventListener('change', () => {
     currentMode = modeSelect.value;
     setSelect.value = ''; // Reset quest selection
     startButton.disabled = true;
     mascotMessage.textContent = 'Choose a quest to begin!';
-    speakStatus(`Game mode set to ${currentMode}.`);
+    speakStatus(`Adventure level set to ${currentMode}.`);
   });
 });
