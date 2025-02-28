@@ -4,7 +4,7 @@
   --accent-color: #FF6F61;     /* Vibrant coral for buttons and text highlights */
   --matched-color: #A5D6A7;    /* Soft green for matched cards */
   --text-color: #3E2723;       /* Dark brown for text readability */
-  --font-family: 'Chewy', cursive;
+  --font-family: 'Chewy', cursive, Arial, sans-serif; /* Fallback font */
 }
 
 * {
@@ -135,7 +135,7 @@ body.fullscreen::after {
 .controls select {
   border: 5px solid var(--secondary-color);
   background-color: var(--primary-color);
-  background-image: url('fox-tail.png');
+  background-image: url('images/fox-tail.png');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 24px;
@@ -214,7 +214,7 @@ body.fullscreen::after {
   position: absolute;
   width: 20px;
   height: 20px;
-  background: url('leaf-icon.png') no-repeat center;
+  background: url('images/leaf-icon.png') no-repeat center;
   background-size: contain;
   top: -10px;
   left: -10px;
@@ -226,7 +226,7 @@ body.fullscreen::after {
   position: absolute;
   width: 20px;
   height: 20px;
-  background: url('paw-icon.png') no-repeat center;
+  background: url('images/paw-icon.png') no-repeat center;
   background-size: contain;
   bottom: -10px;
   right: -10px;
@@ -251,7 +251,7 @@ body.fullscreen::after {
   box-shadow: 0 8px 16px rgba(165, 214, 167, 0.5);
 }
 .card-front {
-  background: url('card-front.png') no-repeat center/cover;
+  background: url('images/card-front.png') no-repeat center/cover;
   z-index: 2;
 }
 .card-front img {
@@ -381,7 +381,7 @@ body.fullscreen::after {
   position: absolute;
   width: 30px;
   height: 30px;
-  background: url('sparkle.png') no-repeat center;
+  background: url('images/sparkle.png') no-repeat center;
   background-size: contain;
   top: 20px;
   left: 20px;
@@ -393,7 +393,7 @@ body.fullscreen::after {
   position: absolute;
   width: 20px;
   height: 20px;
-  background: url('leaf-icon.png') no-repeat center;
+  background: url('images/leaf-icon.png') no-repeat center;
   background-size: contain;
   bottom: -10px;
   left: -10px;
