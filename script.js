@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fullscreenButton.textContent = 'Full Screen';
       isFullscreen = false;
     }
-    speakStatus(isFullscreen ? 'Entered full screen mode' : 'Exited full screen mode');
+    // No spoken status update to reduce audio announcements
   };
 
   // Create Cards
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    speakStatus('Find a match by focusing on the numbers 1–10 to choose cards and reveal words on the back!');
+    // No spoken status update to reduce audio announcements
   };
 
   // Flip Card
@@ -143,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!flippingAllowed || card.classList.contains('flipped') || matchedCards.includes(card)) return;
 
     card.classList.add('flipped');
+    if (soundOn) speakWord(card.dataset.word); // Only speak the word when flipped
     flippedCards.push(card);
-    speakWord(card.dataset.word);
     if (flippedCards.length === 2) checkForMatch();
   };
 
@@ -162,8 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      mascotMessage.textContent = `Yay! You matched card ${card1.dataset.position} with "${card1.dataset.word}"!`;
-      speakStatus('Great match! Look for another number.');
+      // No spoken feedback for match to reduce audio annoyance
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
@@ -175,9 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } else {
       playSound('incorrect');
-      mascotMessage.textContent = 'Oh no! Try again!';
-      speakStatus('No match, try again. Focus on the numbers!');
-      // Delay the mismatch animation to allow the flip to complete first
+      // No spoken feedback for mismatch to reduce audio annoyance
+      // Delay to show words longer before applying mismatch animation
       setTimeout(() => {
         card1.classList.add('mismatch');
         card2.classList.add('mismatch');
@@ -186,9 +184,9 @@ document.addEventListener('DOMContentLoaded', () => {
           card2.classList.remove('flipped', 'mismatch');
           flippedCards = [];
           flippingAllowed = true;
-          mascotMessage.textContent = 'Find a match!';
+          // No spoken feedback after flip-back
         }, 1000); // Match the duration of the shake animation (1s)
-      }, 600); // Delay after the flip animation completes (0.6s as per CSS transition)
+      }, 1200); // Delay to ensure words are visible longer (1.2s)
     }
   };
 
@@ -197,15 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!soundOn || !speechSynthesis) return;
     speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(word === 'a' ? 'ay' : word);
-    utterance.lang = 'en-US';
-    utterance.pitch = 1.3;
-    utterance.rate = 0.7;
-    speechSynthesis.speak(utterance);
-  };
-
-  const speakStatus = (message) => {
-    if (!soundOn || !speechSynthesis) return;
-    const utterance = new SpeechSynthesisUtterance(message);
     utterance.lang = 'en-US';
     utterance.pitch = 1.3;
     utterance.rate = 0.7;
@@ -227,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
-    speakStatus(`Fox Stars: ${score}, Pairs: ${matchedPairs} out of 5`);
+    // No spoken status update to reduce audio annoyance
   };
 
   const updateProgressBar = () => {
@@ -248,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) {
       bgMusic.pause();
       playSound('correct');
-      speakStatus(`Amazing job! You collected ${score} Fox Stars! Here are your matched words: ${matchedWords}`);
+      // No spoken feedback for reward to reduce audio annoyance
       document.getElementById('mascot').classList.add('foxJump');
       setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
     }
@@ -264,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
-      speakStatus('Please choose a quest first.');
+      // No spoken feedback to reduce audio annoyance
       return;
     }
     currentSet = parseInt(setSelect.value, 10);
@@ -322,7 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     startButton.disabled = false;
     mascotMessage.textContent = 'Choose a quest to begin!';
-    speakStatus(`Adventure level set to ${currentMode}.`);
+    // No spoken feedback to reduce audio annoyance
   });
   fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
@@ -330,23 +319,24 @@ document.addEventListener('DOMContentLoaded', () => {
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
     if (soundOn && isGameInProgress) bgMusic.play();
     else bgMusic.pause();
-    speechSynthesis.cancel();
+    // No spoken feedback for sound toggle
   });
 
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
-    speakStatus('Here’s how to play: Tap or click a card numbered 1–10 to flip it and match the sight words on the back!');
+    if (soundOn) speakStatus('Tap or click a card numbered 1–10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.'); // Only speak when "How to Play" is clicked
   });
 
   closeHowToPlay.addEventListener('click', () => {
     howToPlay.classList.remove('visible');
-    speakStatus('Got it! Start your quest.');
+    // No spoken feedback to reduce audio annoyance
   });
 
   // Initialization
   updateSetSelect();
   if (!localStorage.getItem('welcomeShown')) {
     howToPlay.classList.add('visible');
+    // No spoken feedback for welcome to reduce audio annoyance
     localStorage.setItem('welcomeShown', 'true');
   }
 
