@@ -56,17 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let isFullscreen = false;
   let isGameInProgress = false;
 
-  // Audio with Enhanced Error Handling
+  // Audio with Enhanced Error Handling (No Alerts)
   const correctSound = new Audio('sounds/cheer.mp3');
-  correctSound.onerror = () => console.warn('Failed to load cheer.mp3. Sound may be disabled.');
+  correctSound.onerror = () => console.warn('Failed to load cheer.mp3. Check audio files or browser settings.');
   correctSound.onended = () => console.log('Cheer sound ended successfully');
 
   const incorrectSound = new Audio('sounds/whoops.mp3');
-  incorrectSound.onerror = () => console.warn('Failed to load whoops.mp3. Sound may be disabled.');
+  incorrectSound.onerror = () => console.warn('Failed to load whoops.mp3. Check audio files or browser settings.');
   incorrectSound.onended = () => console.log('Whoops sound ended successfully');
 
   const bgMusic = new Audio('sounds/quest.mp3');
-  bgMusic.onerror = () => console.warn('Failed to load quest.mp3. Background music may be disabled.');
+  bgMusic.onerror = () => console.warn('Failed to load quest.mp3. Check audio files or browser settings.');
   bgMusic.onended = () => console.log('Background music ended successfully');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     utterance.pitch = 1.3; // Higher pitch for child-friendly tone
     utterance.rate = 0.7; // Slower rate for clarity
-    utterance.onerror = (error) => console.error('Speech synthesis error for word:', word, error);
+    utterance.onerror = (error) => console.warn('Speech synthesis error for word:', word, error);
 
     speechSynthesis.speak(utterance);
   };
@@ -254,13 +254,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = type === 'correct' ? correctSound : incorrectSound;
     audio.play().catch((error) => {
       console.warn(`Failed to play ${type} sound:`, error);
-      // Instead of disabling sound completely, retry or show a warning
-      console.log('Attempting to re-enable sound...');
+      // Instead of showing an alert, log to console and retry silently
+      console.log('Attempting to re-enable and retry sound...');
       audio.load(); // Reload the audio to attempt recovery
       audio.play().catch((retryError) => {
         console.error(`Retry failed for ${type} sound:`, retryError);
-        // Optional: Show a user message instead of disabling sound
-        alert('Some sounds may not play due to an error. Check audio files or browser settings.');
+        // No alert; silent fallback to maintain gameplay
       });
     });
   };
