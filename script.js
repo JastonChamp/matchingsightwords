@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Create Cards
   const createCards = () => {
-    cardContainer.innerHTML = '';
+    cardContainer.innerHTML = ''; // Clear any residual DOM elements to prevent duplication
     flippedCards = [];
     matchedCards = [];
 
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    cardContainer.innerHTML = '';
+    cardContainer.innerHTML = ''; // Clear any residual cards to prevent duplication
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
