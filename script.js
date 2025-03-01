@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'there', 'this', 'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
   ];
 
-  // Updated Non-Decodable Words for Medium Mode (200 words, 40 sets of 5, from all tables, excluding overlaps with Easy, no duplicates)
+  // Updated Non-Decodable Words for Medium Mode (238 words, 47 sets of 5 and 1 set of 3, from all tables, excluding overlaps with Easy, no duplicates)
   const sightWordsMedium = [
     'of', 'no', 'they', 'find', 'two',
     'while', 'me', 'saw', 'here', 'take',
@@ -41,7 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
     'can’t', 'much', 'began', 'which', 'carry',
     'feet', 'catch', 'new', 'really', 'after',
     'easy', 'great', 'children', 'page', 'begin',
-    'always', 'family', 'sleep', 'couldn’t', 'hard'
+    'always', 'family', 'sleep', 'couldn’t', 'hard',
+    'start', 'every', 'our', 'small', 'fall',
+    'dear', 'part', 'everywhere', 'we', 'walk',
+    'point', 'idea', 'last', 'parent', 'first',
+    'already', 'another', 'year', 'laugh', 'ever',
+    'hurt', 'toy', 'against', 'near', 'car',
+    'never', 'heard', 'found', 'ear', 'ball',
+    'half', 'number', 'call', 'house', 'able',
+    'blue', 'ask', 'together', 'door', 'around',
+    'outside', 'during', 'father', 'answer', 'draw',
+    'almost', 'pull', 'front', 'air', 'early',
+    'four', 'hear', 'far', 'hold', 'earth',
+    'hour', 'horse', 'push', 'question', 'later',
+    'more', 'short', 'fire', 'bought', 'letter',
+    'morning', 'talk', 'right'
   ];
 
   // Updated Non-Decodable Words for Hard Mode (10 words, 2 sets of 5, Primary 1/2 common words)
@@ -53,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sight Words Sets for Different Modes
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)), // 10 sets of 5
-    medium: Array.from({ length: 40 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 40 sets of 5
+    medium: Array.from({ length: 44 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 43 ? 3 : 5))), // 44 sets (47 sets of 5, 1 set of 3)
     hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5)) // 2 sets of 5
   };
 
@@ -141,7 +155,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
+    // Adjust for the last set (Set 43) in Medium mode, which has only 3 words
+    const adjustedWords = currentMode === 'medium' && currentSet === 43 ? words.concat(words.slice(0, 2)) : words.concat(words);
+    const cardWords = shuffleArray(adjustedWords).slice(0, 10); // Ensure 10 cards (5 pairs), padding if necessary
 
     Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
       const word = cardWords[index];
