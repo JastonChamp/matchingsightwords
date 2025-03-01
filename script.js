@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'there', 'this', 'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
   ];
 
-  // Updated Non-Decodable Words for Medium Mode (238 words, 48 sets of 5, from all tables, excluding overlaps with Easy)
+  // Updated Non-Decodable Words for Medium Mode (240 words, 48 sets of 5, from all tables, excluding overlaps with Easy)
   const sightWordsMedium = [
     'of', 'no', 'they', 'find', 'two',
     'while', 'me', 'saw', 'here', 'take',
@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Sight Words Sets for Different Modes
   const sightWordsSets = {
-    easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)), // 10 sets of 5 words each
-    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 48 sets of 5 words each
-    hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5)) // 2 sets of 5 words each
+    easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)), // 10 sets of 5
+    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 48 sets of 5
+    hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5)) // 2 sets of 5
   };
 
   // DOM Elements
@@ -148,11 +148,22 @@ document.addEventListener('DOMContentLoaded', () => {
     flippedCards = [];
     matchedCards = [];
 
-    const words = sightWordsSets[currentMode][currentSet];
+    const words = sightWordsSets[currentMode]?.[currentSet] || [];
+    if (!words || words.length === 0) {
+      console.error('No words available for the selected mode and set.');
+      mascotMessage.textContent = 'Error: No words available for this quest!';
+      return;
+    }
+
     const cardWords = shuffleArray(words.concat(words)).slice(0, 10); // Ensure 10 cards (5 pairs)
 
     Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
       const word = cardWords[index];
+      if (!word) {
+        console.warn(`Word at index ${index} is undefined, skipping card creation for position ${position + 1}.`);
+        return;
+      }
+
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
@@ -406,12 +417,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Dynamic Set Selection
   const updateSetSelect = () => {
     setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
-    const numSets = sightWordsSets[currentMode].length;
+    const numSets = sightWordsSets[currentMode]?.length || 0;
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = `Quest ${i + 1}`;
       setSelect.appendChild(option);
+    }
+    if (numSets === 0) {
+      setSelect.disabled = true;
+      mascotMessage.textContent = 'No quests available for this mode!';
+    } else {
+      setSelect.disabled = false;
     }
   };
 
