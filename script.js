@@ -10,44 +10,52 @@ document.addEventListener('DOMContentLoaded', () => {
     'there', 'this', 'to', 'too', 'want', 'was', 'were', 'what', 'when', 'white'
   ];
 
-  // Updated Non-Decodable Words for Medium Mode (180 words, 36 sets of 5, from all images, including overlaps)
+  // Updated Non-Decodable Words for Medium Mode (238 words, 48 sets of 5, from all tables, excluding overlaps with Easy)
   const sightWordsMedium = [
-    'a', 'for', 'many', 'the', 'white',
-    'would', 'about', 'go', 'name', 'their',
-    'of', 'should', 'above', 'he', 'not',
-    'then', 'no', 'could', 'again', 'her',
-    'now', 'there', 'they', 'good', 'all',
-    'his', 'on', 'this', 'find', 'made',
-    'also', 'how', 'one', 'to', 'two',
-    'across', 'are', 'I', 'over', 'too',
-    'while', 'come', 'be', 'in', 'said',
-    'want', 'before', 'brother', 'used', 'way',
-    'please', 'fine', 'love', 'mother', 'down',
-    'make', 'keep', 'high', 'put', 'who',
-    'boy', 'ate', 'leave', 'eye', 'cold',
-    'something', 'girl', 'been', 'these', 'nothing',
-    'salt', 'become', 'watch', 'same', 'sea',
-    'buy', 'because', 'give', 'head', 'say',
-    'flies', 'wrote', 'upon', 'just', 'may',
-    'green', 'fly', 'by', 'from', 'with',
-    'though', 'became', 'aunty', 'finally', 'here',
-    'enough', 'large', 'change', 'work', 'funny',
-    'without', 'even', 'goes', 'any', 'off',
-    'today', 'kind', 'group', 'both', 'eat',
-    'open', 'try', 'might', 'when', 'home',
-    'through', 'along', 'often', 'night', 'yellow',
-    'don’t', 'place', 'behind', 'done', 'nice',
-    'low', 'music', 'move', 'below', 'city',
-    'once', 'money', 'knew', 'brought', 'between',
-    'eight', 'rain', 'most', 'few', 'inside',
-    'body', 'feel', 'can’t', 'much', 'began',
-    'which', 'carry', 'feet', 'catch', 'new',
-    'really', 'after', 'easy', 'great', 'children',
-    'page', 'begin', 'always', 'family', 'sleep',
-    'couldn’t', 'hard', 'start', 'every', 'our',
-    'small', 'fall', 'dear', 'part', 'everywhere',
-    'we', 'walk', 'point', 'idea', 'last',
-    'parent', 'first', 'already', 'another', 'year'
+    'of', 'no', 'they', 'find', 'two',
+    'while', 'me', 'saw', 'here', 'take',
+    'out', 'would', 'should', 'could', 'good',
+    'made', 'across', 'come', 'water', 'will',
+    'see', 'under', 'other', 'before', 'brother',
+    'used', 'way', 'please', 'fine', 'love',
+    'mother', 'down', 'make', 'keep', 'high',
+    'put', 'who', 'boy', 'ate', 'leave',
+    'eye', 'cold', 'something', 'girl', 'been',
+    'these', 'nothing', 'salt', 'become', 'watch',
+    'same', 'sea', 'buy', 'because', 'give',
+    'head', 'say', 'flies', 'wrote', 'upon',
+    'just', 'may', 'green', 'fly', 'by',
+    'from', 'with', 'until', 'must', 'maybe',
+    'young', 'you', 'wolf', 'where', 'away',
+    'pretty', 'why', 'very', 'though', 'became',
+    'aunty', 'finally', 'here', 'enough', 'large',
+    'change', 'work', 'funny', 'without', 'even',
+    'goes', 'any', 'off', 'today', 'kind',
+    'group', 'both', 'eat', 'open', 'try',
+    'might', 'when', 'home', 'through', 'along',
+    'often', 'night', 'yellow', 'don’t', 'place',
+    'behind', 'done', 'nice', 'low', 'music',
+    'move', 'below', 'city', 'once', 'money',
+    'knew', 'brought', 'between', 'eight', 'rain',
+    'most', 'few', 'inside', 'body', 'feel',
+    'can’t', 'much', 'began', 'which', 'carry',
+    'feet', 'catch', 'new', 'really', 'after',
+    'easy', 'great', 'children', 'page', 'begin',
+    'always', 'family', 'sleep', 'couldn’t', 'hard',
+    'start', 'every', 'our', 'small', 'fall',
+    'dear', 'part', 'everywhere', 'we', 'walk',
+    'point', 'idea', 'last', 'parent', 'first',
+    'already', 'another', 'year', 'laugh', 'ever',
+    'hurt', 'toy', 'against', 'near', 'car',
+    'never', 'heard', 'found', 'ear', 'ball',
+    'half', 'number', 'call', 'house', 'able',
+    'blue', 'ask', 'together', 'door', 'around',
+    'outside', 'during', 'father', 'answer', 'draw',
+    'almost', 'pull', 'front', 'air', 'early',
+    'four', 'hear', 'far', 'hold', 'earth',
+    'hour', 'horse', 'push', 'question', 'later',
+    'more', 'short', 'fire', 'bought', 'letter',
+    'morning', 'talk', 'right', 'talk', 'right'
   ];
 
   // Updated Non-Decodable Words for Hard Mode (10 words, 2 sets of 5, unchanged)
@@ -59,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Sight Words Sets for Different Modes
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)), // 10 sets of 5 words each
-    medium: Array.from({ length: 36 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 36 sets of 5 words each
+    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, (i + 1) * 5)), // 48 sets of 5 words each
     hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5)) // 2 sets of 5 words each
   };
 
