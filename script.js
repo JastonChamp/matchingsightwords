@@ -155,9 +155,24 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Adjust for the last set (Set 43) in Medium mode, which has only 3 words
-    const adjustedWords = currentMode === 'medium' && currentSet === 43 ? words.concat(words.slice(0, 2)) : words.concat(words);
-    const cardWords = shuffleArray(adjustedWords).slice(0, 10); // Ensure 10 cards (5 pairs), padding if necessary
+    // Handle the last set (Set 43, Quest 44) in Medium mode, which has only 3 words
+    let adjustedWords = words;
+    if (currentMode === 'medium' && currentSet === 43) {
+      // Create 5 pairs (10 cards) using the 3 words: morning, talk, right
+      const pairs = [];
+      // Distribute the 3 words to create 5 pairs, repeating to fill 10 cards
+      const wordPool = ['morning', 'talk', 'right']; // The 3 words from Set 44
+      while (pairs.length < 5) {
+        const word1 = wordPool[Math.floor(Math.random() * wordPool.length)];
+        const word2 = wordPool[Math.floor(Math.random() * wordPool.length)];
+        if (word1 === word2) pairs.push(word1); // Ensure pairs match
+      }
+      adjustedWords = pairs.flatMap(word => [word, word]); // Create 10 cards (5 pairs)
+    } else {
+      adjustedWords = words.concat(words); // For other sets, duplicate to create pairs
+    }
+
+    const cardWords = shuffleArray(adjustedWords).slice(0, 10); // Ensure 10 cards (5 pairs)
 
     Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
       const word = cardWords[index];
