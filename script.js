@@ -210,24 +210,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const utterance = new SpeechSynthesisUtterance(utteranceText);
-    utterance.lang = 'en-US'; // Standard American English
+    utterance.lang = 'en-GB'; // Set to British English
 
-    // Dynamically select a voice that supports English phonetics well
+    // Dynamically select a UK female voice
     let bestVoice = null;
     const voices = speechSynthesis.getVoices(); // Get available voices
     if (voices.length > 0) {
+      // Prefer a female UK voice
       bestVoice = voices.find(voice => 
-        voice.lang.startsWith('en-US') && // Prefer American English voices
-        (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('male')) // Prefer clear voices (adjust as needed)
-      ) || voices.find(voice => voice.lang.startsWith('en-US')); // Fallback to any English US voice
+        voice.lang === 'en-GB' && 
+        voice.name.toLowerCase().includes('female')
+      ) || voices.find(voice => voice.lang === 'en-GB'); // Fallback to any UK voice if no female voice is found
     } else {
       // Handle case where voices aren't loaded yet (async loading in some browsers)
       speechSynthesis.onvoiceschanged = () => {
         const updatedVoices = speechSynthesis.getVoices();
         bestVoice = updatedVoices.find(voice => 
-          voice.lang.startsWith('en-US') && 
-          (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('male'))
-        ) || updatedVoices.find(voice => voice.lang.startsWith('en-US'));
+          voice.lang === 'en-GB' && 
+          voice.name.toLowerCase().includes('female')
+        ) || updatedVoices.find(voice => voice.lang === 'en-GB'); // Fallback to any UK voice
         if (bestVoice) {
           utterance.voice = bestVoice;
           speechSynthesis.speak(utterance);
@@ -238,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (bestVoice) {
       utterance.voice = bestVoice;
     } else {
-      // Fallback if no voice is found, use default voice with explicit phonetic hint
+      // Fallback if no UK voice is found, use default voice with British English pronunciation hint
       utteranceText = word.toLowerCase() === 'a' ? 'uh' : word; // Ensure "a" uses "uh" even with default voice
     }
 
@@ -398,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
-    if (soundOn) speakStatus('Tap or click a card numbered 1–10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.'); // Only speak when "How to Play" is clicked
+    if (soundOn) speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
   });
 
   closeHowToPlay.addEventListener('click', () => {
