@@ -126,6 +126,23 @@ document.addEventListener('DOMContentLoaded', () => {
     return shuffled;
   };
 
+  // Helper function to get a preferred female voice
+  const getPreferredFemaleVoice = () => {
+    const voices = speechSynthesis.getVoices();
+    // List of keywords that may indicate a female voice (adjust or add as needed)
+    const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
+    let preferredVoice = voices.find(voice =>
+      voice.lang === 'en-GB' && femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
+    );
+    // Fallback: if no en-GB voice is found, try any voice with a known female indicator
+    if (!preferredVoice) {
+      preferredVoice = voices.find(voice =>
+        femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
+      );
+    }
+    return preferredVoice;
+  };
+
   // Toggle Full Screen
   const toggleFullscreen = () => {
     if (!isFullscreen) {
@@ -139,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
       fullscreenButton.textContent = 'Full Screen';
       isFullscreen = false;
     }
-    // No spoken status update to reduce audio announcements
   };
 
   // Create Cards
@@ -160,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentMode === 'medium' && currentSet === 43) {
       // Create 5 pairs (10 cards) using the 3 words: morning, talk, right
       const pairs = [];
-      // Distribute the 3 words to create 5 pairs, repeating to fill 10 cards
       const wordPool = ['morning', 'talk', 'right']; // The 3 words from Set 44
       while (pairs.length < 5) {
         const word1 = wordPool[Math.floor(Math.random() * wordPool.length)];
@@ -216,7 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cardContainer.classList.add('pulse');
     setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
-    // No spoken status update to reduce audio announcements
   };
 
   // Flip Card
@@ -243,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
       card2.classList.add('matched');
       card1.classList.remove('unmatched');
       card2.classList.remove('unmatched');
-      // No spoken feedback for match to reduce audio annoyance
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
@@ -255,8 +268,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     } else {
       playSound('incorrect');
-      // No spoken feedback for mismatch to reduce audio annoyance
-      // Delay to show words longer before applying mismatch animation
       setTimeout(() => {
         card1.classList.add('mismatch');
         card2.classList.add('mismatch');
@@ -265,9 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
           card2.classList.remove('flipped', 'mismatch');
           flippedCards = [];
           flippingAllowed = true;
-          // No spoken feedback after flip-back
-        }, 1000); // Match the duration of the shake animation (1s)
-      }, 1200); // Delay to ensure words are visible longer (1.2s)
+        }, 1000); // Duration of mismatch animation
+      }, 1200); // Delay to ensure words are visible longer
     }
   };
 
@@ -276,48 +286,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!soundOn || !speechSynthesis) return;
     speechSynthesis.cancel();
 
-    let utteranceText = word;
-    // Use schwa sound (/ə/) for "a" in casual, unstressed speech (e.g., "uh" as in "a cat" or "a dog")
-    if (word.toLowerCase() === 'a') {
-      utteranceText = 'uh'; // Use "uh" for a reliable schwa-like pronunciation
-    }
-
+    // Use schwa sound (/ə/) for "a" in casual, unstressed speech
+    let utteranceText = word.toLowerCase() === 'a' ? 'uh' : word;
     const utterance = new SpeechSynthesisUtterance(utteranceText);
-    utterance.lang = 'en-GB'; // Set to British English
+    utterance.lang = 'en-GB';
 
-    // Dynamically select a UK female voice
-    let bestVoice = null;
-    const voices = speechSynthesis.getVoices(); // Get available voices
-    if (voices.length > 0) {
-      // Prefer a female UK voice
-      bestVoice = voices.find(voice => 
-        voice.lang === 'en-GB' && 
-        voice.name.toLowerCase().includes('female')
-      ) || voices.find(voice => voice.lang === 'en-GB'); // Fallback to any UK voice if no female voice is found
-    } else {
-      // Handle case where voices aren't loaded yet (async loading in some browsers)
-      speechSynthesis.onvoiceschanged = () => {
-        const updatedVoices = speechSynthesis.getVoices();
-        bestVoice = updatedVoices.find(voice => 
-          voice.lang === 'en-GB' && 
-          voice.name.toLowerCase().includes('female')
-        ) || updatedVoices.find(voice => voice.lang === 'en-GB'); // Fallback to any UK voice
-        if (bestVoice) {
-          utterance.voice = bestVoice;
-          speechSynthesis.speak(utterance);
-        }
-      };
-    }
-
+    // Use helper function to select a preferred female voice
+    const bestVoice = getPreferredFemaleVoice();
     if (bestVoice) {
       utterance.voice = bestVoice;
-    } else {
-      // Fallback if no UK voice is found, use default voice with British English pronunciation hint
-      utteranceText = word.toLowerCase() === 'a' ? 'uh' : word; // Ensure "a" uses "uh" even with default voice
     }
 
-    utterance.pitch = 1.3; // Higher pitch for child-friendly tone
-    utterance.rate = 0.7; // Slower rate for clarity
+    utterance.pitch = 1.3; // Child-friendly pitch
+    utterance.rate = 0.7;  // Slower rate for clarity
     utterance.onerror = (error) => console.warn('Speech synthesis error for word:', word, error);
 
     speechSynthesis.speak(utterance);
@@ -328,12 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const audio = type === 'correct' ? correctSound : incorrectSound;
     audio.play().catch((error) => {
       console.warn(`Failed to play ${type} sound:`, error);
-      // Instead of showing an alert, log to console and retry silently
-      console.log('Attempting to re-enable and retry sound...');
-      audio.load(); // Reload the audio to attempt recovery
+      audio.load(); // Reload and retry
       audio.play().catch((retryError) => {
         console.error(`Retry failed for ${type} sound:`, retryError);
-        // No alert; silent fallback to maintain gameplay
       });
     });
   };
@@ -342,7 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
     scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
-    // No spoken status update to reduce audio annoyance
   };
 
   const updateProgressBar = () => {
@@ -358,14 +335,12 @@ document.addEventListener('DOMContentLoaded', () => {
     finalScore.textContent = score;
     const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
     matchedWordsDisplay.textContent = matchedWords;
-    // Delay the modal appearance to allow review of revealed words
     setTimeout(() => {
       modal.classList.add('visible');
       modal.setAttribute('aria-hidden', 'false');
       if (soundOn) {
         bgMusic.pause();
         playSound('correct');
-        // No spoken feedback for reward to reduce audio annoyance
         document.getElementById('mascot').classList.add('foxJump');
         setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
       }
@@ -375,16 +350,18 @@ document.addEventListener('DOMContentLoaded', () => {
         origin: { y: 0.6 }
       });
       isGameInProgress = false;
-    }, 3000); // Delay of 3 seconds (3,000 ms) to allow time for review
+    }, 3000); // Delay for review
   };
 
   // Game Control
   const startGame = () => {
     if (!setSelect.value) {
       mascotMessage.textContent = 'Choose a quest first!';
-      // No spoken feedback to reduce audio annoyance
       return;
     }
+    // Preload voices on user gesture to ensure they're available
+    speechSynthesis.getVoices();
+
     currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
     startButton.disabled = false;
@@ -399,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) {
       bgMusic.play().catch((error) => {
         console.warn('Failed to play background music:', error);
-        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.load();
         bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
       });
     }
@@ -425,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn) {
       bgMusic.play().catch((error) => {
         console.warn('Failed to play background music:', error);
-        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.load();
         bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
       });
     }
@@ -458,7 +435,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     startButton.disabled = false;
     mascotMessage.textContent = 'Choose a quest to begin!';
-    // No spoken feedback to reduce audio annoyance
   });
   fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
@@ -467,33 +443,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if (soundOn && isGameInProgress) {
       bgMusic.play().catch((error) => {
         console.warn('Failed to play background music:', error);
-        bgMusic.load(); // Attempt to reload and retry
+        bgMusic.load();
         bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
       });
     } else {
       bgMusic.pause();
     }
-    // No spoken feedback for sound toggle
   });
 
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
-    if (soundOn) speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
+    if (soundOn) {
+      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
+    }
   });
 
   closeHowToPlay.addEventListener('click', () => {
     howToPlay.classList.remove('visible');
-    // No spoken feedback to reduce audio annoyance
   });
 
   // Initialization
   updateSetSelect();
   if (!localStorage.getItem('welcomeShown')) {
     howToPlay.classList.add('visible');
-    // No spoken feedback for welcome to reduce audio annoyance
     localStorage.setItem('welcomeShown', 'true');
   }
 
-  // Add Confetti Library (external script or CDN for particle effects)
-  // Include <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script> in HTML head
+  // Note: Make sure to include the external confetti library in your HTML head:
+  // <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 });
