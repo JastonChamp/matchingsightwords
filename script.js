@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-  'use strict';
+'use strict';
+
+const init = () => {
 
   // Original 50 Sight Words for Easy Mode (5 words per set, 10 quests)
   const sightWordsEasy = [
@@ -84,10 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const playAgainButton = document.getElementById('play-again-button');
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
-  const progressBar = document.getElementById('progress-bar');
  const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
   const themeToggle = document.getElementById('theme-toggle');
+  const howToPlayButton = document.getElementById('how-to-play-button');
+  const body = document.body;
   const howToPlayButton = document.getElementById('how-to-play-button');
   const body = document.body;
 
@@ -435,27 +437,29 @@ document.addEventListener('DOMContentLoaded', () => {
   // Event Listeners
  startButton.addEventListener('click', startGame);␊
   playAgainButton.addEventListener('click', resetGame);␊
-  fullscreenButton.addEventListener('click', toggleFullscreen);
-  modeSelect.addEventListener('change', () => {
-    currentMode = modeSelect.value;
-    updateSetSelect();
-    setSelect.value = '';
-    startButton.disabled = false;
-    mascotMessage.textContent = 'Choose a quest to begin!';
+ fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
-    // Toggle sound flag on each click
     soundOn = !soundOn;
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
-
     if (soundOn && isGameInProgress) {
       bgMusic.play().catch((error) => {
         console.warn('Failed to play background music:', error);
         bgMusic.load();
-        bgMusic.play().catch((retryError) =>
-          console.error('Background music retry failed:', retryError));
+        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
       });
     } else {
       bgMusic.pause();
+    }
+  });
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    if (body.classList.contains('dark')) {
+      themeToggle.textContent = 'Light Mode';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = 'Dark Mode';
+      localStorage.setItem('theme', 'light');
     }
   });
 
@@ -483,8 +487,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Initialization
-  updateSetSelect();
+updateSetSelect();
   const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    themeToggle.textContent = 'Light Mode';
+  } else {
+    themeToggle.textContent = 'Dark Mode';
+  }
+  if (!localStorage.getItem('welcomeShown')) {
   if (savedTheme === 'dark') {
     body.classList.add('dark');
     themeToggle.textContent = 'Light Mode';
@@ -496,6 +507,12 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('welcomeShown', 'true');
   }
 
-  // Note: Make sure to include the external confetti library in your HTML head:
+    // Note: Make sure to include the external confetti library in your HTML head:
   // <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-});
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
