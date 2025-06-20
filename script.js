@@ -65,7 +65,7 @@ const init = () => {
   // Sight Words Sets
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)),
-    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 47 ? 3 : 5))),
+    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 47 ? 5 : 5))),
     hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5))
   };
 
@@ -86,8 +86,9 @@ const init = () => {
   const soundToggle = document.getElementById('sound-toggle');
   const themeToggle = document.getElementById('theme-toggle');
   const howToPlayButton = document.getElementById('how-to-play-button');
+  const progressBar = document.getElementById('progress-bar');
   const body = document.body;
-  
+
   // Game State
   let flippedCards = [];
   let matchedCards = [];
@@ -98,6 +99,7 @@ const init = () => {
   let soundOn = true;
   let isFullscreen = false;
   let isGameInProgress = false;
+  let lastFlipTime = 0;
 
   // Fullscreen Handling
   document.addEventListener('fullscreenchange', () => {
@@ -116,14 +118,15 @@ const init = () => {
     audio.onerror = () => console.warn(`Failed to load audio: ${src}`);
     return audio;
   };
-  const correctSound = loadAudio('sounds/cheer.mp3');
-  const incorrectSound = loadAudio('sounds/whoops.mp3');
-  const bgMusic = loadAudio('sounds/quest.mp3');
+  const correctSound = loadAudio('cheer.mp3');
+  const incorrectSound = loadAudio('whoops.mp3');
+  const bgMusic = loadAudio('quest.mp3');
   bgMusic.loop = true;
   bgMusic.volume = 0.2;
 
   // Utilities
   const shuffleArray = (array) => {
+    // Fisher-Yates shuffle
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -138,13 +141,16 @@ const init = () => {
     let preferredVoice = voices.find(voice =>
       voice.lang === 'en-GB' && femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
     );
-    if (!preferredVoice) {
-      preferredVoice = voices.find(voice =>
-        femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
-      );
-    }
-    return preferredVoice;
+    return preferredVoice || voices.find(voice =>
+      femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
+    );
   };
+
+  // Ensure voices are loaded
+  speechSynthesis.onvoiceschanged = () => {
+    console.log('Voices loaded:', speechSynthesis.getVoices().length);
+  };
+  speechSynthesis.getVoices(); // Trigger voice loading
 
   const toggleFullscreen = () => {
     if (!isFullscreen) {
@@ -170,29 +176,27 @@ const init = () => {
 
     let adjustedWords = words;
     if (currentMode === 'medium' && currentSet === 47) {
-      const wordPool = ['morning', 'talk', 'right'];
-      const pairs = [...wordPool, ...wordPool.slice(0, 2)];
-      adjustedWords = pairs.flatMap(word => [word, word]);
+      adjustedWords = ['morning', 'talk', 'right', 'new', 'great'].concat(['morning', 'talk', 'right', 'new', 'great']);
     } else {
       adjustedWords = words.concat(words);
     }
 
     const cardWords = shuffleArray(adjustedWords).slice(0, 10);
 
-    Array.from({ length: 10 }, (_, i) => i).forEach((position, index) => {
-      const word = cardWords[index];
+    cardWords.forEach((word, index) => {
       if (!word) {
-        console.warn(`Word at index ${index} is undefined, skipping card creation for position ${position + 1}.`);
+        console.warn(`Word at index ${index} is undefined, skipping card creation.`);
         return;
       }
 
+      const position = index + 1;
       const card = document.createElement('div');
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${position + 1} with word ${word} on the back`);
+      card.setAttribute('aria-label', `Flip card ${position} with word ${word} on the back`);
       card.dataset.word = word;
-      card.dataset.position = position + 1;
+      card.dataset.position = position;
 
       const cardInner = document.createElement('div');
       cardInner.classList.add('card-inner', 'unmatched');
@@ -200,16 +204,16 @@ const init = () => {
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
-       <img src="card-front.png" alt="Card image" />
-        <div class="card-number">${position + 1}</div>
+        <img src="card-front.png" alt="Card image" />
+        <div class="card-number">${position}</div>
       `;
-
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
       backFace.textContent = word;
 
-      cardInner.appendChild(frontFace, backFace);
+      cardInner.appendChild(frontFace);
+      cardInner.appendChild(backFace);
       card.appendChild(cardInner);
 
       card.addEventListener('click', () => flipCard(card));
@@ -225,7 +229,9 @@ const init = () => {
   };
 
   const flipCard = (card) => {
-    if (!flippingAllowed || card.classList.contains('flipped') || matchedCards.includes(card)) return;
+    const now = Date.now();
+    if (!flippingAllowed || card.classList.contains('flipped') || matchedCards.includes(card) || now - lastFlipTime < 300) return;
+    lastFlipTime = now;
 
     card.classList.add('flipped');
     if (soundOn) speakWord(card.dataset.word);
@@ -250,14 +256,15 @@ const init = () => {
       flippingAllowed = true;
       updateProgressBar();
       if (matchedCards.length === 10) showReward();
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
     } else {
-     playSound('incorrect');
-      // Delay slightly longer so words remain visible before flipping back
+      playSound('incorrect');
       setTimeout(() => {
         card1.classList.add('mismatch');
         card2.classList.add('mismatch');
@@ -291,8 +298,7 @@ const init = () => {
     const audio = type === 'correct' ? correctSound : incorrectSound;
     audio.play().catch((error) => {
       console.warn(`Failed to play ${type} sound: ${error}`);
-      audio.load();
-      audio.play();
+      mascotMessage.textContent = 'Audio playback failed. Try enabling sound again!';
     });
   };
 
@@ -302,6 +308,7 @@ const init = () => {
   };
 
   const updateProgressBar = () => {
+    if (!progressBar) return;
     const progress = (matchedCards.length / 10) * 100;
     progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
     progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
@@ -322,21 +329,22 @@ const init = () => {
         document.getElementById('mascot').classList.add('foxJump');
         setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
       }
-      confetti({
-        particleCount: 200,
-        spread: 70,
-        origin: { y: 0.6 }
-      });
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 200,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
       isGameInProgress = false;
     }, 1000);
   };
 
   const startGame = () => {
-    if (!setSelect.value) {
-      mascotMessage.textContent = 'Choose a quest first!';
+    if (!setSelect.value || isNaN(parseInt(setSelect.value, 10))) {
+      mascotMessage.textContent = 'Choose a valid quest first!';
       return;
     }
-    speechSynthesis.getVoices();
     currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
     startButton.disabled = true;
@@ -344,6 +352,7 @@ const init = () => {
     modeSelect.disabled = true;
     score = 0;
     updateScore();
+    updateProgressBar();
     mascotMessage.textContent = 'Find a match!';
     flippingAllowed = true;
     isGameInProgress = true;
@@ -363,6 +372,7 @@ const init = () => {
     modeSelect.disabled = false;
     score = 0;
     updateScore();
+    updateProgressBar();
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
@@ -433,48 +443,6 @@ const init = () => {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') {
     body.classList.add('dark');
-   fullscreenButton.addEventListener('click', toggleFullscreen);
-  soundToggle.addEventListener('click', () => {
-    soundOn = !soundOn;
-    soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
-    if (soundOn && isGameInProgress) {
-      bgMusic.play().catch((error) => {
-        console.warn('Failed to play background music:', error);
-        bgMusic.load();
-        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
-      });
-    } else {
-      bgMusic.pause();
-    }
-  });
-
-  themeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark');
-    if (body.classList.contains('dark')) {
-      themeToggle.textContent = 'Light Mode';
-      localStorage.setItem('theme', 'dark');
-    } else {
-      themeToggle.textContent = 'Dark Mode';
-      localStorage.setItem('theme', 'light');
-    }
-  });
-    
-  howToPlayButton.addEventListener('click', () => {
-    howToPlay.classList.add('visible');
-    if (soundOn) {
-      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
-    }
-  });
-
-  closeHowToPlay.addEventListener('click', () => {
-    howToPlay.classList.remove('visible');
-  });
-
-  // Initialization
-  updateSetSelect();
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    body.classList.add('dark');
     themeToggle.textContent = 'Light Mode';
   } else {
     themeToggle.textContent = 'Dark Mode';
@@ -483,9 +451,6 @@ const init = () => {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
-
-  // Note: Make sure to include the external confetti library in your HTML head:
-  // <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 };
 
 if (document.readyState === 'loading') {
