@@ -16,18 +16,32 @@
 body {
   font-family: var(--font-family);
   color: var(--text-color);
-  background: linear-gradient(135deg, #87CEEB, #98FF98);
+  background: linear-gradient(135deg, #87CEEB, #98FF98); /* Sky blue to light green for a playful, nature-inspired look */
   background-size: cover;
-  background-attachment: fixed;
+  background-attachment: fixed; /* Ensures background stays visible in fullscreen */
   font-size: 1.5rem;
   overflow-x: hidden;
   transition: all 0.3s ease;
 }
 
 body.dark {
-  --primary-color: #37474F;
+  --primary-color: #546E7A; /* Lighter tone so flipped cards stand out */
   --secondary-color: #5E92F3;
   --accent-color: #FF8A65;
+  --matched-color: #4DB6AC;
+  --text-color: #ECEFF1;
+  background: linear-gradient(135deg, #263238, #37474F);
+  color: var(--text-color);
+}
+
+body.fullscreen {
+  overflow: hidden;
+  background: linear-gradient(135deg, #87CEEB, #98FF98); /* Explicitly set background for fullscreen */
+}
+
+body.fullscreen.dark {
+  background: linear-gradient(135deg, #263238, #37474F);
+}
   --matched-color: #4DB6AC;
    --text-color: #ECEFF1;
   background: linear-gradient(135deg, #263238, #37474F);
@@ -123,7 +137,7 @@ body.fullscreen.dark {
 .controls select {
   border: 5px solid var(--secondary-color);
   background-color: var(--primary-color);
- background-image: url('fox-tail.png');
+  background-image: url('fox-tail.png');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 24px;
@@ -141,21 +155,26 @@ body.fullscreen.dark {
   filter: brightness(1.1);
 }
 
-/* Game Container */
-.game-container {
-  margin-top: 80px;
-  padding: 1rem;
-  transition: all 0.3s ease;
-  min-height: calc(100vh - 80px);
-  background: inherit;
+.controls button:disabled {
+  background-color: #B0BEC5;
+  cursor: not-allowed;
 }
 
-body.fullscreen .game-container {
+/* Game Container */
+.game-container {
+  margin-top: 200px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+  min-height: calc(100vh - 200px);
+  background: inherit; /* Inherit background from body */
+}
+
+.game-container.fullscreen {
   margin: 0;
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background: inherit;
+  background: linear-gradient(135deg, #87CEEB, #98FF98); /* Ensure background in fullscreen */
 }
 
 /* Card Grid */
@@ -235,7 +254,7 @@ body.fullscreen .game-container {
   right: 10px;
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--accent-color);
+  color: var(--accent-color); /* Vibrant coral for high contrast against the background */
   background-color: rgba(255, 255, 255, 0.9);
   padding: 5px 10px;
   border-radius: 50%;
@@ -274,9 +293,9 @@ body.fullscreen .game-container {
 }
 
 /* Progress Bar */
-.progress-bar {
-  width: 100px;
-  height: 15px;
+.progress-bar {␊
+  width: 100px;␊
+  height: 15px;␊
   background: linear-gradient(to right, var(--secondary-color) 0%, var(--secondary-color) 0%, transparent 0%);
   border: 2px solid var(--secondary-color);
   position: relative;
