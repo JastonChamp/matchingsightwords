@@ -30,7 +30,7 @@
       <div class="controls">
         <select id="mode-select" aria-label="Choose adventure level">
           <option value="easy">Easy</option>
-          <option value="medium">હ
+          <option value="medium">Medium</option>
           <option value="hard">Hard</option>
         </select>
         <select id="set-select" aria-label="Choose word quest">
@@ -42,29 +42,30 @@
         <button id="theme-toggle" type="button" aria-label="Toggle Theme">Dark Mode</button>
         <button id="how-to-play-button" type="button" aria-label="Show How to Play">How to Play</button>
       </div>
-    </header>
-
-    <main class="game-container">
-      <div class="card-row" role="grid" aria-label="Word Explorer Cards"></div>
-    </main>
-
-    <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
-      <div class="modal-content">
-        <h2>Amazing Job!</h2>
-        <img src="images/star-badge.png" alt="Star Badge" class="reward-image" />
-        <p>You collected <span id="final-score"></span> Fox Stars!</p>
-        <p>Matched Words: <span id="matched-words"></span></p>
-        <button id="play-again-button" type="button">New Quest</button>
-      </div>
     </div>
+  </header>
 
-    <div id="how-to-play" class="how-to-play">
-      <h3>How to Play</h3>
-      <p>Tap or click a card numbered 1–10 to flip it and match the sight words on the back!</p>
-      <p>Focus on the numbers to find pairs and earn Fox Stars.</p>
-      <img src="images/card-flip.png" alt="Card flipping example" />
-      <button id="close-how-to-play">Got It!</button>
+  <main class="game-container">
+    <div class="card-row" role="grid" aria-label="Word Explorer Cards"></div>
+  </main>
+
+  <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Amazing Job!</h2>
+      <img src="images/star-badge.png" alt="Star Badge" class="reward-image" />
+      <p>You collected <span id="final-score"></span> Fox Stars!</p>
+      <p>Matched Words: <span id="matched-words"></span></p>
+      <button id="play-again-button" type="button">New Quest</button>
     </div>
+  </div>
+
+  <div id="how-to-play" class="how-to-play">
+    <h3>How to Play</h3>
+    <p>Tap or click a card numbered 1–10 to flip it and match the sight words on the back!</p>
+    <p>Focus on the numbers to find pairs and earn Fox Stars.</p>
+    <img src="images/card-flip.png" alt="Card flipping example" />
+    <button id="close-how-to-play">Got It!</button>
+  </div>
   <script src="script.js" defer></script>
 </body>
 </html>
