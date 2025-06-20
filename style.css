@@ -29,7 +29,7 @@ body.dark {
   --secondary-color: #5E92F3;
   --accent-color: #FF8A65;
   --matched-color: #4DB6AC;
-  --text-color: #ECEFF1;
+   --text-color: #ECEFF1;
   background: linear-gradient(135deg, #263238, #37474F);
   color: var(--text-color);
 }
@@ -54,7 +54,7 @@ body.fullscreen.dark {
   justify-content: center;
   align-items: center;
   position: relative;
-  background-image: url('images/fox-pattern.png');
+  background-image: url('fox-pattern.png');
   background-blend-mode: overlay;
 }
 
@@ -123,7 +123,7 @@ body.fullscreen.dark {
 .controls select {
   border: 5px solid var(--secondary-color);
   background-color: var(--primary-color);
-  background-image: url('images/fox-tail.png');
+ background-image: url('fox-tail.png');
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 24px;
@@ -216,7 +216,7 @@ body.fullscreen .game-container {
 }
 
 .card-front {
-  background: url('card-front.png') no-repeat center/cover;
+ background: url('card-front.png') no-repeat center/cover;
   transform: rotateY(0deg);
   z-index: 2;
   position: relative;
@@ -286,7 +286,7 @@ body.fullscreen .game-container {
   position: absolute;
   width: 12px;
   height: 12px;
-  background: url('images/star-icon.png') no-repeat center;
+ background: url('star-icon.png') no-repeat center;
   background-size: contain;
   opacity: 0.3;
   animation: twinkle 2s infinite;
