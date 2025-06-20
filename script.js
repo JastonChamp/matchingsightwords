@@ -85,9 +85,6 @@ const init = () => {
   const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
   const themeToggle = document.getElementById('theme-toggle');
-  const fullscreenButton = document.getElementById('fullscreen-button');
-  const soundToggle = document.getElementById('sound-toggle');
-  const themeToggle = document.getElementById('theme-toggle');
   const howToPlayButton = document.getElementById('how-to-play-button');
   const body = document.body;
   
