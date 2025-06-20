@@ -85,10 +85,12 @@ const init = () => {
   const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
   const themeToggle = document.getElementById('theme-toggle');
+   const fullscreenButton = document.getElementById('fullscreen-button');
+  const soundToggle = document.getElementById('sound-toggle');
+  const themeToggle = document.getElementById('theme-toggle');
   const howToPlayButton = document.getElementById('how-to-play-button');
   const body = document.body;
-  const progressBar = document.getElementById('progress-bar');
-
+  
   // Game State
   let flippedCards = [];
   let matchedCards = [];
@@ -434,6 +436,48 @@ const init = () => {
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') {
     body.classList.add('dark');
+   fullscreenButton.addEventListener('click', toggleFullscreen);
+  soundToggle.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
+    if (soundOn && isGameInProgress) {
+      bgMusic.play().catch((error) => {
+        console.warn('Failed to play background music:', error);
+        bgMusic.load();
+        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
+      });
+    } else {
+      bgMusic.pause();
+    }
+  });
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    if (body.classList.contains('dark')) {
+      themeToggle.textContent = 'Light Mode';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = 'Dark Mode';
+      localStorage.setItem('theme', 'light');
+    }
+  });
+    
+  howToPlayButton.addEventListener('click', () => {
+    howToPlay.classList.add('visible');
+    if (soundOn) {
+      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
+    }
+  });
+
+  closeHowToPlay.addEventListener('click', () => {
+    howToPlay.classList.remove('visible');
+  });
+
+  // Initialization
+  updateSetSelect();
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
     themeToggle.textContent = 'Light Mode';
   } else {
     themeToggle.textContent = 'Dark Mode';
@@ -442,6 +486,13 @@ const init = () => {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
+
+  // Note: Make sure to include the external confetti library in your HTML head:
+  // <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 };
 
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
