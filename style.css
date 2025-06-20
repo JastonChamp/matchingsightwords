@@ -216,7 +216,7 @@ body.fullscreen .game-container {
 }
 
 .card-front {
-  background: url('images/card-front.png') no-repeat center/cover;
+  background: url('card-front.png') no-repeat center/cover;
   transform: rotateY(0deg);
   z-index: 2;
   position: relative;
