@@ -85,8 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
   const progressBar = document.getElementById('progress-bar');
-  const fullscreenButton = document.getElementById('fullscreen-button');
+ const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
+  const themeToggle = document.getElementById('theme-toggle');
   const howToPlayButton = document.getElementById('how-to-play-button');
   const body = document.body;
 
@@ -435,8 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelect.value = '';
     startButton.disabled = false;
     mascotMessage.textContent = 'Choose a quest to begin!';
-  });
-  fullscreenButton.addEventListener('click', toggleFullscreen);
+ fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
     soundOn = true; // Reset soundOn to true when toggling back on
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
@@ -449,6 +449,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       bgMusic.pause();
     }
+  });
+
+  themeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark');
+    if (body.classList.contains('dark')) {
+      themeToggle.textContent = 'Light Mode';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = 'Dark Mode';
+      localStorage.setItem('theme', 'light');
+    }
+  });
   });
 
   howToPlayButton.addEventListener('click', () => {
@@ -464,6 +476,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialization
   updateSetSelect();
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    themeToggle.textContent = 'Light Mode';
+  } else {
+    themeToggle.textContent = 'Dark Mode';
+  }
   if (!localStorage.getItem('welcomeShown')) {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
