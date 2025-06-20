@@ -140,9 +140,10 @@ body.fullscreen.dark {
   background-color: var(--accent-color);
   filter: brightness(1.1);
 }
-.controls button:disabled {
-  background-color: #B0BEC5;
-  cursor: not-allowed;
+.controls button:hover:not(:disabled) {
+  transform: scale(1.1);
+  background-color: var(--accent-color);
+  filter: brightness(1.1);
 }
 
 /* Game Container */
@@ -278,12 +279,11 @@ body.fullscreen .game-container {
 }
 
 /* Progress Bar */
-.progress-bar {
-  width: 100px;
-  height: 15px;
+.progress-bar {␊
+  width: 100px;␊
+  height: 15px;␊
   background: linear-gradient(to right, var(--secondary-color) 0%, var(--secondary-color) 0%, transparent 0%);
   border: 2px solid var(--secondary-color);
-
 .progress-bar .star-icon {
   position: absolute;
   width: 12px;
