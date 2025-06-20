@@ -154,12 +154,12 @@ body.fullscreen.dark {
   background: inherit; /* Inherit background from body */
 }
 
-.game-container.fullscreen {
+body.fullscreen .game-container {
   margin: 0;
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(135deg, #87CEEB, #98FF98); /* Ensure background in fullscreen */
+  background: inherit; /* Use body's background in fullscreen */
 }
 
 /* Card Grid */
