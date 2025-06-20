@@ -99,8 +99,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let flippingAllowed = true;
   let score = 0;
   let soundOn = true; // Ensure sound stays on by default
-  let isFullscreen = false;
+ let isFullscreen = false;
   let isGameInProgress = false;
+
+  // Keep track of fullscreen changes
+  document.addEventListener('fullscreenchange', () => {
+    isFullscreen = !!document.fullscreenElement;
+    body.classList.toggle('fullscreen', isFullscreen);
+    fullscreenButton.textContent = isFullscreen ? 'Exit Full Screen' : 'Full Screen';
+    if (isFullscreen) {
+      document.getElementById('mascot').classList.add('foxJump');
+      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+    }
+  });
 
   // Audio with Enhanced Error Handling (No Alerts)
   const correctSound = new Audio('sounds/cheer.mp3');
@@ -145,17 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Toggle Full Screen
-  const toggleFullscreen = () => {
+ const toggleFullscreen = () => {
     if (!isFullscreen) {
-      body.requestFullscreen();
-      fullscreenButton.textContent = 'Exit Full Screen';
-      isFullscreen = true;
-      document.getElementById('mascot').classList.add('foxJump');
-      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+      document.documentElement.requestFullscreen();
     } else {
       document.exitFullscreen();
-      fullscreenButton.textContent = 'Full Screen';
-      isFullscreen = false;
     }
   };
 
@@ -428,23 +433,26 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Event Listeners
-  startButton.addEventListener('click', startGame);
-  playAgainButton.addEventListener('click', resetGame);
+ startButton.addEventListener('click', startGame);␊
+  playAgainButton.addEventListener('click', resetGame);␊
+  fullscreenButton.addEventListener('click', toggleFullscreen);
   modeSelect.addEventListener('change', () => {
     currentMode = modeSelect.value;
     updateSetSelect();
     setSelect.value = '';
     startButton.disabled = false;
     mascotMessage.textContent = 'Choose a quest to begin!';
- fullscreenButton.addEventListener('click', toggleFullscreen);
   soundToggle.addEventListener('click', () => {
-    soundOn = true; // Reset soundOn to true when toggling back on
+    // Toggle sound flag on each click
+    soundOn = !soundOn;
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
+
     if (soundOn && isGameInProgress) {
       bgMusic.play().catch((error) => {
         console.warn('Failed to play background music:', error);
         bgMusic.load();
-        bgMusic.play().catch((retryError) => console.error('Background music retry failed:', retryError));
+        bgMusic.play().catch((retryError) =>
+          console.error('Background music retry failed:', retryError));
       });
     } else {
       bgMusic.pause();
