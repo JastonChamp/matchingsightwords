@@ -201,9 +201,9 @@ const init = () => {
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
-        <img src="images/card-front.png" alt="Card image" />
         <div class="card-number">${position + 1}</div>
       `;
+
 
       const backFace = document.createElement('div');
       backFace.classList.add('card-face', 'card-back');
@@ -256,7 +256,8 @@ const init = () => {
         origin: { y: 0.6 }
       });
     } else {
-      playSound('incorrect');
+     playSound('incorrect');
+      // Delay slightly longer so words remain visible before flipping back
       setTimeout(() => {
         card1.classList.add('mismatch');
         card2.classList.add('mismatch');
@@ -266,7 +267,7 @@ const init = () => {
           flippedCards = [];
           flippingAllowed = true;
         }, 1000);
-      }, 1200);
+      }, 2000);
     }
   };
 
