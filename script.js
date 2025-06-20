@@ -201,6 +201,7 @@ const init = () => {
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
+       <img src="card-front.png" alt="Card image" />
         <div class="card-number">${position + 1}</div>
       `;
 
