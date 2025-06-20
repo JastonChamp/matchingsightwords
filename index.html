@@ -4,21 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Word Explorer Game</title>
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
   <div class="mascot-banner">
-    <img src="images/mascot.png" alt="Friendly fox mascot" id="mascot" />
+    <img src="mascot.png" alt="Friendly fox mascot" id="mascot" />
     <div id="mascot-message" aria-live="polite">Hello, explorer! Let’s find words!</div>
   </div>
 
   <header class="fixed-header">
     <div class="header-content">
       <div id="score-display" aria-live="polite">
-        <img src="images/fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
+        <img src="fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
         <div class="progress-bar" id="progress-bar">
           <div class="star-icon" style="left: 10%;"></div>
           <div class="star-icon" style="left: 30%;"></div>
@@ -52,7 +52,7 @@
   <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
     <div class="modal-content">
       <h2>Amazing Job!</h2>
-      <img src="images/star-badge.png" alt="Star Badge" class="reward-image" />
+      <img src="star-icon.png" alt="Star Badge" class="reward-image" />
       <p>You collected <span id="final-score"></span> Fox Stars!</p>
       <p>Matched Words: <span id="matched-words"></span></p>
       <button id="play-again-button" type="button">New Quest</button>
@@ -63,7 +63,7 @@
     <h3>How to Play</h3>
     <p>Tap or click a card numbered 1–10 to flip it and match the sight words on the back!</p>
     <p>Focus on the numbers to find pairs and earn Fox Stars.</p>
-    <img src="images/card-flip.png" alt="Card flipping example" />
+    <img src="card-flip.png" alt="Card flipping example" />
     <button id="close-how-to-play">Got It!</button>
   </div>
   <script src="script.js" defer></script>
