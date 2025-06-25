@@ -52,15 +52,23 @@ const init = () => {
   ];
 
   const sightWordsHard = [
-    'love', 'come', 'some', 'put', 'push',
-    'because', 'find', 'kind', 'behind', 'child'
+    'absence', 'accommodate', 'achieve', 'acquire', 'address',
+    'advertise', 'apparent', 'argument', 'athlete', 'beginning',
+    'believe', 'bicycle', 'biscuit', 'business', 'calendar',
+    'category', 'ceiling', 'cemetery', 'changeable', 'chocolate',
+    'committee', 'communicate', 'compare', 'competition', 'concentrate',
+    'congratulations', 'conscience', 'conscious', 'controversial', 'convenience',
+    'correspond', 'criticize', 'curiosity', 'deceive', 'decision',
+    'definite', 'description', 'desperate', 'develop', 'dictionary',
+    'dilemma', 'disappear', 'disappoint', 'discipline', 'disease',
+    'embarrass', 'environment', 'especially', 'exaggerate', 'excellent'
   ];
 
   // Sight Words Sets
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)),
     medium: Array.from({ length: 42 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 41 ? 3 : 5))),
-    hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5))
+    hard: Array.from({ length: 10 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5))
   };
 
   // DOM Elements
@@ -143,45 +151,45 @@ const init = () => {
     });
   };
 
-  const getPreferredFemaleVoice = () => {
+  const getPreferredVoice = () => {
     const voices = speechSynthesis.getVoices();
-    const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
-    let preferredVoice = voices.find(voice =>
-      voice.lang.includes('en') && femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
-    );
+    let preferredVoice = voices.find(voice => voice.lang.includes('en-GB'));
     return preferredVoice || voices.find(voice => voice.lang.includes('en')) || null;
   };
 
   const speakWord = async (word) => {
-    if (!soundOn || !speechSynthesis) {
-      console.warn('Speech synthesis not supported or sound is off.');
-      mascotMessage.textContent = 'Speech synthesis is not available. Try enabling sound or using another browser.';
+    if (!soundOn || !window.speechSynthesis) {
+      console.log('Speech synthesis disabled or not supported.');
+      mascotMessage.textContent = 'Speech not available. Check sound settings or browser support.';
       return;
     }
 
     try {
       await waitForVoices();
-      speechSynthesis.cancel();
+      window.speechSynthesis.cancel();
 
       let utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it’s', "it's");
       const utterance = new SpeechSynthesisUtterance(utteranceText);
       utterance.lang = 'en-GB';
-      const bestVoice = getPreferredFemaleVoice();
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-        console.log('Using voice:', bestVoice.name, `(${bestVoice.lang})`);
+      const voice = getPreferredVoice();
+      if (voice) {
+        utterance.voice = voice;
+        console.log('Speaking with voice:', voice.name, `(${voice.lang})`);
       } else {
-        console.warn('No English voice found for word:', word);
-        mascotMessage.textContent = 'No suitable voice found for speech.';
+        console.warn('No English voice available for word:', word);
+        mascotMessage.textContent = 'No voice found for speech synthesis.';
       }
-      utterance.pitch = 1.3;
-      utterance.rate = 0.7;
-      utterance.onerror = (event) => console.error('Speech synthesis error for word:', word, 'Error:', event.error);
-      utterance.onend = () => console.log('Finished speaking:', word);
-      speechSynthesis.speak(utterance);
+      utterance.pitch = 1.0;
+      utterance.rate = 0.8;
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event.error, 'for word:', word);
+        mascotMessage.textContent = 'Error speaking word. Try another browser.';
+      };
+      utterance.onend = () => console.log('Speech completed for word:', word);
+      window.speechSynthesis.speak(utterance);
     } catch (error) {
-      console.error('Error in speakWord:', error);
-      mascotMessage.textContent = 'Error with speech synthesis. Please try again.';
+      console.error('Speech synthesis failed:', error);
+      mascotMessage.textContent = 'Speech synthesis error. Please try again.';
     }
   };
 
