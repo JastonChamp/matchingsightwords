@@ -64,12 +64,22 @@ const init = () => {
     'embarrass', 'environment', 'especially', 'exaggerate', 'excellent'
   ];
 
+  // Log word counts to verify
+  console.log('Easy words count:', sightWordsEasy.length);  // Should be 50
+  console.log('Medium words count:', sightWordsMedium.length);  // Should be 208
+  console.log('Hard words count:', sightWordsHard.length);  // Should be 50
+
   // Sight Words Sets
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)),
     medium: Array.from({ length: 42 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 41 ? 3 : 5))),
     hard: Array.from({ length: 10 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5))
   };
+
+  // Verify set counts
+  console.log('Easy sets:', sightWordsSets.easy.length);  // Should be 10
+  console.log('Medium sets:', sightWordsSets.medium.length);  // Should be 42
+  console.log('Hard sets:', sightWordsSets.hard.length);  // Should be 10
 
   // DOM Elements
   const cardContainer = document.querySelector('.card-row');
@@ -140,12 +150,13 @@ const init = () => {
     return new Promise(resolve => {
       const voices = speechSynthesis.getVoices();
       if (voices.length > 0) {
+        console.log('Voices already loaded:', voices.length);
         resolve(voices);
         return;
       }
       speechSynthesis.onvoiceschanged = () => {
         const loadedVoices = speechSynthesis.getVoices();
-        console.log('Voices loaded:', loadedVoices.length, loadedVoices.map(v => `${v.name} (${v.lang})`));
+        console.log('Voices loaded:', loadedVoices.length);
         resolve(loadedVoices);
       };
     });
@@ -153,43 +164,56 @@ const init = () => {
 
   const getPreferredVoice = () => {
     const voices = speechSynthesis.getVoices();
-    let preferredVoice = voices.find(voice => voice.lang.includes('en-GB'));
-    return preferredVoice || voices.find(voice => voice.lang.includes('en')) || null;
+    const preferredVoice = voices.find(voice => voice.lang.includes('en-GB')) || 
+                          voices.find(voice => voice.lang.includes('en'));
+    if (preferredVoice) {
+      console.log('Selected voice:', preferredVoice.name, preferredVoice.lang);
+    } else {
+      console.warn('No English voice found');
+    }
+    return preferredVoice;
   };
 
   const speakWord = async (word) => {
-    if (!soundOn || !window.speechSynthesis) {
-      console.log('Speech synthesis disabled or not supported.');
-      mascotMessage.textContent = 'Speech not available. Check sound settings or browser support.';
+    if (!soundOn) {
+      console.log('Sound is off, not speaking:', word);
+      return;
+    }
+    if (!('speechSynthesis' in window)) {
+      console.warn('Speech synthesis not supported in this browser');
+      mascotMessage.textContent = 'Speech synthesis not supported in your browser';
       return;
     }
 
     try {
-      await waitForVoices();
+      const voices = await waitForVoices();
+      if (voices.length === 0) {
+        console.warn('No voices available');
+        mascotMessage.textContent = 'No voices available for speech synthesis';
+        return;
+      }
       window.speechSynthesis.cancel();
 
-      let utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it’s', "it's");
+      const utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it’s', "it's");
       const utterance = new SpeechSynthesisUtterance(utteranceText);
       utterance.lang = 'en-GB';
       const voice = getPreferredVoice();
       if (voice) {
         utterance.voice = voice;
-        console.log('Speaking with voice:', voice.name, `(${voice.lang})`);
       } else {
-        console.warn('No English voice available for word:', word);
-        mascotMessage.textContent = 'No voice found for speech synthesis.';
+        mascotMessage.textContent = 'No English voice found';
       }
       utterance.pitch = 1.0;
       utterance.rate = 0.8;
       utterance.onerror = (event) => {
-        console.error('Speech synthesis error:', event.error, 'for word:', word);
-        mascotMessage.textContent = 'Error speaking word. Try another browser.';
+        console.error('Speech error:', event.error, 'for word:', word);
+        mascotMessage.textContent = `Speech error: ${event.error}`;
       };
-      utterance.onend = () => console.log('Speech completed for word:', word);
+      utterance.onend = () => console.log('Speech completed:', word);
       window.speechSynthesis.speak(utterance);
     } catch (error) {
       console.error('Speech synthesis failed:', error);
-      mascotMessage.textContent = 'Speech synthesis error. Please try again.';
+      mascotMessage.textContent = 'Speech synthesis error occurred';
     }
   };
 
@@ -210,8 +234,8 @@ const init = () => {
 
     const words = sightWordsSets[currentMode]?.[currentSet] || [];
     if (!words || words.length === 0) {
-      console.error('No words available for mode:', currentMode, 'set:', currentSet);
-      mascotMessage.textContent = 'Error: No words available for this quest!';
+      console.error('No words for mode:', currentMode, 'set:', currentSet);
+      mascotMessage.textContent = 'No words available for this quest!';
       return;
     }
 
@@ -226,7 +250,7 @@ const init = () => {
 
     cardWords.forEach((word, index) => {
       if (!word) {
-        console.warn(`Word at index ${index} is undefined.`);
+        console.warn(`Undefined word at index ${index}`);
         return;
       }
 
@@ -298,11 +322,7 @@ const init = () => {
       updateProgressBar();
       if (matchedCards.length === 10) showReward();
       if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
     } else {
       playSound('incorrect');
@@ -353,11 +373,7 @@ const init = () => {
         setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
       }
       if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 200,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
       }
       isGameInProgress = false;
     }, 1000);
@@ -370,6 +386,7 @@ const init = () => {
     }
     currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
+    console.log('Starting game - Mode:', currentMode, 'Set:', currentSet);
     startButton.disabled = true;
     setSelect.disabled = true;
     modeSelect.disabled = true;
@@ -411,6 +428,7 @@ const init = () => {
   const updateSetSelect = () => {
     setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
     const numSets = sightWordsSets[currentMode]?.length || 0;
+    console.log('Updating sets - Mode:', currentMode, 'Number of sets:', numSets);
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
@@ -459,7 +477,10 @@ const init = () => {
     howToPlay.classList.remove('visible');
   });
 
-  modeSelect.addEventListener('change', updateSetSelect);
+  modeSelect.addEventListener('change', () => {
+    currentMode = modeSelect.value;
+    updateSetSelect();
+  });
 
   // Initialization
   updateSetSelect();
