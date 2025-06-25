@@ -11,50 +11,44 @@ const init = () => {
   ];
 
   const sightWordsMedium = [
-    'of', 'no', 'they', 'find', 'two',
-    'while', 'me', 'saw', 'here', 'take',
-    'out', 'would', 'should', 'could', 'good',
-    'made', 'across', 'come', 'water', 'will',
-    'see', 'under', 'other', 'before', 'brother',
-    'used', 'way', 'please', 'fine', 'love',
-    'mother', 'down', 'make', 'keep', 'high',
-    'put', 'who', 'boy', 'ate', 'leave',
-    'eye', 'cold', 'something', 'girl', 'been',
-    'these', 'nothing', 'salt', 'become', 'watch',
-    'same', 'sea', 'buy', 'because', 'give',
-    'head', 'say', 'flies', 'wrote', 'upon',
-    'just', 'may', 'green', 'fly', 'by',
-    'from', 'with', 'until', 'must', 'maybe',
-    'young', 'you', 'wolf', 'where', 'away',
-    'pretty', 'why', 'very', 'though', 'became',
-    'aunty', 'finally', 'here', 'enough', 'large',
-    'change', 'work', 'funny', 'without', 'even',
-    'goes', 'any', 'off', 'today', 'kind',
-    'group', 'both', 'eat', 'open', 'try',
-    'might', 'when', 'home', 'through', 'along',
-    'often', 'night', 'yellow', 'don’t', 'place',
-    'behind', 'done', 'nice', 'low', 'music',
-    'move', 'below', 'city', 'once', 'money',
-    'knew', 'brought', 'between', 'eight', 'rain',
-    'most', 'few', 'inside', 'body', 'feel',
-    'can’t', 'much', 'began', 'which', 'carry',
-    'feet', 'catch', 'new', 'really', 'after',
-    'easy', 'great', 'children', 'page', 'begin',
-    'always', 'family', 'sleep', 'couldn’t', 'hard',
-    'start', 'every', 'our', 'small', 'fall',
-    'dear', 'part', 'everywhere', 'we', 'walk',
-    'point', 'idea', 'last', 'parent', 'first',
-    'already', 'another', 'year', 'laugh', 'ever',
-    'hurt', 'toy', 'against', 'near', 'car',
-    'never', 'heard', 'found', 'ear', 'ball',
-    'half', 'number', 'call', 'house', 'able',
-    'blue', 'ask', 'together', 'door', 'around',
-    'outside', 'during', 'father', 'answer', 'draw',
-    'almost', 'pull', 'front', 'air', 'early',
-    'four', 'hear', 'far', 'hold', 'earth',
-    'hour', 'horse', 'push', 'question', 'later',
-    'more', 'short', 'fire', 'bought', 'letter',
-    'morning', 'talk', 'right'
+    'no', 'me', 'saw', 'two', 'out', 'take', 'find', 'they', 'here', 'while',
+    'see', 'would', 'should', 'could', 'good', 'made', 'across', 'come', 'water', 'will',
+    'under', 'from', 'cold', 'love', 'put', 'other', 'salt', 'because', 'upon', 'before',
+    'until', 'young', 'you', 'who', 'give', 'mother', 'brother', 'something', 'become', 'wolf',
+    'just', 'with', 'must', 'girl', 'boy', 'where', 'thought', 'fast', 'down', 'watch',
+    'head', 'may', 'friend', 'maybe', 'has', 'have', 'away', 'way', 'make', 'ate',
+    'been', 'same', 'say', 'green', 'people', 'each', 'your', 'happy', 'pretty', 'please',
+    'keep', 'leave', 'these', 'sea', 'flies', 'fly', 'life', 'light', 'myself', 'time',
+    'why', 'fine', 'high', 'eye', 'nothing', 'buy', 'wrote', 'by', 'going', 'own',
+    'only', 'ago', 'very', 'though', 'large', 'goes', 'both', 'home', 'don’t', 'any',
+    'became', 'began', 'begin', 'change', 'eat', 'few', 'knew', 'music', 'really', 'through',
+    'place', 'move', 'brought', 'inside', 'which', 'after', 'always', 'aunty', 'work', 'off',
+    'behind', 'body', 'family', 'today', 'open', 'below', 'carry', 'finally', 'try', 'along',
+    'between', 'easy', 'funny', 'often', 'done', 'city', 'eight', 'feel', 'feet', 'great',
+    'sleep', 'here', 'without', 'kind', 'might', 'night', 'nice', 'once', 'rain', 'can’t',
+    'catch', 'children', 'couldn’t', 'enough', 'even', 'group', 'when', 'yellow', 'low', 'money',
+    'most', 'much', 'new', 'page', 'hard', 'start', 'part', 'last', 'laugh', 'car',
+    'half', 'ask', 'father', 'air', 'little', 'every', 'parent', 'ever', 'never', 'number',
+    'together', 'bought', 'everywhere', 'question', 'answer', 'early', 'earth', 'later', 'letter', 'our',
+    'we', 'first', 'hurt', 'heard', 'call', 'door', 'draw', 'four', 'more', 'morning',
+    'small', 'walk', 'already', 'toy', 'found', 'house', 'around', 'almost', 'hear', 'horse',
+    'talk', 'short', 'fall', 'point', 'another', 'against', 'ear', 'able', 'outside', 'pull',
+    'far', 'push', 'fire', 'right', 'dear', 'idea', 'year', 'near', 'ball', 'blue',
+    'during', 'front', 'hold', 'like', 'look', 'write', 'way', 'my', 'called', 'oil',
+    'long', 'use', 'words', 'sound', 'live', 'back', 'things', 'sentence', 'line', 'means',
+    'old', 'tell', 'fellow', 'show', 'form', 'three', 'well', 'such', 'turn', 'read',
+    'need', 'different', 'picture', 'play', 'spell', 'animal', 'study', 'still', 'learn', 'Singapore',
+    'world', 'add', 'food', 'country', 'plant', 'school', 'father', 'tree', 'close', 'seem',
+    'example', 'those', 'paper', 'important', 'side', 'metre', 'grow', 'took', 'river', 'state',
+    'book', 'stop', 'second', 'late', 'miss', 'face', 'Indian', 'real', 'sometimes', 'mountains',
+    'soon', 'song', 'being', 'Monday', 'Tuesday', 'it’s', 'colour', 'area', 'mark', 'birds',
+    'problem', 'complete', 'room', 'Wednesday', 'Thursday', 'since', 'piece', 'told', 'usually', 'didn’t',
+    'friends', 'order', 'sure', 'Friday', 'Saturday', 'Sunday', 'better', 'however', 'black', 'products',
+    'happened', 'whole', 'measure', 'remember', 'waves', 'reached', 'listen', 'wind', 'rock', 'space',
+    'covered', 'several', 'himself', 'towards', 'five', 'passed', 'vowel', 'true', 'hundred', 'pattern',
+    'numeral', 'table', 'north', 'slowly', 'farm', 'pulled', 'voice', 'seen', 'cried', 'plan',
+    'notice', 'south', 'sing', 'ground', 'king', 'town', 'I’ll', 'unit', 'figure', 'certain',
+    'field', 'travel', 'wood', 'used'
   ];
 
   const sightWordsHard = [
@@ -65,7 +59,7 @@ const init = () => {
   // Sight Words Sets
   const sightWordsSets = {
     easy: Array.from({ length: 10 }, (_, i) => sightWordsEasy.slice(i * 5, (i + 1) * 5)),
-    medium: Array.from({ length: 48 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 47 ? 5 : 5))),
+    medium: Array.from({ length: 42 }, (_, i) => sightWordsMedium.slice(i * 5, i * 5 + (i === 41 ? 3 : 5))),
     hard: Array.from({ length: 2 }, (_, i) => sightWordsHard.slice(i * 5, (i + 1) * 5))
   };
 
@@ -175,8 +169,9 @@ const init = () => {
     }
 
     let adjustedWords = words;
-    if (currentMode === 'medium' && currentSet === 47) {
-      adjustedWords = ['morning', 'talk', 'right', 'new', 'great'].concat(['morning', 'talk', 'right', 'new', 'great']);
+    if (currentMode === 'medium' && currentSet === 41) {
+      // Last set has 3 words: 'unit', 'figure', 'certain'
+      adjustedWords = ['unit', 'figure', 'certain', 'unit', 'figure'].concat(['unit', 'figure', 'certain', 'unit', 'figure']);
     } else {
       adjustedWords = words.concat(words);
     }
@@ -255,14 +250,6 @@ const init = () => {
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
-      if (matchedCards.length === 10) showReward();
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      }
     } else {
       playSound('incorrect');
       setTimeout(() => {
@@ -280,123 +267,71 @@ const init = () => {
 
   const speakWord = (word) => {
     if (!soundOn || !speechSynthesis) return;
-    speechSynthesis.cancel();
-
-    let utteranceText = word.toLowerCase() === 'a' ? 'uh' : word;
-    const utterance = new SpeechSynthesisUtterance(utteranceText);
+    const utterance = new SpeechSynthesisUtterance(word.toLowerCase());
     utterance.lang = 'en-GB';
     const bestVoice = getPreferredFemaleVoice();
     if (bestVoice) utterance.voice = bestVoice;
-    utterance.pitch = 1.3;
-    utterance.rate = 0.7;
-    utterance.onerror = () => console.warn('Speech synthesis error for word:', word);
+    utterance.rate = 1.0;
     speechSynthesis.speak(utterance);
   };
 
   const playSound = (type) => {
     if (!soundOn) return;
     const audio = type === 'correct' ? correctSound : incorrectSound;
-    audio.play().catch((error) => {
-      console.warn(`Failed to play ${type} sound: ${error}`);
-      mascotMessage.textContent = 'Audio playback failed. Try enabling sound again!';
-    });
+    audio.play().catch((error) => console.error('Error playing sound:', error));
   };
 
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
-    scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
+    scoreDisplay.textContent = `Score: ${score} / Pairs: ${matchedPairs}/5}`;
   };
 
   const updateProgressBar = () => {
-    if (!progressBar) return;
     const progress = (matchedCards.length / 10) * 100;
-    progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
-    progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
-      star.style.opacity = index < matchedCards.length / 2 ? 1 : 0.3;
-    });
+    progressBar.style.width = `${progress}%`;
   };
 
-  const showReward = () => {
+  const showRewardModal = () => {
     finalScore.textContent = score;
-    const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
-    matchedWordsDisplay.textContent = matchedWords;
-    setTimeout(() => {
-      modal.classList.add('visible');
-      modal.setAttribute('aria-hidden', 'false');
-      if (soundOn) {
-        bgMusic.pause();
-        playSound('correct');
-        document.getElementById('mascot').classList.add('foxJump');
-        setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
-      }
-      if (typeof confetti === 'function') {
-        confetti({
-          particleCount: 200,
-          spread: 70,
-          origin: { y: 0.6 }
-        });
-      }
-      isGameInProgress = false;
-    }, 1000);
+    matchedWordsDisplay.textContent = matchedCards.map(card => card.dataset.word).join(', ');
+    modal.style.display = 'block';
+    if (soundOn) playSound('correct');
   };
 
   const startGame = () => {
-    if (!setSelect.value || isNaN(parseInt(setSelect.value, 10))) {
-      mascotMessage.textContent = 'Choose a valid quest first!';
-      return;
-    }
-    currentSet = parseInt(setSelect.value, 10);
+    currentSet = setSelect.value;
     currentMode = modeSelect.value;
-    startButton.disabled = true;
-    setSelect.disabled = true;
-    modeSelect.disabled = true;
-    score = 0;
+    createCards();
     updateScore();
-    updateProgressBar();
     mascotMessage.textContent = 'Find a match!';
     flippingAllowed = true;
     isGameInProgress = true;
-    createCards();
-    if (soundOn) {
-      bgMusic.play().catch((error) => console.warn('Failed to play background music:', error));
-    }
-    document.getElementById('mascot').classList.add('foxCheer');
-    setTimeout(() => document.getElementById('mascot').classList.remove('foxCheer'), 2000);
+    if (soundOn) bgMusic.play();
   };
 
   const resetGame = () => {
-    modal.classList.remove('visible');
-    modal.setAttribute('aria-hidden', 'true');
+    modal.style.display = 'none';
     startButton.disabled = false;
     setSelect.disabled = false;
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    updateProgressBar();
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
-    setSelect.value = '';
-    mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
+    mascotMessage.textContent = 'Pick a quest!';
     isGameInProgress = false;
-    if (soundOn) {
-      bgMusic.play().catch((error) => console.warn('Failed to play background music:', error));
-    }
   };
 
   const updateSetSelect = () => {
-    setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
+    setSelect.innerHTML = '';
     const numSets = sightWordsSets[currentMode].length;
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = `Quest ${i + 1}`;
       setSelect.appendChild(option);
-    }
-    setSelect.disabled = numSets === 0;
-    if (numSets === 0) {
-      mascotMessage.textContent = 'No quests available for this mode!';
     }
   };
 
@@ -407,50 +342,26 @@ const init = () => {
   soundToggle.addEventListener('click', () => {
     soundOn = !soundOn;
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
-    if (soundOn && isGameInProgress) {
-      bgMusic.play().catch((error) => console.warn('Failed to play background music:', error));
-    } else {
-      bgMusic.pause();
-    }
+    if (!soundOn) bgMusic.pause();
   });
 
   themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark');
-    if (body.classList.contains('dark')) {
-      themeToggle.textContent = 'Light Mode';
-      localStorage.setItem('theme', 'dark');
-    } else {
-      themeToggle.textContent = 'Dark Mode';
-      localStorage.setItem('theme', 'light');
-    }
+    themeToggle.textContent = body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
   });
 
   howToPlayButton.addEventListener('click', () => {
-    howToPlay.classList.add('visible');
-    if (soundOn) {
-      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
-    }
+    howToPlay.style.display = 'block';
   });
 
   closeHowToPlay.addEventListener('click', () => {
-    howToPlay.classList.remove('visible');
+    howToPlay.style.display = 'none';
   });
 
   modeSelect.addEventListener('change', updateSetSelect);
 
   // Initialization
   updateSetSelect();
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'dark') {
-    body.classList.add('dark');
-    themeToggle.textContent = 'Light Mode';
-  } else {
-    themeToggle.textContent = 'Dark Mode';
-  }
-  if (!localStorage.getItem('welcomeShown')) {
-    howToPlay.classList.add('visible');
-    localStorage.setItem('welcomeShown', 'true');
-  }
 };
 
 if (document.readyState === 'loading') {
