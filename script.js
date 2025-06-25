@@ -120,7 +120,6 @@ const init = () => {
 
   // Utilities
   const shuffleArray = (array) => {
-    // Fisher-Yates shuffle
     const shuffled = array.slice();
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -129,28 +128,68 @@ const init = () => {
     return shuffled;
   };
 
+  const waitForVoices = () => {
+    return new Promise(resolve => {
+      const voices = speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        resolve(voices);
+        return;
+      }
+      speechSynthesis.onvoiceschanged = () => {
+        const loadedVoices = speechSynthesis.getVoices();
+        console.log('Voices loaded:', loadedVoices.length, loadedVoices.map(v => `${v.name} (${v.lang})`));
+        resolve(loadedVoices);
+      };
+    });
+  };
+
   const getPreferredFemaleVoice = () => {
     const voices = speechSynthesis.getVoices();
     const femaleIndicators = ['female', 'samantha', 'kate', 'victoria', 'alice', 'moira', 'tessa', 'zira'];
     let preferredVoice = voices.find(voice =>
-      voice.lang === 'en-GB' && femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
+      voice.lang.includes('en') && femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
     );
-    return preferredVoice || voices.find(voice =>
-      femaleIndicators.some(indicator => voice.name.toLowerCase().includes(indicator))
-    );
+    return preferredVoice || voices.find(voice => voice.lang.includes('en')) || null;
   };
 
-  // Ensure voices are loaded
-  speechSynthesis.onvoiceschanged = () => {
-    console.log('Voices loaded:', speechSynthesis.getVoices().length);
+  const speakWord = async (word) => {
+    if (!soundOn || !speechSynthesis) {
+      console.warn('Speech synthesis not supported or sound is off.');
+      mascotMessage.textContent = 'Speech synthesis is not available. Try enabling sound or using another browser.';
+      return;
+    }
+
+    try {
+      await waitForVoices();
+      speechSynthesis.cancel();
+
+      let utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it’s', "it's");
+      const utterance = new SpeechSynthesisUtterance(utteranceText);
+      utterance.lang = 'en-GB';
+      const bestVoice = getPreferredFemaleVoice();
+      if (bestVoice) {
+        utterance.voice = bestVoice;
+        console.log('Using voice:', bestVoice.name, `(${bestVoice.lang})`);
+      } else {
+        console.warn('No English voice found for word:', word);
+        mascotMessage.textContent = 'No suitable voice found for speech.';
+      }
+      utterance.pitch = 1.3;
+      utterance.rate = 0.7;
+      utterance.onerror = (event) => console.error('Speech synthesis error for word:', word, 'Error:', event.error);
+      utterance.onend = () => console.log('Finished speaking:', word);
+      speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error('Error in speakWord:', error);
+      mascotMessage.textContent = 'Error with speech synthesis. Please try again.';
+    }
   };
-  speechSynthesis.getVoices(); // Trigger voice loading
 
   const toggleFullscreen = () => {
     if (!isFullscreen) {
-      document.documentElement.requestFullscreen();
+      document.documentElement.requestFullscreen().catch(err => console.warn('Fullscreen error:', err));
     } else {
-      document.exitFullscreen();
+      document.exitFullscreen().catch(err => console.warn('Exit fullscreen error:', err));
     }
   };
 
@@ -163,14 +202,13 @@ const init = () => {
 
     const words = sightWordsSets[currentMode]?.[currentSet] || [];
     if (!words || words.length === 0) {
-      console.error('No words available for the selected mode and set.');
+      console.error('No words available for mode:', currentMode, 'set:', currentSet);
       mascotMessage.textContent = 'Error: No words available for this quest!';
       return;
     }
 
     let adjustedWords = words;
     if (currentMode === 'medium' && currentSet === 41) {
-      // Last set has 3 words: 'unit', 'figure', 'certain'
       adjustedWords = ['unit', 'figure', 'certain', 'unit', 'figure'].concat(['unit', 'figure', 'certain', 'unit', 'figure']);
     } else {
       adjustedWords = words.concat(words);
@@ -180,7 +218,7 @@ const init = () => {
 
     cardWords.forEach((word, index) => {
       if (!word) {
-        console.warn(`Word at index ${index} is undefined, skipping card creation.`);
+        console.warn(`Word at index ${index} is undefined.`);
         return;
       }
 
@@ -250,6 +288,14 @@ const init = () => {
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
+      if (matchedCards.length === 10) showReward();
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
     } else {
       playSound('incorrect');
       setTimeout(() => {
@@ -265,73 +311,107 @@ const init = () => {
     }
   };
 
-  const speakWord = (word) => {
-    if (!soundOn || !speechSynthesis) return;
-    const utterance = new SpeechSynthesisUtterance(word.toLowerCase());
-    utterance.lang = 'en-GB';
-    const bestVoice = getPreferredFemaleVoice();
-    if (bestVoice) utterance.voice = bestVoice;
-    utterance.rate = 1.0;
-    speechSynthesis.speak(utterance);
-  };
-
   const playSound = (type) => {
     if (!soundOn) return;
     const audio = type === 'correct' ? correctSound : incorrectSound;
-    audio.play().catch((error) => console.error('Error playing sound:', error));
+    audio.play().catch(error => console.warn(`Failed to play ${type} sound:`, error));
   };
 
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
-    scoreDisplay.textContent = `Score: ${score} / Pairs: ${matchedPairs}/5}`;
+    scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
   };
 
   const updateProgressBar = () => {
+    if (!progressBar) return;
     const progress = (matchedCards.length / 10) * 100;
-    progressBar.style.width = `${progress}%`;
+    progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
+    progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
+      star.style.opacity = index < matchedCards.length / 2 ? 1 : 0.3;
+    });
   };
 
-  const showRewardModal = () => {
+  const showReward = () => {
     finalScore.textContent = score;
-    matchedWordsDisplay.textContent = matchedCards.map(card => card.dataset.word).join(', ');
-    modal.style.display = 'block';
-    if (soundOn) playSound('correct');
+    const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
+    matchedWordsDisplay.textContent = matchedWords;
+    setTimeout(() => {
+      modal.classList.add('visible');
+      modal.setAttribute('aria-hidden', 'false');
+      if (soundOn) {
+        bgMusic.pause();
+        playSound('correct');
+        document.getElementById('mascot').classList.add('foxJump');
+        setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+      }
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 200,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+      isGameInProgress = false;
+    }, 1000);
   };
 
   const startGame = () => {
-    currentSet = setSelect.value;
+    if (!setSelect.value || isNaN(parseInt(setSelect.value, 10))) {
+      mascotMessage.textContent = 'Choose a valid quest first!';
+      return;
+    }
+    currentSet = parseInt(setSelect.value, 10);
     currentMode = modeSelect.value;
-    createCards();
+    startButton.disabled = true;
+    setSelect.disabled = true;
+    modeSelect.disabled = true;
+    score = 0;
     updateScore();
+    updateProgressBar();
     mascotMessage.textContent = 'Find a match!';
     flippingAllowed = true;
     isGameInProgress = true;
-    if (soundOn) bgMusic.play();
+    createCards();
+    if (soundOn) {
+      bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
+    }
+    document.getElementById('mascot').classList.add('foxCheer');
+    setTimeout(() => document.getElementById('mascot').classList.remove('foxCheer'), 2000);
   };
 
   const resetGame = () => {
-    modal.style.display = 'none';
+    modal.classList.remove('visible');
+    modal.setAttribute('aria-hidden', 'true');
     startButton.disabled = false;
     setSelect.disabled = false;
     modeSelect.disabled = false;
     score = 0;
     updateScore();
+    updateProgressBar();
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
-    mascotMessage.textContent = 'Pick a quest!';
+    setSelect.value = '';
+    mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
     isGameInProgress = false;
+    if (soundOn) {
+      bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
+    }
   };
 
   const updateSetSelect = () => {
-    setSelect.innerHTML = '';
-    const numSets = sightWordsSets[currentMode].length;
+    setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
+    const numSets = sightWordsSets[currentMode]?.length || 0;
     for (let i = 0; i < numSets; i++) {
       const option = document.createElement('option');
       option.value = i;
       option.textContent = `Quest ${i + 1}`;
       setSelect.appendChild(option);
+    }
+    setSelect.disabled = numSets === 0;
+    if (numSets === 0) {
+      mascotMessage.textContent = 'No quests available for this mode!';
     }
   };
 
@@ -342,26 +422,50 @@ const init = () => {
   soundToggle.addEventListener('click', () => {
     soundOn = !soundOn;
     soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
-    if (!soundOn) bgMusic.pause();
+    if (soundOn && isGameInProgress) {
+      bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
+    } else {
+      bgMusic.pause();
+    }
   });
 
   themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark');
-    themeToggle.textContent = body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+    if (body.classList.contains('dark')) {
+      themeToggle.textContent = 'Light Mode';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = 'Dark Mode';
+      localStorage.setItem('theme', 'light');
+    }
   });
 
   howToPlayButton.addEventListener('click', () => {
-    howToPlay.style.display = 'block';
+    howToPlay.classList.add('visible');
+    if (soundOn) {
+      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
+    }
   });
 
   closeHowToPlay.addEventListener('click', () => {
-    howToPlay.style.display = 'none';
+    howToPlay.classList.remove('visible');
   });
 
   modeSelect.addEventListener('change', updateSetSelect);
 
   // Initialization
   updateSetSelect();
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme === 'dark') {
+    body.classList.add('dark');
+    themeToggle.textContent = 'Light Mode';
+  } else {
+    themeToggle.textContent = 'Dark Mode';
+  }
+  if (!localStorage.getItem('welcomeShown')) {
+    howToPlay.classList.add('visible');
+    localStorage.setItem('welcomeShown', 'true');
+  }
 };
 
 if (document.readyState === 'loading') {
