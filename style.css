@@ -1,36 +1,41 @@
 /* ===================================
-   WORD EXPLORER - MODERN UI REDESIGN
+   WORD EXPLORER - GIRI-INSPIRED DESIGN
    =================================== */
 
 /* CSS Variables */
 :root {
-  /* Light Theme Colors */
-  --bg-primary: #f0f7ff;
-  --bg-secondary: #ffffff;
-  --bg-gradient-start: #667eea;
-  --bg-gradient-end: #764ba2;
+  /* Light Theme Colors - Giri Inspired */
+  --bg-primary: #FCEAE6;
+  --bg-secondary: #FFF9F5;
+  --bg-gradient-start: #F5D6D0;
+  --bg-gradient-end: #FFE4D6;
 
-  --card-bg: #ffffff;
-  --card-border: #e2e8f0;
-  --card-shadow: rgba(100, 100, 111, 0.2);
+  --card-bg: #FFFCFA;
+  --card-border: #E8D4C8;
+  --card-shadow: rgba(180, 140, 120, 0.25);
 
-  --primary: #6366f1;
-  --primary-hover: #4f46e5;
-  --primary-light: #eef2ff;
+  --primary: #C9A86C;
+  --primary-hover: #B8956A;
+  --primary-light: #FFF3E6;
 
-  --accent: #f97316;
-  --accent-hover: #ea580c;
-  --accent-light: #fff7ed;
+  --accent: #E8C547;
+  --accent-hover: #D4B23E;
+  --accent-light: #FFF8E1;
 
-  --success: #22c55e;
-  --success-light: #dcfce7;
+  --success: #7CB687;
+  --success-light: #E8F5E9;
 
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
+  --text-primary: #3D3028;
+  --text-secondary: #6B5B4F;
+  --text-muted: #9C8B7F;
 
-  --matched-bg: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-  --matched-border: #22c55e;
+  --matched-bg: linear-gradient(135deg, #A8E6CF 0%, #88D4AB 100%);
+  --matched-border: #7CB687;
+
+  /* Fun accent colors for variety */
+  --coral: #F5A88E;
+  --peach: #FFD4B8;
+  --cream: #FFF5EB;
 
   /* Typography */
   --font-display: 'Fredoka One', cursive;
@@ -49,34 +54,38 @@
   --transition-slow: 0.5s ease;
 }
 
-/* Dark Theme */
+/* Dark Theme - Warm & Cozy */
 body.dark {
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-gradient-start: #1e1b4b;
-  --bg-gradient-end: #312e81;
+  --bg-primary: #2D2520;
+  --bg-secondary: #3D3530;
+  --bg-gradient-start: #3D3028;
+  --bg-gradient-end: #4D4038;
 
-  --card-bg: #1e293b;
-  --card-border: #334155;
+  --card-bg: #4A403A;
+  --card-border: #5D534D;
   --card-shadow: rgba(0, 0, 0, 0.4);
 
-  --primary: #818cf8;
-  --primary-hover: #a5b4fc;
-  --primary-light: #1e1b4b;
+  --primary: #E8C880;
+  --primary-hover: #F5D890;
+  --primary-light: #4A4035;
 
-  --accent: #fb923c;
-  --accent-hover: #fdba74;
-  --accent-light: #431407;
+  --accent: #F5D280;
+  --accent-hover: #FFE4A0;
+  --accent-light: #4D4030;
 
-  --success: #4ade80;
-  --success-light: #14532d;
+  --success: #8FCF9A;
+  --success-light: #2D4030;
 
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
+  --text-primary: #FFF5EB;
+  --text-secondary: #E8D8C8;
+  --text-muted: #A89888;
 
-  --matched-bg: linear-gradient(135deg, #065f46 0%, #0e7490 100%);
-  --matched-border: #22c55e;
+  --matched-bg: linear-gradient(135deg, #4A8060 0%, #5A9070 100%);
+  --matched-border: #7CB687;
+
+  --coral: #E8A088;
+  --peach: #D4B498;
+  --cream: #5D534D;
 }
 
 /* Reset & Base */
@@ -250,7 +259,7 @@ body::before {
   top: 0;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: linear-gradient(90deg, var(--coral), var(--accent));
   border-radius: var(--radius-xl);
   transition: width var(--transition-slow);
 }
@@ -344,17 +353,17 @@ body::before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
+  padding: 0.875rem 1.75rem;
+  font-size: 1.15rem;
   font-family: var(--font-body);
   font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
-  border: none;
-  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  background: linear-gradient(145deg, var(--accent), var(--accent-hover));
+  border: 3px solid rgba(255,255,255,0.5);
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-fast);
-  box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 15px rgba(232, 197, 71, 0.4);
 }
 
 .start-btn:hover:not(:disabled) {
@@ -427,28 +436,34 @@ body::before {
    GAME CONTAINER & CARDS
    =================================== */
 .game-container {
-  padding: 1.5rem;
-  min-height: 400px;
+  padding: 2rem;
+  min-height: 500px;
 }
 
 .card-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
-  max-width: 900px;
+  gap: 1.25rem;
+  max-width: 1000px;
   margin: 0 auto;
-  min-height: 300px;
+  min-height: 400px;
 }
 
 /* Card Styles */
 .card {
   position: relative;
   width: 100%;
+  min-height: 140px;
   padding-bottom: 100%; /* Square aspect ratio fallback */
   aspect-ratio: 1;
   perspective: 1000px;
   cursor: pointer;
   border-radius: var(--radius-lg);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
 }
 
 .card-inner {
@@ -483,8 +498,8 @@ body::before {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 3px solid var(--card-border);
-  box-shadow: 0 4px 12px var(--card-shadow);
+  border: 4px solid var(--card-border);
+  box-shadow: 0 6px 20px var(--card-shadow);
   transition: all var(--transition-normal);
 }
 
@@ -500,19 +515,20 @@ body::before {
 
 .card-number {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  background: var(--primary);
-  color: white;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(145deg, var(--accent), var(--accent-hover));
+  color: var(--text-primary);
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 1.2rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 3px 10px rgba(232, 197, 71, 0.5);
+  border: 3px solid rgba(255,255,255,0.6);
   z-index: 5;
   transition: all var(--transition-fast);
 }
@@ -528,13 +544,14 @@ body::before {
 
 .card-back {
   transform: rotateY(180deg);
-  background: linear-gradient(135deg, var(--primary-light), var(--bg-secondary));
+  background: linear-gradient(145deg, var(--cream), var(--bg-secondary));
   font-family: var(--font-display);
-  font-size: 1.5rem;
-  color: var(--primary);
+  font-size: 1.8rem;
+  color: var(--text-primary);
   text-align: center;
   padding: 1rem;
   word-break: break-word;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* Matched Card */
@@ -765,14 +782,15 @@ body::before {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-  color: white;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  background: linear-gradient(145deg, var(--accent), var(--accent-hover));
+  color: var(--text-primary);
+  box-shadow: 0 4px 15px rgba(232, 197, 71, 0.4);
+  border: 3px solid rgba(255,255,255,0.5);
 }
 
 .primary-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 20px rgba(232, 197, 71, 0.5);
 }
 
 /* ===================================
@@ -898,11 +916,23 @@ body::before {
 
   .card-grid {
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.75rem;
+    gap: 1rem;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .card {
+    min-height: 100px;
   }
 
   .card-back {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+  }
+
+  .card-number {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 
   .mascot-img {
@@ -995,19 +1025,24 @@ body::before {
 
   .card-grid {
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
+    gap: 0.6rem;
+  }
+
+  .card {
+    min-height: 60px;
   }
 
   .card-number {
-    width: 24px;
-    height: 24px;
-    font-size: 0.8rem;
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
     top: 4px;
     right: 4px;
+    border-width: 2px;
   }
 
   .card-back {
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: 0.5rem;
   }
 
@@ -1033,15 +1068,15 @@ body::before {
 @media (max-width: 400px) {
   .card-grid {
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
 
   .card-back {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
   }
 
   .card-number {
-    width: 20px;
+    width: 22px;
     height: 20px;
     font-size: 0.7rem;
   }
