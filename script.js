@@ -20,13 +20,13 @@ const init = () => {
     'been', 'same', 'say', 'green', 'people', 'each', 'your', 'happy', 'pretty', 'please',
     'keep', 'leave', 'these', 'sea', 'flies', 'fly', 'life', 'light', 'myself', 'time',
     'why', 'fine', 'high', 'eye', 'nothing', 'buy', 'wrote', 'by', 'going', 'own',
-    'only', 'ago', 'very', 'though', 'large', 'goes', 'both', 'home', 'don’t', 'any',
+    'only', 'ago', 'very', 'though', 'large', 'goes', 'both', 'home', 'don't', 'any',
     'became', 'began', 'begin', 'change', 'eat', 'few', 'knew', 'music', 'really', 'through',
     'place', 'move', 'brought', 'inside', 'which', 'after', 'always', 'aunty', 'work', 'off',
     'behind', 'body', 'family', 'today', 'open', 'below', 'carry', 'finally', 'try', 'along',
     'between', 'easy', 'funny', 'often', 'done', 'city', 'eight', 'feel', 'feet', 'great',
-    'sleep', 'here', 'without', 'kind', 'might', 'night', 'nice', 'once', 'rain', 'can’t',
-    'catch', 'children', 'couldn’t', 'enough', 'even', 'group', 'when', 'yellow', 'low', 'money',
+    'sleep', 'here', 'without', 'kind', 'might', 'night', 'nice', 'once', 'rain', 'can't',
+    'catch', 'children', 'couldn't', 'enough', 'even', 'group', 'when', 'yellow', 'low', 'money',
     'most', 'much', 'new', 'page', 'hard', 'start', 'part', 'last', 'laugh', 'car',
     'half', 'ask', 'father', 'air', 'little', 'every', 'parent', 'ever', 'never', 'number',
     'together', 'bought', 'everywhere', 'question', 'answer', 'early', 'earth', 'later', 'letter', 'our',
@@ -41,13 +41,13 @@ const init = () => {
     'world', 'add', 'food', 'country', 'plant', 'school', 'father', 'tree', 'close', 'seem',
     'example', 'those', 'paper', 'important', 'side', 'metre', 'grow', 'took', 'river', 'state',
     'book', 'stop', 'second', 'late', 'miss', 'face', 'Indian', 'real', 'sometimes', 'mountains',
-    'soon', 'song', 'being', 'Monday', 'Tuesday', 'it’s', 'colour', 'area', 'mark', 'birds',
-    'problem', 'complete', 'room', 'Wednesday', 'Thursday', 'since', 'piece', 'told', 'usually', 'didn’t',
+    'soon', 'song', 'being', 'Monday', 'Tuesday', 'it's', 'colour', 'area', 'mark', 'birds',
+    'problem', 'complete', 'room', 'Wednesday', 'Thursday', 'since', 'piece', 'told', 'usually', 'didn't',
     'friends', 'order', 'sure', 'Friday', 'Saturday', 'Sunday', 'better', 'however', 'black', 'products',
     'happened', 'whole', 'measure', 'remember', 'waves', 'reached', 'listen', 'wind', 'rock', 'space',
     'covered', 'several', 'himself', 'towards', 'five', 'passed', 'vowel', 'true', 'hundred', 'pattern',
     'numeral', 'table', 'north', 'slowly', 'farm', 'pulled', 'voice', 'seen', 'cried', 'plan',
-    'notice', 'south', 'sing', 'ground', 'king', 'town', 'I’ll', 'unit', 'figure', 'certain',
+    'notice', 'south', 'sing', 'ground', 'king', 'town', 'I'll', 'unit', 'figure', 'certain',
     'field', 'travel', 'wood', 'used'
   ];
 
@@ -65,9 +65,9 @@ const init = () => {
   ];
 
   // Log word counts to verify
-  console.log('Easy words count:', sightWordsEasy.length);  // Should be 50
-  console.log('Medium words count:', sightWordsMedium.length);  // Should be 208
-  console.log('Hard words count:', sightWordsHard.length);  // Should be 50
+  console.log('Easy words count:', sightWordsEasy.length);
+  console.log('Medium words count:', sightWordsMedium.length);
+  console.log('Hard words count:', sightWordsHard.length);
 
   // Sight Words Sets
   const sightWordsSets = {
@@ -77,16 +77,17 @@ const init = () => {
   };
 
   // Verify set counts
-  console.log('Easy sets:', sightWordsSets.easy.length);  // Should be 10
-  console.log('Medium sets:', sightWordsSets.medium.length);  // Should be 42
-  console.log('Hard sets:', sightWordsSets.hard.length);  // Should be 10
+  console.log('Easy sets:', sightWordsSets.easy.length);
+  console.log('Medium sets:', sightWordsSets.medium.length);
+  console.log('Hard sets:', sightWordsSets.hard.length);
 
   // DOM Elements
-  const cardContainer = document.querySelector('.card-row');
+  const cardContainer = document.querySelector('.card-grid');
   const startButton = document.getElementById('start-button');
   const setSelect = document.getElementById('set-select');
   const modeSelect = document.getElementById('mode-select');
-  const scoreDisplay = document.getElementById('score-display');
+  const starCountDisplay = document.getElementById('star-count');
+  const pairsCountDisplay = document.getElementById('pairs-count');
   const mascotMessage = document.getElementById('mascot-message');
   const modal = document.getElementById('reward-modal');
   const finalScore = document.getElementById('final-score');
@@ -94,11 +95,14 @@ const init = () => {
   const playAgainButton = document.getElementById('play-again-button');
   const howToPlay = document.getElementById('how-to-play');
   const closeHowToPlay = document.getElementById('close-how-to-play');
+  const gotItButton = document.getElementById('got-it-button');
   const fullscreenButton = document.getElementById('fullscreen-button');
   const soundToggle = document.getElementById('sound-toggle');
   const themeToggle = document.getElementById('theme-toggle');
   const howToPlayButton = document.getElementById('how-to-play-button');
-  const progressBar = document.getElementById('progress-bar');
+  const progressFill = document.getElementById('progress-fill');
+  const progressStars = document.querySelectorAll('.progress-star');
+  const mascot = document.getElementById('mascot');
   const body = document.body;
 
   // Game State
@@ -117,12 +121,20 @@ const init = () => {
   document.addEventListener('fullscreenchange', () => {
     isFullscreen = !!document.fullscreenElement;
     body.classList.toggle('fullscreen', isFullscreen);
-    fullscreenButton.textContent = isFullscreen ? 'Exit Full Screen' : 'Full Screen';
-    if (isFullscreen) {
-      document.getElementById('mascot').classList.add('foxJump');
-      setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+    updateFullscreenButton();
+    if (isFullscreen && mascot) {
+      mascot.classList.add('foxJump');
+      setTimeout(() => mascot.classList.remove('foxJump'), 600);
     }
   });
+
+  const updateFullscreenButton = () => {
+    const icon = fullscreenButton.querySelector('.btn-icon');
+    if (icon) {
+      icon.innerHTML = isFullscreen ? '&#10006;' : '&#9974;';
+    }
+    fullscreenButton.title = isFullscreen ? 'Exit Fullscreen' : 'Fullscreen';
+  };
 
   // Audio
   const loadAudio = (src) => {
@@ -164,7 +176,7 @@ const init = () => {
 
   const getPreferredVoice = () => {
     const voices = speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => voice.lang.includes('en-GB')) || 
+    const preferredVoice = voices.find(voice => voice.lang.includes('en-GB')) ||
                           voices.find(voice => voice.lang.includes('en'));
     if (preferredVoice) {
       console.log('Selected voice:', preferredVoice.name, preferredVoice.lang);
@@ -194,7 +206,7 @@ const init = () => {
       }
       window.speechSynthesis.cancel();
 
-      const utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it’s', "it's");
+      const utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it's', "it's");
       const utterance = new SpeechSynthesisUtterance(utteranceText);
       utterance.lang = 'en-GB';
       const voice = getPreferredVoice();
@@ -259,17 +271,17 @@ const init = () => {
       card.classList.add('card');
       card.setAttribute('role', 'button');
       card.setAttribute('tabindex', '0');
-      card.setAttribute('aria-label', `Flip card ${position} with word ${word} on the back`);
+      card.setAttribute('aria-label', `Card ${position}`);
       card.dataset.word = word;
       card.dataset.position = position;
 
       const cardInner = document.createElement('div');
-      cardInner.classList.add('card-inner', 'unmatched');
+      cardInner.classList.add('card-inner');
 
       const frontFace = document.createElement('div');
       frontFace.classList.add('card-face', 'card-front');
       frontFace.innerHTML = `
-        <img src="card-front.png" alt="Card image" />
+        <img src="card-front.png" alt="Card front" />
         <div class="card-number">${position}</div>
       `;
 
@@ -283,14 +295,14 @@ const init = () => {
 
       card.addEventListener('click', () => flipCard(card));
       card.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') flipCard(card);
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          flipCard(card);
+        }
       });
 
       cardContainer.appendChild(card);
     });
-
-    cardContainer.classList.add('pulse');
-    setTimeout(() => cardContainer.classList.remove('pulse'), 6000);
   };
 
   const flipCard = (card) => {
@@ -315,17 +327,28 @@ const init = () => {
       playSound('correct');
       card1.classList.add('matched');
       card2.classList.add('matched');
-      card1.classList.remove('unmatched');
-      card2.classList.remove('unmatched');
       flippedCards = [];
       flippingAllowed = true;
       updateProgressBar();
+
+      // Update mascot message based on progress
+      const matchedPairs = matchedCards.length / 2;
+      const messages = [
+        'Great start! Keep going!',
+        'Awesome! You found another!',
+        'Halfway there! You\'re doing great!',
+        'Almost there! One more to go!',
+        'Amazing! You found them all!'
+      ];
+      mascotMessage.textContent = messages[matchedPairs - 1] || 'Keep matching!';
+
       if (matchedCards.length === 10) showReward();
       if (typeof confetti === 'function') {
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       }
     } else {
       playSound('incorrect');
+      mascotMessage.textContent = 'Not quite! Try again!';
       setTimeout(() => {
         card1.classList.add('mismatch');
         card2.classList.add('mismatch');
@@ -334,8 +357,8 @@ const init = () => {
           card2.classList.remove('flipped', 'mismatch');
           flippedCards = [];
           flippingAllowed = true;
-        }, 1000);
-      }, 2000);
+        }, 600);
+      }, 1500);
     }
   };
 
@@ -347,41 +370,59 @@ const init = () => {
 
   const updateScore = () => {
     const matchedPairs = matchedCards.length / 2;
-    scoreDisplay.textContent = `Fox Stars: ${score} / Pairs: ${matchedPairs}/5`;
+    if (starCountDisplay) starCountDisplay.textContent = score;
+    if (pairsCountDisplay) pairsCountDisplay.textContent = matchedPairs;
   };
 
   const updateProgressBar = () => {
-    if (!progressBar) return;
     const progress = (matchedCards.length / 10) * 100;
-    progressBar.style.background = `linear-gradient(to right, #FFD54F 0%, #FFD54F ${progress}%, transparent ${progress}%)`;
-    progressBar.querySelectorAll('.star-icon').forEach((star, index) => {
-      star.style.opacity = index < matchedCards.length / 2 ? 1 : 0.3;
+
+    // Update fill bar
+    if (progressFill) {
+      progressFill.style.width = `${progress}%`;
+    }
+
+    // Update stars
+    const matchedPairs = matchedCards.length / 2;
+    progressStars.forEach((star, index) => {
+      if (index < matchedPairs) {
+        if (!star.classList.contains('earned')) {
+          star.classList.add('earned');
+        }
+      } else {
+        star.classList.remove('earned');
+      }
     });
   };
 
   const showReward = () => {
     finalScore.textContent = score;
-    const matchedWords = matchedCards.map(card => `${card.dataset.word} (Card ${card.dataset.position})`).join(', ');
-    matchedWordsDisplay.textContent = matchedWords;
+
+    // Get unique matched words
+    const uniqueWords = [...new Set(matchedCards.map(card => card.dataset.word))];
+    matchedWordsDisplay.textContent = uniqueWords.join(', ');
+
     setTimeout(() => {
       modal.classList.add('visible');
       modal.setAttribute('aria-hidden', 'false');
       if (soundOn) {
         bgMusic.pause();
         playSound('correct');
-        document.getElementById('mascot').classList.add('foxJump');
-        setTimeout(() => document.getElementById('mascot').classList.remove('foxJump'), 1200);
+        if (mascot) {
+          mascot.classList.add('foxJump');
+          setTimeout(() => mascot.classList.remove('foxJump'), 600);
+        }
       }
       if (typeof confetti === 'function') {
-        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
       }
       isGameInProgress = false;
-    }, 1000);
+    }, 800);
   };
 
   const startGame = () => {
     if (!setSelect.value || isNaN(parseInt(setSelect.value, 10))) {
-      mascotMessage.textContent = 'Choose a valid quest first!';
+      mascotMessage.textContent = 'Choose a quest first!';
       return;
     }
     currentSet = parseInt(setSelect.value, 10);
@@ -393,15 +434,17 @@ const init = () => {
     score = 0;
     updateScore();
     updateProgressBar();
-    mascotMessage.textContent = 'Find a match!';
+    mascotMessage.textContent = 'Find matching words!';
     flippingAllowed = true;
     isGameInProgress = true;
     createCards();
     if (soundOn) {
       bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
     }
-    document.getElementById('mascot').classList.add('foxCheer');
-    setTimeout(() => document.getElementById('mascot').classList.remove('foxCheer'), 2000);
+    if (mascot) {
+      mascot.classList.add('foxCheer');
+      setTimeout(() => mascot.classList.remove('foxCheer'), 500);
+    }
   };
 
   const resetGame = () => {
@@ -412,13 +455,17 @@ const init = () => {
     modeSelect.disabled = false;
     score = 0;
     updateScore();
-    updateProgressBar();
+
+    // Reset progress bar
+    if (progressFill) progressFill.style.width = '0%';
+    progressStars.forEach(star => star.classList.remove('earned'));
+
     cardContainer.innerHTML = '';
     flippedCards = [];
     matchedCards = [];
     currentSet = null;
     setSelect.value = '';
-    mascotMessage.textContent = 'Hello, explorer! Let’s find words!';
+    mascotMessage.textContent = 'Hello, explorer! Let\'s find some words!';
     isGameInProgress = false;
     if (soundOn) {
       bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
@@ -426,7 +473,7 @@ const init = () => {
   };
 
   const updateSetSelect = () => {
-    setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest!</option>';
+    setSelect.innerHTML = '<option value="" selected disabled>Pick a Quest</option>';
     const numSets = sightWordsSets[currentMode]?.length || 0;
     console.log('Updating sets - Mode:', currentMode, 'Number of sets:', numSets);
     for (let i = 0; i < numSets; i++) {
@@ -441,13 +488,35 @@ const init = () => {
     }
   };
 
+  const closeHowToPlayModal = () => {
+    howToPlay.classList.remove('visible');
+  };
+
+  const updateSoundButton = () => {
+    const icon = soundToggle.querySelector('.btn-icon');
+    if (icon) {
+      icon.innerHTML = soundOn ? '&#128266;' : '&#128263;';
+    }
+    soundToggle.title = soundOn ? 'Sound On' : 'Sound Off';
+    soundToggle.classList.toggle('active', soundOn);
+  };
+
+  const updateThemeButton = () => {
+    const icon = themeToggle.querySelector('.btn-icon');
+    if (icon) {
+      icon.innerHTML = body.classList.contains('dark') ? '&#9728;' : '&#127769;';
+    }
+    themeToggle.title = body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+  };
+
   // Event Listeners
   startButton.addEventListener('click', startGame);
   playAgainButton.addEventListener('click', resetGame);
   fullscreenButton.addEventListener('click', toggleFullscreen);
+
   soundToggle.addEventListener('click', () => {
     soundOn = !soundOn;
-    soundToggle.textContent = soundOn ? 'Sound On' : 'Sound Off';
+    updateSoundButton();
     if (soundOn && isGameInProgress) {
       bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
     } else {
@@ -457,11 +526,10 @@ const init = () => {
 
   themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark');
+    updateThemeButton();
     if (body.classList.contains('dark')) {
-      themeToggle.textContent = 'Light Mode';
       localStorage.setItem('theme', 'dark');
     } else {
-      themeToggle.textContent = 'Dark Mode';
       localStorage.setItem('theme', 'light');
     }
   });
@@ -469,12 +537,21 @@ const init = () => {
   howToPlayButton.addEventListener('click', () => {
     howToPlay.classList.add('visible');
     if (soundOn) {
-      speakWord('Tap or click a card numbered 1 to 10 to flip it and match the sight words on the back! Focus on the numbers to find pairs and earn Fox Stars.');
+      speakWord('Tap a numbered card to flip it and match the sight words!');
     }
   });
 
-  closeHowToPlay.addEventListener('click', () => {
-    howToPlay.classList.remove('visible');
+  closeHowToPlay.addEventListener('click', closeHowToPlayModal);
+
+  if (gotItButton) {
+    gotItButton.addEventListener('click', closeHowToPlayModal);
+  }
+
+  // Close modal on overlay click
+  howToPlay.addEventListener('click', (e) => {
+    if (e.target === howToPlay) {
+      closeHowToPlayModal();
+    }
   });
 
   modeSelect.addEventListener('change', () => {
@@ -482,15 +559,25 @@ const init = () => {
     updateSetSelect();
   });
 
+  // Keyboard escape to close modals
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (howToPlay.classList.contains('visible')) {
+        closeHowToPlayModal();
+      }
+    }
+  });
+
   // Initialization
   updateSetSelect();
+  updateSoundButton();
+
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme === 'dark') {
     body.classList.add('dark');
-    themeToggle.textContent = 'Light Mode';
-  } else {
-    themeToggle.textContent = 'Dark Mode';
   }
+  updateThemeButton();
+
   if (!localStorage.getItem('welcomeShown')) {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
