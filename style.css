@@ -104,11 +104,12 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
   opacity: 0.1;
   z-index: -1;
+  pointer-events: none;
 }
 
 /* ===================================
@@ -427,7 +428,7 @@ body::before {
    =================================== */
 .game-container {
   padding: 1.5rem;
-  min-height: calc(100vh - var(--header-height) - 150px);
+  min-height: 400px;
 }
 
 .card-grid {
@@ -436,12 +437,14 @@ body::before {
   gap: 1rem;
   max-width: 900px;
   margin: 0 auto;
-  animation: fadeInUp 0.5s ease;
+  min-height: 300px;
 }
 
 /* Card Styles */
 .card {
   position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* Square aspect ratio fallback */
   aspect-ratio: 1;
   perspective: 1000px;
   cursor: pointer;
@@ -450,7 +453,10 @@ body::before {
 
 .card-inner {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: var(--radius-lg);
@@ -466,8 +472,12 @@ body::before {
 
 .card-face {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
@@ -550,7 +560,10 @@ body::before {
    =================================== */
 .modal-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   display: none;
@@ -565,6 +578,12 @@ body::before {
 .modal-overlay.visible {
   display: flex;
   opacity: 1;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-card {
