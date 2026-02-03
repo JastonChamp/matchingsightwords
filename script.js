@@ -20,13 +20,13 @@ const init = () => {
     'been', 'same', 'say', 'green', 'people', 'each', 'your', 'happy', 'pretty', 'please',
     'keep', 'leave', 'these', 'sea', 'flies', 'fly', 'life', 'light', 'myself', 'time',
     'why', 'fine', 'high', 'eye', 'nothing', 'buy', 'wrote', 'by', 'going', 'own',
-    'only', 'ago', 'very', 'though', 'large', 'goes', 'both', 'home', 'don't', 'any',
+    'only', 'ago', 'very', 'though', 'large', 'goes', 'both', 'home', "don't", 'any',
     'became', 'began', 'begin', 'change', 'eat', 'few', 'knew', 'music', 'really', 'through',
     'place', 'move', 'brought', 'inside', 'which', 'after', 'always', 'aunty', 'work', 'off',
     'behind', 'body', 'family', 'today', 'open', 'below', 'carry', 'finally', 'try', 'along',
     'between', 'easy', 'funny', 'often', 'done', 'city', 'eight', 'feel', 'feet', 'great',
-    'sleep', 'here', 'without', 'kind', 'might', 'night', 'nice', 'once', 'rain', 'can't',
-    'catch', 'children', 'couldn't', 'enough', 'even', 'group', 'when', 'yellow', 'low', 'money',
+    'sleep', 'here', 'without', 'kind', 'might', 'night', 'nice', 'once', 'rain', "can't",
+    'catch', 'children', "couldn't", 'enough', 'even', 'group', 'when', 'yellow', 'low', 'money',
     'most', 'much', 'new', 'page', 'hard', 'start', 'part', 'last', 'laugh', 'car',
     'half', 'ask', 'father', 'air', 'little', 'every', 'parent', 'ever', 'never', 'number',
     'together', 'bought', 'everywhere', 'question', 'answer', 'early', 'earth', 'later', 'letter', 'our',
@@ -41,13 +41,13 @@ const init = () => {
     'world', 'add', 'food', 'country', 'plant', 'school', 'father', 'tree', 'close', 'seem',
     'example', 'those', 'paper', 'important', 'side', 'metre', 'grow', 'took', 'river', 'state',
     'book', 'stop', 'second', 'late', 'miss', 'face', 'Indian', 'real', 'sometimes', 'mountains',
-    'soon', 'song', 'being', 'Monday', 'Tuesday', 'it's', 'colour', 'area', 'mark', 'birds',
-    'problem', 'complete', 'room', 'Wednesday', 'Thursday', 'since', 'piece', 'told', 'usually', 'didn't',
+    'soon', 'song', 'being', 'Monday', 'Tuesday', "it's", 'colour', 'area', 'mark', 'birds',
+    'problem', 'complete', 'room', 'Wednesday', 'Thursday', 'since', 'piece', 'told', 'usually', "didn't",
     'friends', 'order', 'sure', 'Friday', 'Saturday', 'Sunday', 'better', 'however', 'black', 'products',
     'happened', 'whole', 'measure', 'remember', 'waves', 'reached', 'listen', 'wind', 'rock', 'space',
     'covered', 'several', 'himself', 'towards', 'five', 'passed', 'vowel', 'true', 'hundred', 'pattern',
     'numeral', 'table', 'north', 'slowly', 'farm', 'pulled', 'voice', 'seen', 'cried', 'plan',
-    'notice', 'south', 'sing', 'ground', 'king', 'town', 'I'll', 'unit', 'figure', 'certain',
+    'notice', 'south', 'sing', 'ground', 'king', 'town', "I'll", 'unit', 'figure', 'certain',
     'field', 'travel', 'wood', 'used'
   ];
 
@@ -81,7 +81,7 @@ const init = () => {
   console.log('Medium sets:', sightWordsSets.medium.length);
   console.log('Hard sets:', sightWordsSets.hard.length);
 
-  // DOM Elements
+  // DOM Elements - with validation
   const cardContainer = document.querySelector('.card-grid');
   const startButton = document.getElementById('start-button');
   const setSelect = document.getElementById('set-select');
@@ -104,6 +104,20 @@ const init = () => {
   const progressStars = document.querySelectorAll('.progress-star');
   const mascot = document.getElementById('mascot');
   const body = document.body;
+
+  // Validate critical elements
+  console.log('DOM Elements loaded:', {
+    cardContainer: !!cardContainer,
+    startButton: !!startButton,
+    setSelect: !!setSelect,
+    modeSelect: !!modeSelect,
+    mascotMessage: !!mascotMessage
+  });
+
+  if (!cardContainer || !startButton || !setSelect || !modeSelect) {
+    console.error('Critical DOM elements not found!');
+    return;
+  }
 
   // Game State
   let flippedCards = [];
@@ -206,7 +220,7 @@ const init = () => {
       }
       window.speechSynthesis.cancel();
 
-      const utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace('it's', "it's");
+      const utteranceText = word.toLowerCase() === 'a' ? 'uh' : word.replace("it's", "it's");
       const utterance = new SpeechSynthesisUtterance(utteranceText);
       utterance.lang = 'en-GB';
       const voice = getPreferredVoice();
@@ -509,55 +523,76 @@ const init = () => {
     themeToggle.title = body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
   };
 
-  // Event Listeners
-  startButton.addEventListener('click', startGame);
-  playAgainButton.addEventListener('click', resetGame);
-  fullscreenButton.addEventListener('click', toggleFullscreen);
+  // Event Listeners - with null checks
+  if (startButton) {
+    startButton.addEventListener('click', startGame);
+    console.log('Start button listener attached');
+  }
 
-  soundToggle.addEventListener('click', () => {
-    soundOn = !soundOn;
-    updateSoundButton();
-    if (soundOn && isGameInProgress) {
-      bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
-    } else {
-      bgMusic.pause();
-    }
-  });
+  if (playAgainButton) {
+    playAgainButton.addEventListener('click', resetGame);
+  }
 
-  themeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark');
-    updateThemeButton();
-    if (body.classList.contains('dark')) {
-      localStorage.setItem('theme', 'dark');
-    } else {
-      localStorage.setItem('theme', 'light');
-    }
-  });
+  if (fullscreenButton) {
+    fullscreenButton.addEventListener('click', toggleFullscreen);
+  }
 
-  howToPlayButton.addEventListener('click', () => {
-    howToPlay.classList.add('visible');
-    if (soundOn) {
-      speakWord('Tap a numbered card to flip it and match the sight words!');
-    }
-  });
+  if (soundToggle) {
+    soundToggle.addEventListener('click', () => {
+      soundOn = !soundOn;
+      updateSoundButton();
+      if (soundOn && isGameInProgress) {
+        bgMusic.play().catch(error => console.warn('Failed to play background music:', error));
+      } else {
+        bgMusic.pause();
+      }
+    });
+  }
 
-  closeHowToPlay.addEventListener('click', closeHowToPlayModal);
+  if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      updateThemeButton();
+      if (body.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  }
+
+  if (howToPlayButton && howToPlay) {
+    howToPlayButton.addEventListener('click', () => {
+      howToPlay.classList.add('visible');
+      if (soundOn) {
+        speakWord('Tap a numbered card to flip it and match the sight words!');
+      }
+    });
+  }
+
+  if (closeHowToPlay) {
+    closeHowToPlay.addEventListener('click', closeHowToPlayModal);
+  }
 
   if (gotItButton) {
     gotItButton.addEventListener('click', closeHowToPlayModal);
   }
 
   // Close modal on overlay click
-  howToPlay.addEventListener('click', (e) => {
-    if (e.target === howToPlay) {
-      closeHowToPlayModal();
-    }
-  });
+  if (howToPlay) {
+    howToPlay.addEventListener('click', (e) => {
+      if (e.target === howToPlay) {
+        closeHowToPlayModal();
+      }
+    });
+  }
 
-  modeSelect.addEventListener('change', () => {
-    currentMode = modeSelect.value;
-    updateSetSelect();
-  });
+  if (modeSelect) {
+    modeSelect.addEventListener('change', () => {
+      currentMode = modeSelect.value;
+      updateSetSelect();
+    });
+  }
 
   // Keyboard escape to close modals
   document.addEventListener('keydown', (e) => {
@@ -569,6 +604,7 @@ const init = () => {
   });
 
   // Initialization
+  console.log('Initializing game...');
   updateSetSelect();
   updateSoundButton();
 
@@ -578,10 +614,12 @@ const init = () => {
   }
   updateThemeButton();
 
-  if (!localStorage.getItem('welcomeShown')) {
+  if (!localStorage.getItem('welcomeShown') && howToPlay) {
     howToPlay.classList.add('visible');
     localStorage.setItem('welcomeShown', 'true');
   }
+
+  console.log('Game initialized successfully!');
 };
 
 if (document.readyState === 'loading') {
