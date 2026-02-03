@@ -3,69 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Word Explorer Game</title>
+  <title>Word Explorer - Sight Word Matching Game</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-  <div class="mascot-banner">
-    <img src="mascot.png" alt="Friendly fox mascot" id="mascot" />
-    <div id="mascot-message" aria-live="polite">Hello, explorer! Let’s find words!</div>
-  </div>
+  <header class="game-header">
+    <div class="header-top">
+      <div class="logo-section">
+        <img src="fox-icon.png" alt="Fox mascot" class="header-fox" />
+        <h1 class="game-title">Word Explorer</h1>
+      </div>
 
-  <header class="fixed-header">
-    <div class="header-content">
-      <div id="score-display" aria-live="polite">
-        <img src="fox-icon.png" alt="Fox icon" style="width: 40px; height: 40px;" /> Fox Stars: 0 / Pairs: 0/5
-        <div class="progress-bar" id="progress-bar">
-          <div class="star-icon" style="left: 10%;"></div>
-          <div class="star-icon" style="left: 30%;"></div>
-          <div class="star-icon" style="left: 50%;"></div>
-          <div class="star-icon" style="left: 70%;"></div>
-          <div class="star-icon" style="left: 90%;"></div>
+      <div class="score-section">
+        <div class="score-badge">
+          <span class="score-icon">&#11088;</span>
+          <span id="star-count">0</span>
+          <span class="score-label">Stars</span>
+        </div>
+        <div class="pairs-badge">
+          <span class="pairs-icon">&#127183;</span>
+          <span id="pairs-count">0</span>
+          <span class="pairs-label">/ 5 Pairs</span>
         </div>
       </div>
-      <div class="controls">
-        <select id="mode-select" aria-label="Choose adventure level">
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
-        <select id="set-select" aria-label="Choose word quest">
-          <option value="" selected disabled>Pick a Quest!</option>
-        </select>
-        <button id="start-button" type="button">Start Quest!</button>
-        <button id="fullscreen-button" type="button" aria-label="Toggle Full Screen">Full Screen</button>
-        <button id="sound-toggle" type="button" aria-label="Toggle Sound">Sound On</button>
-        <button id="theme-toggle" type="button" aria-label="Toggle Theme">Dark Mode</button>
-        <button id="how-to-play-button" type="button" aria-label="Show How to Play">How to Play</button>
+
+      <div class="utility-buttons">
+        <button id="sound-toggle" type="button" class="icon-btn" aria-label="Toggle Sound" title="Sound">
+          <span class="btn-icon">&#128266;</span>
+        </button>
+        <button id="theme-toggle" type="button" class="icon-btn" aria-label="Toggle Theme" title="Theme">
+          <span class="btn-icon">&#127769;</span>
+        </button>
+        <button id="fullscreen-button" type="button" class="icon-btn" aria-label="Toggle Full Screen" title="Fullscreen">
+          <span class="btn-icon">&#9974;</span>
+        </button>
+        <button id="how-to-play-button" type="button" class="icon-btn help-btn" aria-label="How to Play" title="How to Play">
+          <span class="btn-icon">?</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-track" id="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+        <div class="progress-stars">
+          <span class="progress-star" data-index="0">&#11088;</span>
+          <span class="progress-star" data-index="1">&#11088;</span>
+          <span class="progress-star" data-index="2">&#11088;</span>
+          <span class="progress-star" data-index="3">&#11088;</span>
+          <span class="progress-star" data-index="4">&#11088;</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-section">
+      <div class="game-controls">
+        <div class="select-wrapper">
+          <label for="mode-select" class="select-label">Difficulty</label>
+          <select id="mode-select" aria-label="Choose difficulty level">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+        <div class="select-wrapper">
+          <label for="set-select" class="select-label">Quest</label>
+          <select id="set-select" aria-label="Choose word quest">
+            <option value="" selected disabled>Pick a Quest</option>
+          </select>
+        </div>
+        <button id="start-button" type="button" class="start-btn">
+          <span class="btn-icon">&#9658;</span>
+          Start Quest!
+        </button>
       </div>
     </div>
   </header>
 
-  <main class="game-container">
-    <div class="card-row" role="grid" aria-label="Word Explorer Cards"></div>
-  </main>
-
-  <div id="reward-modal" class="modal" role="dialog" aria-hidden="true">
-    <div class="modal-content">
-      <h2>Amazing Job!</h2>
-      <img src="star-icon.png" alt="Star Badge" class="reward-image" />
-      <p>You collected <span id="final-score"></span> Fox Stars!</p>
-      <p>Matched Words: <span id="matched-words"></span></p>
-      <button id="play-again-button" type="button">New Quest</button>
+  <div class="mascot-container">
+    <div class="mascot-wrapper">
+      <img src="mascot.png" alt="Friendly fox mascot" id="mascot" class="mascot-img" />
+      <div class="speech-bubble" id="mascot-message" aria-live="polite">
+        Hello, explorer! Let's find some words!
+      </div>
     </div>
   </div>
 
-  <div id="how-to-play" class="how-to-play">
-    <h3>How to Play</h3>
-    <p>Tap or click a card numbered 1–10 to flip it and match the sight words on the back!</p>
-    <p>Focus on the numbers to find pairs and earn Fox Stars.</p>
-    <img src="card-flip.png" alt="Card flipping example" />
-    <button id="close-how-to-play">Got It!</button>
+  <main class="game-container">
+    <div class="card-grid" role="grid" aria-label="Word Explorer Cards"></div>
+  </main>
+
+  <div id="reward-modal" class="modal-overlay" role="dialog" aria-hidden="true">
+    <div class="modal-card reward-modal">
+      <div class="modal-decoration">
+        <span class="confetti-piece">&#127881;</span>
+        <span class="confetti-piece">&#11088;</span>
+        <span class="confetti-piece">&#127881;</span>
+      </div>
+      <h2 class="modal-title">Amazing Job!</h2>
+      <div class="reward-star">
+        <img src="star-icon.png" alt="Star Badge" class="reward-image" />
+      </div>
+      <div class="reward-stats">
+        <div class="stat-item">
+          <span class="stat-value" id="final-score">0</span>
+          <span class="stat-label">Fox Stars Earned</span>
+        </div>
+      </div>
+      <div class="matched-words-section">
+        <h3>Words You Learned:</h3>
+        <p id="matched-words" class="matched-words-list"></p>
+      </div>
+      <button id="play-again-button" type="button" class="action-btn primary-btn">
+        <span class="btn-icon">&#128260;</span>
+        New Quest
+      </button>
+    </div>
   </div>
+
+  <div id="how-to-play" class="modal-overlay how-to-play-modal">
+    <div class="modal-card instructions-modal">
+      <button id="close-how-to-play" class="close-modal-btn" aria-label="Close">&times;</button>
+      <h2 class="modal-title">How to Play</h2>
+      <div class="instructions-content">
+        <div class="instruction-step">
+          <span class="step-number">1</span>
+          <p>Tap a numbered card to flip it and reveal a word</p>
+        </div>
+        <div class="instruction-step">
+          <span class="step-number">2</span>
+          <p>Try to remember where each word is located</p>
+        </div>
+        <div class="instruction-step">
+          <span class="step-number">3</span>
+          <p>Find matching pairs to earn Fox Stars!</p>
+        </div>
+        <img src="card-flip.png" alt="Card flipping example" class="instruction-image" />
+      </div>
+      <button id="got-it-button" type="button" class="action-btn primary-btn">
+        Got It!
+      </button>
+    </div>
+  </div>
+
   <script src="script.js" defer></script>
 </body>
 </html>
