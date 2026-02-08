@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Giri-inspired warm color palette -->
+    <color name="colorPrimary">#C9A86C</color>
+    <color name="colorPrimaryDark">#B8956A</color>
+    <color name="colorAccent">#E8C547</color>
+
+    <!-- Splash screen background -->
+    <color name="splash_background">#FCEAE6</color>
+
+    <!-- Status bar color -->
+    <color name="status_bar">#FCEAE6</color>
+</resources>
