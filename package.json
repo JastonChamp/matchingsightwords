@@ -1,0 +1,35 @@
+{
+  "name": "word-explorer",
+  "version": "1.0.0",
+  "description": "Word Explorer - A fun sight word matching game for children",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'No build step required - static files ready'",
+    "cap:init": "npx cap init 'Word Explorer' com.wordexplorer.app --web-dir .",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:build:android": "cd android && ./gradlew assembleRelease",
+    "cap:build:debug": "cd android && ./gradlew assembleDebug",
+    "android:build": "npm run cap:sync && npm run cap:build:android",
+    "android:debug": "npm run cap:sync && npm run cap:build:debug"
+  },
+  "keywords": [
+    "education",
+    "sight-words",
+    "children",
+    "learning",
+    "game",
+    "matching"
+  ],
+  "author": "Word Explorer Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0"
+  }
+}
